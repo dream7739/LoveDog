@@ -25,6 +25,11 @@
 		8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2AD2C6CA834007DBE47 /* BaseView.swift */; };
 		8833A2B32C6CAB34007DBE47 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2B22C6CAB34007DBE47 /* SignInViewController.swift */; };
 		8833A2BB2C6CACF0007DBE47 /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2BA2C6CACF0007DBE47 /* Design.swift */; };
+		8833A2BD2C6CC4FB007DBE47 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2BC2C6CC4FB007DBE47 /* APIKey.swift */; };
+		8833A2C02C6CC65B007DBE47 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2BF2C6CC65B007DBE47 /* TabBarController.swift */; };
+		8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2C12C6CC68F007DBE47 /* ProfileViewController.swift */; };
+		8833A2C42C6CC69D007DBE47 /* IntroduceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2C32C6CC69D007DBE47 /* IntroduceViewController.swift */; };
+		8833A2C92C6CC6B8007DBE47 /* CommunityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2C82C6CC6B8007DBE47 /* CommunityViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +47,11 @@
 		8833A2AD2C6CA834007DBE47 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		8833A2B22C6CAB34007DBE47 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		8833A2BA2C6CACF0007DBE47 /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
+		8833A2BC2C6CC4FB007DBE47 /* APIKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
+		8833A2BF2C6CC65B007DBE47 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		8833A2C12C6CC68F007DBE47 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		8833A2C32C6CC69D007DBE47 /* IntroduceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceViewController.swift; sourceTree = "<group>"; };
+		8833A2C82C6CC6B8007DBE47 /* CommunityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +91,8 @@
 		880E39E72C6C9CED00C57C2C /* LoveDog */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2BE2C6CC654007DBE47 /* TabBar */,
+				8833A2BC2C6CC4FB007DBE47 /* APIKey.swift */,
 				8833A2952C6CA68F007DBE47 /* Base */,
 				8833A2922C6CA3F8007DBE47 /* Constant */,
 				8833A2912C6CA3F1007DBE47 /* Database */,
@@ -132,6 +144,9 @@
 		8833A28D2C6CA3D9007DBE47 /* Community */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2C72C6CC6AB007DBE47 /* Model */,
+				8833A2C62C6CC6A5007DBE47 /* ViewModel */,
+				8833A2C52C6CC6A0007DBE47 /* ViewController */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -210,6 +225,7 @@
 		8833A2B42C6CABD4007DBE47 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2C32C6CC69D007DBE47 /* IntroduceViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -238,11 +254,42 @@
 		8833A2B82C6CABF3007DBE47 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2C12C6CC68F007DBE47 /* ProfileViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
 		};
 		8833A2B92C6CABF9007DBE47 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8833A2BE2C6CC654007DBE47 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				8833A2BF2C6CC65B007DBE47 /* TabBarController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		8833A2C52C6CC6A0007DBE47 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8833A2C82C6CC6B8007DBE47 /* CommunityViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		8833A2C62C6CC6A5007DBE47 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8833A2C72C6CC6AB007DBE47 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -337,8 +384,13 @@
 			files = (
 				8833A2BB2C6CACF0007DBE47 /* Design.swift in Sources */,
 				8833A2AC2C6CA7DF007DBE47 /* BaseProtocol.swift in Sources */,
+				8833A2C02C6CC65B007DBE47 /* TabBarController.swift in Sources */,
 				8833A2992C6CA6E3007DBE47 /* BaseViewController.swift in Sources */,
 				880E39E92C6C9CED00C57C2C /* AppDelegate.swift in Sources */,
+				8833A2BD2C6CC4FB007DBE47 /* APIKey.swift in Sources */,
+				8833A2C92C6CC6B8007DBE47 /* CommunityViewController.swift in Sources */,
+				8833A2C42C6CC69D007DBE47 /* IntroduceViewController.swift in Sources */,
+				8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */,
 				8833A2972C6CA6CD007DBE47 /* UIColor+.swift in Sources */,
 				8833A2B32C6CAB34007DBE47 /* SignInViewController.swift in Sources */,
 				8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */,
