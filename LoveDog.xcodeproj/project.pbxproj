@@ -33,6 +33,13 @@
 		8833A2DA2C6CDD52007DBE47 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 8833A2D92C6CDD52007DBE47 /* RxCocoa */; };
 		8833A2DC2C6CDD52007DBE47 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8833A2DB2C6CDD52007DBE47 /* RxSwift */; };
 		8833A2DF2C6CDD5F007DBE47 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8833A2DE2C6CDD5F007DBE47 /* SnapKit */; };
+		8833A2E42C6CF3FD007DBE47 /* BasicTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E32C6CF3FD007DBE47 /* BasicTextField.swift */; };
+		8833A2E62C6CF4B9007DBE47 /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E52C6CF4B9007DBE47 /* SignInViewModel.swift */; };
+		8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E72C6CF6E9007DBE47 /* BaseViewModel.swift */; };
+		8833A2EA2C6CF789007DBE47 /* BasicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E92C6CF789007DBE47 /* BasicButton.swift */; };
+		8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */; };
+		8874A1742C6DB35500299265 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1732C6DB35500299265 /* String+.swift */; };
+		8874A1782C6DC40800299265 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1772C6DC40800299265 /* UserManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +67,13 @@
 		8833A2CE2C6CD1E2007DBE47 /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
 		8833A2D12C6CD418007DBE47 /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		8833A2D32C6CD6BB007DBE47 /* BaseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProvider.swift; sourceTree = "<group>"; };
+		8833A2E32C6CF3FD007DBE47 /* BasicTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTextField.swift; sourceTree = "<group>"; };
+		8833A2E52C6CF4B9007DBE47 /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		8833A2E72C6CF6E9007DBE47 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		8833A2E92C6CF789007DBE47 /* BasicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicButton.swift; sourceTree = "<group>"; };
+		8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfiguration.swift; sourceTree = "<group>"; };
+		8874A1732C6DB35500299265 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		8874A1772C6DC40800299265 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +111,7 @@
 		880E39E72C6C9CED00C57C2C /* LoveDog */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2E22C6CF3AC007DBE47 /* CustomView */,
 				8833A2BE2C6CC654007DBE47 /* TabBar */,
 				8833A2952C6CA68F007DBE47 /* Base */,
 				8833A2922C6CA3F8007DBE47 /* Constant */,
@@ -171,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				8833A2962C6CA6CD007DBE47 /* UIColor+.swift */,
+				8874A1732C6DB35500299265 /* String+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -178,9 +194,8 @@
 		8833A2902C6CA3EC007DBE47 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				8833A2D12C6CD418007DBE47 /* Header.swift */,
-				8833A2D32C6CD6BB007DBE47 /* BaseProvider.swift */,
-				8833A2D02C6CD1ED007DBE47 /* Login */,
+				8874A17C2C6DC46900299265 /* Support */,
+				8833A2D02C6CD1ED007DBE47 /* User */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -195,6 +210,7 @@
 		8833A2922C6CA3F8007DBE47 /* Constant */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */,
 				8833A2BA2C6CACF0007DBE47 /* Design.swift */,
 			);
 			path = Constant;
@@ -205,6 +221,7 @@
 			children = (
 				8833A2982C6CA6E3007DBE47 /* BaseViewController.swift */,
 				8833A2AD2C6CA834007DBE47 /* BaseView.swift */,
+				8833A2E72C6CF6E9007DBE47 /* BaseViewModel.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -212,6 +229,7 @@
 		8833A2AF2C6CAB21007DBE47 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				8833A2E52C6CF4B9007DBE47 /* SignInViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -305,14 +323,57 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		8833A2D02C6CD1ED007DBE47 /* Login */ = {
+		8833A2D02C6CD1ED007DBE47 /* User */ = {
 			isa = PBXGroup;
 			children = (
-				8833A2CA2C6CCF9E007DBE47 /* LoginService.swift */,
+				8874A1772C6DC40800299265 /* UserManager.swift */,
+				8874A17B2C6DC45400299265 /* Login */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		8833A2E22C6CF3AC007DBE47 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				8833A2E32C6CF3FD007DBE47 /* BasicTextField.swift */,
+				8833A2E92C6CF789007DBE47 /* BasicButton.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		8874A1792C6DC41700299265 /* Model */ = {
+			isa = PBXGroup;
+			children = (
 				8833A2CC2C6CD1B9007DBE47 /* LoginRequest.swift */,
 				8833A2CE2C6CD1E2007DBE47 /* LoginResponse.swift */,
 			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8874A17A2C6DC44D00299265 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				8833A2CA2C6CCF9E007DBE47 /* LoginService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		8874A17B2C6DC45400299265 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				8874A17A2C6DC44D00299265 /* Service */,
+				8874A1792C6DC41700299265 /* Model */,
+			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		8874A17C2C6DC46900299265 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				8833A2D12C6CD418007DBE47 /* Header.swift */,
+				8833A2D32C6CD6BB007DBE47 /* BaseProvider.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,21 +459,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				8833A2D42C6CD6BB007DBE47 /* BaseProvider.swift in Sources */,
+				8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */,
 				8833A2BB2C6CACF0007DBE47 /* Design.swift in Sources */,
 				8833A2AC2C6CA7DF007DBE47 /* BaseProtocol.swift in Sources */,
 				8833A2C02C6CC65B007DBE47 /* TabBarController.swift in Sources */,
+				8874A1782C6DC40800299265 /* UserManager.swift in Sources */,
 				8833A2992C6CA6E3007DBE47 /* BaseViewController.swift in Sources */,
 				880E39E92C6C9CED00C57C2C /* AppDelegate.swift in Sources */,
 				8833A2CD2C6CD1B9007DBE47 /* LoginRequest.swift in Sources */,
 				8833A2BD2C6CC4FB007DBE47 /* APIKey.swift in Sources */,
+				8833A2E62C6CF4B9007DBE47 /* SignInViewModel.swift in Sources */,
 				8833A2C92C6CC6B8007DBE47 /* CommunityViewController.swift in Sources */,
 				8833A2CB2C6CCF9E007DBE47 /* LoginService.swift in Sources */,
+				8874A1742C6DB35500299265 /* String+.swift in Sources */,
 				8833A2C42C6CC69D007DBE47 /* IntroduceViewController.swift in Sources */,
 				8833A2D22C6CD418007DBE47 /* Header.swift in Sources */,
 				8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */,
 				8833A2972C6CA6CD007DBE47 /* UIColor+.swift in Sources */,
+				8833A2EA2C6CF789007DBE47 /* BasicButton.swift in Sources */,
 				8833A2B32C6CAB34007DBE47 /* SignInViewController.swift in Sources */,
 				8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */,
+				8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */,
+				8833A2E42C6CF3FD007DBE47 /* BasicTextField.swift in Sources */,
 				880E39EB2C6C9CED00C57C2C /* SceneDelegate.swift in Sources */,
 				8833A2CF2C6CD1E2007DBE47 /* LoginResponse.swift in Sources */,
 				8833A2942C6CA66C007DBE47 /* ReusableProtocol.swift in Sources */,

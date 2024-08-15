@@ -7,25 +7,93 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
+import SnapKit
 
 final class SignInViewController: BaseViewController {
     
+    private let emailTextField = BasicTextField()
+    private let passwordTextField = BasicTextField()
+    private let validationLabel = UILabel()
+    private let signInButton = BasicButton(title: "로그인")
+    
+    let viewModel = SignInViewModel()
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
         
-        BaseProvider<LoginService>().callRequest(target: .login(param: LoginRequest(email: "", password: "")), response: LoginResponse.self)
-            .subscribe(with: self) { owner, value in
-                print(value)
-            } onFailure: { owner, error in
-                print(error)
-            } onDisposed: { owner in
-                print("disposed")
-            }
-            .disposed(by: disposeBag)
-
     }
     
+    override func configureHierarchy() {
+        [emailTextField, passwordTextField, signInButton, validationLabel].forEach {
+            view.addSubview($0)
+        }
+    }
+    
+    override func configureLayout() {
+        emailTextField.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(44)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(passwordTextField.snp.top).offset(-8)
+        }
+        
+        passwordTextField.snp.makeConstraints { make in
+            make.top.equalTo(emailTextField.snp.bottom).offset(8)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(44)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().multipliedBy(0.9)
+        }
+        
+        validationLabel.snp.makeConstraints { make in
+            make.top.equalTo(passwordTextField.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(passwordTextField)
+        }
+        
+        signInButton.snp.makeConstraints { make in
+            make.top.equalTo(validationLabel.snp.bottom).offset(32)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(44)
+        }
+    }
+    
+    override func configureView() {
+        emailTextField.font = Design.Font.tertiary
+        passwordTextField.font = Design.Font.tertiary
+        passwordTextField.isSecureTextEntry = true
+        validationLabel.font = Design.Font.quarternary
+        validationLabel.textColor = .deep_gray
+        signInButton.isEnabled = false
+    }
+    
+    private func bind(){
+        let input = SignInViewModel.Input(
+            emailText: emailTextField.rx.text.orEmpty,
+            passwordText: passwordTextField.rx.text.orEmpty,
+            signButtonTap: signInButton.rx.tap
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.validationText
+            .drive(with: self) { owner, value in
+                owner.validationLabel.text = value
+            }
+            .disposed(by: disposeBag)
+        
+        output.validation
+            .drive(with: self) { owner, value in
+                let color: UIColor = value ? .main : .light_gray
+                owner.validationLabel.isHidden = value
+                owner.signInButton.isEnabled = value
+                owner.signInButton.configuration?.background.backgroundColor = color
+            }
+            .disposed(by: disposeBag)
+        
+    }
     
 }
