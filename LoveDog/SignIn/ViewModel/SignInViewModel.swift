@@ -22,11 +22,13 @@ final class SignInViewModel: BaseViewModel {
     struct Output {
         let validationText: Driver<String>
         let validation: Driver<Bool>
+        let navigationTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let validationText = PublishRelay<String>()
         let validation = BehaviorRelay<Bool>(value: false)
+        let navigationTrigger = PublishRelay<Void>()
         
         let userInput = Observable.combineLatest(input.emailText, input.passwordText)
             .map { (email: $0, password: $1) }
@@ -62,8 +64,9 @@ final class SignInViewModel: BaseViewModel {
                 case .success(let value):
                     UserDefaultsManager.token = value.accessToken
                     UserDefaultsManager.refresh = value.refreshToken
+                    navigationTrigger.accept(())
                 case .failure(let error):
-                    print(LoginError.init(statusCode: error.code).localizedDescription)
+                    print(error.localizedDescription)
                     
                 }
             }
@@ -71,7 +74,8 @@ final class SignInViewModel: BaseViewModel {
         
         return Output(
             validationText: validationText.asDriver(onErrorJustReturn: ""),
-            validation: validation.asDriver(onErrorJustReturn: false)
+            validation: validation.asDriver(onErrorJustReturn: false),
+            navigationTrigger: navigationTrigger.asDriver(onErrorJustReturn: ())
         )
     }
     
@@ -89,7 +93,7 @@ final class SignInViewModel: BaseViewModel {
 }
 
 extension SignInViewModel {
-    enum UserInputError: Error, LocalizedError {
+    private enum UserInputError: Error, LocalizedError {
         case isEmpty
         case invalidEmail
         case invalidPassword

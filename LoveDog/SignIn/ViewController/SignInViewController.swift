@@ -70,7 +70,7 @@ final class SignInViewController: BaseViewController {
         signInButton.isEnabled = false
     }
     
-    private func bind(){
+    private func bind() {
         let input = SignInViewModel.Input(
             emailText: emailTextField.rx.text.orEmpty,
             passwordText: passwordTextField.rx.text.orEmpty,
@@ -94,6 +94,11 @@ final class SignInViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.navigationTrigger
+            .drive(with: self) { owner, value in
+                SceneChanger.transitionScene(TabBarController())
+            }
+            .disposed(by: disposeBag)
     }
     
 }

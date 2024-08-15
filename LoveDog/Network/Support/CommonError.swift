@@ -13,6 +13,7 @@ enum CommonError: Int, Error, LocalizedError {
     case invalidURL   //비정상 URL일 경우
     case serverError  //서버 오류
     case unknown      //알 수 없는 오류
+    case decoding     //디코딩 에러
     
     init(statusCode: Int) {
         switch statusCode {
@@ -41,6 +42,8 @@ enum CommonError: Int, Error, LocalizedError {
             return "서버 상의 오류가 발생했습니다"
         case .unknown:
             return "알 수 없는 오류가 발생했습니다"
+        case .decoding:
+            return "디코딩 시 오류가 발생했습니다"
         }
     }
 }

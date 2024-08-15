@@ -35,5 +35,11 @@ final class UserDefaultsManager {
     
     @UserDefault(key: UserDefaultsKey.refresh.rawValue, defaultValue: "")
     static var refresh
+    
+    static func removeTokens(){
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+            UserDefaults.standard.removeObject(forKey: key.description)
+        }
+    }
 }
 

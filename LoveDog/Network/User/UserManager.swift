@@ -6,47 +6,100 @@
 //
 
 import Foundation
-import Moya
+import Alamofire
 import RxSwift
 
+//User와 관련된 API 정의
+//로그인 / 토큰 갱신
+// 1) 액세스 토큰이 만료되었을 때(419) 리프레시 토큰으로 엑세스 토큰 갱신
+// 2) 리프레시 토큰이 만료되었을 때(419) 로그인 화면으로 이동하여 로그인 > 리프레시 & 액세스 토큰 재발행
 final class UserManager {
     
     static let shared = UserManager()
-    private let provider = BaseProvider<LoginService>()
-    
     private init() { }
     
-    func login(request: LoginRequest) -> Single<Result<LoginResponse, NSError>> {
-        return provider.callRequest(target: .login(param: request), response: LoginResponse.self)
-    }
-    
-}
-
-
-enum LoginError: Error, LocalizedError {
-    case invalidRequest //필수값이 없는 경우
-    case incorrectInfo //계정이 없거나, 비밀번호 불일치
-    case common(_ error: CommonError)
-    
-    init(statusCode: Int) {
-        switch statusCode {
-        case 400:
-            self = .invalidRequest
-        case 401:
-            self =  .incorrectInfo
-        default:
-            self = .common(CommonError.init(statusCode: statusCode))
+    //로그인
+    func login(request: LoginRequest) -> Single<Result<LoginResponse, LoginError>> {
+        let result = Single<Result<LoginResponse, LoginError>>.create { observer in
+            do {
+                let loginRequest = try UserRouter.login(param: request).asURLRequest()
+                AF.request(loginRequest)
+                    .responseDecodable(of: LoginResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(LoginError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "LOGIN REQUEST FAILED")
+                observer(.success(.failure(LoginError.common(.unknown))))
+            }
+            
+            return Disposables.create()
         }
+        
+        return result
     }
     
-    var errorDescription: String? {
-        switch self {
-        case .invalidRequest:
-            return "필수값을 채워주세요"
-        case .incorrectInfo:
-            return "계정을 확인해주세요"
-        case .common(let error):
-            return error.localizedDescription
+    //토큰 갱신
+    func refresh() -> Single<Result<AuthResponse, AuthError>> {
+        let result = Single<Result<AuthResponse, AuthError>>.create { observer in
+            do {
+                let refreshRequest = try UserRouter.refresh.asURLRequest()
+                AF.request(refreshRequest)
+                    .responseDecodable(of: AuthResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(AuthError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "REFRESH REQUEST FAILED")
+                observer(.success(.failure(AuthError.common(.unknown))))
+            }
+            
+            return Disposables.create()
         }
+        
+        return result
     }
+    
+    //프로필 조회
+    func profile() -> Single<Result<ProfileResponse, NSError>> {
+        let result = Single<Result<ProfileResponse, NSError>>.create { observer in
+            do {
+                let refreshRequest = try UserRouter.profile.asURLRequest()
+                AF.request(refreshRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: ProfileResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(NSError(domain: "", code: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "PROFILE REQUEST FAILED")
+                observer(.success(.failure(NSError(domain: "", code: 0))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
+    
 }
