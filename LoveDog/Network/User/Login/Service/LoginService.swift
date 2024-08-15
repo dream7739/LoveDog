@@ -54,9 +54,9 @@ enum LoginService: TargetType {
             ]
         case .refresh:
             return [
-                HeaderKey.authorization.rawValue : "토큰토큰",
+                HeaderKey.authorization.rawValue : UserDefaultsManager.token,
                 HeaderKey.sesacKey.rawValue : APIKey.sesacKey,
-                HeaderKey.refresh.rawValue: "리프레시 토큰토큰"
+                HeaderKey.refresh.rawValue: UserDefaultsManager.refresh
             ]
         }
     }

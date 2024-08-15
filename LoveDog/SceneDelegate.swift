@@ -18,8 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
-//        window?.rootViewController = UINavigationController(rootViewController: TabBarController())
+        
+        if UserDefaultsManager.token.isEmpty {
+            window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
+        }else {
+            window?.rootViewController = TabBarController()
+        }
 
         window?.makeKeyAndVisible()
     }

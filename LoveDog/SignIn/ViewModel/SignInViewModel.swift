@@ -60,7 +60,8 @@ final class SignInViewModel: BaseViewModel {
             .bind(with: self) { owner, value in
                 switch value {
                 case .success(let value):
-                    print(value)
+                    UserDefaultsManager.token = value.accessToken
+                    UserDefaultsManager.refresh = value.refreshToken
                 case .failure(let error):
                     print(LoginError.init(statusCode: error.code).localizedDescription)
                     

@@ -29,15 +29,15 @@ final class TabBarController: UITabBarController {
     
     private func configureTabItem(){
         let introduceItem = UITabBarItem(title: "소개", image: UIImage(systemName: "heart"), tag: 0)
-        let introduceVC = IntroduceViewController()
+        let introduceVC = UINavigationController(rootViewController: IntroduceViewController())
         introduceVC.tabBarItem = introduceItem
         
         let communityItem = UITabBarItem(title: "스토리", image: UIImage(systemName: "heart"), tag: 1)
-        let communityVC = CommunityViewController()
+        let communityVC = UINavigationController(rootViewController: CommunityViewController())
         communityVC.tabBarItem = communityItem
         
         let profileItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "heart"), tag: 2)
-        let profileVC = ProfileViewController()
+        let profileVC = UINavigationController(rootViewController: ProfileViewController())
         profileVC.tabBarItem = profileItem
         
         setViewControllers([introduceVC, communityVC, profileVC], animated: true)

@@ -40,6 +40,8 @@
 		8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */; };
 		8874A1742C6DB35500299265 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1732C6DB35500299265 /* String+.swift */; };
 		8874A1782C6DC40800299265 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1772C6DC40800299265 /* UserManager.swift */; };
+		8874A17F2C6DD38000299265 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A17E2C6DD38000299265 /* UserDefaultsManager.swift */; };
+		8874A1812C6DDD9700299265 /* CommonError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1802C6DDD9700299265 /* CommonError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +76,8 @@
 		8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfiguration.swift; sourceTree = "<group>"; };
 		8874A1732C6DB35500299265 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		8874A1772C6DC40800299265 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		8874A17E2C6DD38000299265 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		8874A1802C6DDD9700299265 /* CommonError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +207,7 @@
 		8833A2912C6CA3F1007DBE47 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				8874A17D2C6DD37800299265 /* UserDefaults */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -372,8 +377,17 @@
 			children = (
 				8833A2D12C6CD418007DBE47 /* Header.swift */,
 				8833A2D32C6CD6BB007DBE47 /* BaseProvider.swift */,
+				8874A1802C6DDD9700299265 /* CommonError.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		8874A17D2C6DD37800299265 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				8874A17E2C6DD38000299265 /* UserDefaultsManager.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -473,6 +487,7 @@
 				8833A2CB2C6CCF9E007DBE47 /* LoginService.swift in Sources */,
 				8874A1742C6DB35500299265 /* String+.swift in Sources */,
 				8833A2C42C6CC69D007DBE47 /* IntroduceViewController.swift in Sources */,
+				8874A1812C6DDD9700299265 /* CommonError.swift in Sources */,
 				8833A2D22C6CD418007DBE47 /* Header.swift in Sources */,
 				8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */,
 				8833A2972C6CA6CD007DBE47 /* UIColor+.swift in Sources */,
@@ -481,6 +496,7 @@
 				8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */,
 				8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */,
 				8833A2E42C6CF3FD007DBE47 /* BasicTextField.swift in Sources */,
+				8874A17F2C6DD38000299265 /* UserDefaultsManager.swift in Sources */,
 				880E39EB2C6C9CED00C57C2C /* SceneDelegate.swift in Sources */,
 				8833A2CF2C6CD1E2007DBE47 /* LoginResponse.swift in Sources */,
 				8833A2942C6CA66C007DBE47 /* ReusableProtocol.swift in Sources */,

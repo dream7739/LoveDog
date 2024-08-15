@@ -19,13 +19,14 @@ final class UserManager {
     func login(request: LoginRequest) -> Single<Result<LoginResponse, NSError>> {
         return provider.callRequest(target: .login(param: request), response: LoginResponse.self)
     }
-  
+    
 }
 
+
 enum LoginError: Error, LocalizedError {
-    case invalidRequest
-    case incorrectInfo
-    case unknown
+    case invalidRequest //필수값이 없는 경우
+    case incorrectInfo //계정이 없거나, 비밀번호 불일치
+    case common(_ error: CommonError)
     
     init(statusCode: Int) {
         switch statusCode {
@@ -34,7 +35,7 @@ enum LoginError: Error, LocalizedError {
         case 401:
             self =  .incorrectInfo
         default:
-            self = .unknown
+            self = .common(CommonError.init(statusCode: statusCode))
         }
     }
     
@@ -44,8 +45,8 @@ enum LoginError: Error, LocalizedError {
             return "필수값을 채워주세요"
         case .incorrectInfo:
             return "계정을 확인해주세요"
-        case .unknown:
-            return "알 수 없는 에러입니다"
+        case .common(let error):
+            return error.localizedDescription
         }
     }
 }
