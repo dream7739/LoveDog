@@ -34,6 +34,7 @@ final class ProfileViewController: BaseViewController {
                 switch result {
                 case .success(let value):
                     UserDefaultsManager.token = value.accessToken
+                    print("==== 갱신된 토큰 \(UserDefaultsManager.token)")
                 case .failure(let error):
                     print(error.localizedDescription)
                 }

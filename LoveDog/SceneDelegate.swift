@@ -5,6 +5,11 @@
 //  Created by 홍정민 on 8/14/24.
 //
 
+//"uploads/posts/dog_sample1_1723788226428.jpg"
+//"uploads/posts/dog_sample2_1723788173894.jpg"
+//"uploads/posts/dog_sample3_1723788251885.jpg"
+
+
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

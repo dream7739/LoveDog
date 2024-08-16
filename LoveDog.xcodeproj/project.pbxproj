@@ -48,6 +48,11 @@
 		8874A1912C6E16EC00299265 /* ProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1902C6E16EC00299265 /* ProfileResponse.swift */; };
 		8874A1992C6E399600299265 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8874A1982C6E399600299265 /* Alamofire */; };
 		8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A19C2C6E3A1B00299265 /* TargetType.swift */; };
+		88BEF72E2C6F267B001F390D /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF72D2C6F267B001F390D /* PostRouter.swift */; };
+		88BEF7302C6F2689001F390D /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF72F2C6F2689001F390D /* PostManager.swift */; };
+		88BEF7332C6F27F0001F390D /* FetchPostRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7322C6F27F0001F390D /* FetchPostRequest.swift */; };
+		88BEF7352C6F2E38001F390D /* FetchPostResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7342C6F2E38001F390D /* FetchPostResponse.swift */; };
+		88BEF7372C6F30E2001F390D /* FetchPostError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7362C6F30E2001F390D /* FetchPostError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +95,11 @@
 		8874A18C2C6E120300299265 /* SceneChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneChanger.swift; sourceTree = "<group>"; };
 		8874A1902C6E16EC00299265 /* ProfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponse.swift; sourceTree = "<group>"; };
 		8874A19C2C6E3A1B00299265 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
+		88BEF72D2C6F267B001F390D /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
+		88BEF72F2C6F2689001F390D /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
+		88BEF7322C6F27F0001F390D /* FetchPostRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostRequest.swift; sourceTree = "<group>"; };
+		88BEF7342C6F2E38001F390D /* FetchPostResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostResponse.swift; sourceTree = "<group>"; };
+		88BEF7362C6F30E2001F390D /* FetchPostError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				8874A17C2C6DC46900299265 /* Support */,
+				88BEF72C2C6F2665001F390D /* Post */,
 				8833A2D02C6CD1ED007DBE47 /* User */,
 			);
 			path = Network;
@@ -416,6 +427,26 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		88BEF72C2C6F2665001F390D /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				88BEF7312C6F27DC001F390D /* FetchPost */,
+				88BEF72D2C6F267B001F390D /* PostRouter.swift */,
+				88BEF72F2C6F2689001F390D /* PostManager.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		88BEF7312C6F27DC001F390D /* FetchPost */ = {
+			isa = PBXGroup;
+			children = (
+				88BEF7322C6F27F0001F390D /* FetchPostRequest.swift */,
+				88BEF7342C6F2E38001F390D /* FetchPostResponse.swift */,
+				88BEF7362C6F30E2001F390D /* FetchPostError.swift */,
+			);
+			path = FetchPost;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -498,11 +529,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88BEF7372C6F30E2001F390D /* FetchPostError.swift in Sources */,
 				8874A1912C6E16EC00299265 /* ProfileResponse.swift in Sources */,
 				8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */,
 				8833A2BB2C6CACF0007DBE47 /* Design.swift in Sources */,
 				8874A1892C6E040F00299265 /* AuthResponse.swift in Sources */,
 				8833A2AC2C6CA7DF007DBE47 /* BaseProtocol.swift in Sources */,
+				88BEF7332C6F27F0001F390D /* FetchPostRequest.swift in Sources */,
+				88BEF7302C6F2689001F390D /* PostManager.swift in Sources */,
 				8833A2C02C6CC65B007DBE47 /* TabBarController.swift in Sources */,
 				8874A18B2C6E05F000299265 /* AuthError.swift in Sources */,
 				8874A1782C6DC40800299265 /* UserManager.swift in Sources */,
@@ -515,6 +549,7 @@
 				8833A2E62C6CF4B9007DBE47 /* SignInViewModel.swift in Sources */,
 				8833A2C92C6CC6B8007DBE47 /* CommunityViewController.swift in Sources */,
 				8833A2CB2C6CCF9E007DBE47 /* UserRouter.swift in Sources */,
+				88BEF7352C6F2E38001F390D /* FetchPostResponse.swift in Sources */,
 				8874A18D2C6E120300299265 /* SceneChanger.swift in Sources */,
 				8874A1742C6DB35500299265 /* String+.swift in Sources */,
 				8874A1852C6DFE7600299265 /* AuthInterceptor.swift in Sources */,
@@ -522,6 +557,7 @@
 				8874A1812C6DDD9700299265 /* CommonError.swift in Sources */,
 				8833A2D22C6CD418007DBE47 /* Header.swift in Sources */,
 				8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */,
+				88BEF72E2C6F267B001F390D /* PostRouter.swift in Sources */,
 				8833A2972C6CA6CD007DBE47 /* UIColor+.swift in Sources */,
 				8833A2EA2C6CF789007DBE47 /* BasicButton.swift in Sources */,
 				8833A2B32C6CAB34007DBE47 /* SignInViewController.swift in Sources */,
