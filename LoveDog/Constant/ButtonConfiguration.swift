@@ -12,11 +12,19 @@ struct ButtonConfiguration {
     
     static let basic: UIButton.Configuration = {
         var configuration = UIButton.Configuration.plain()
-        configuration.background.backgroundColor = .main
+        configuration.baseBackgroundColor = .main
         configuration.baseForegroundColor = .white
         var container = AttributeContainer()
         container.font = Design.Font.tertiary
         configuration.attributedTitle = AttributedString("", attributes: container)
+        return configuration
+    }()
+    
+    static let floating: UIButton.Configuration = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.background.backgroundColor = .main
+        configuration.baseForegroundColor = .white
+        configuration.image = Design.Image.add
         return configuration
     }()
 

@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 final class CommunityViewController: BaseViewController {
-    
+    private let writeButton = FloatingButton()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     
     private func layout() -> UICollectionViewLayout {
@@ -34,10 +34,18 @@ final class CommunityViewController: BaseViewController {
     }
     
     override func configureHierarchy() {
-        view.addSubview(collectionView)
+        [collectionView, writeButton].forEach {
+            view.addSubview($0)
+        }
+        
     }
     
     override func configureLayout() {
+        writeButton.snp.makeConstraints { make in
+            make.size.equalTo(44)
+            make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+        
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -53,7 +61,6 @@ final class CommunityViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         
         output.postList
-            .debug("POST LIST")
             .bind(to: collectionView.rx.items(cellIdentifier: CommunityCollectionViewCell.identifier, cellType: CommunityCollectionViewCell.self)){ row, element, cell in
                 cell.configureData(element)
         }

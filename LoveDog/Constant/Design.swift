@@ -25,6 +25,7 @@ enum Design {
     enum Image {
         static let comment = UIImage(systemName: "message")!
         static let like = UIImage(systemName: "heart")!
+        static let add = UIImage(systemName: "plus")!
     }
 }
 

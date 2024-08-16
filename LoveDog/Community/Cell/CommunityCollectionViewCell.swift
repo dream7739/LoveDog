@@ -131,8 +131,6 @@ final class CommunityCollectionViewCell: BaseCollectionViewCell {
     
     private func configureMainImage(path: String) {
         PostManager.shared.fetchPostImage(path: path)
-            .observe(on: MainScheduler.instance)
-            .debug("MAIN IMAGE SUBSCRIBE")
             .subscribe(with: self){ owner, result in
                 switch result {
                 case .success(let value):

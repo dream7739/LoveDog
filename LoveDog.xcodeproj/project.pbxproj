@@ -58,6 +58,7 @@
 		88BEF73E2C6F362A001F390D /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF73D2C6F362A001F390D /* BaseCollectionViewCell.swift */; };
 		88BEF7462C6F5BDD001F390D /* BaseDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7452C6F5BDD001F390D /* BaseDateFormatter.swift */; };
 		88BEF7482C6F70FC001F390D /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7472C6F70FC001F390D /* PaddingLabel.swift */; };
+		88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7492C6F828A001F390D /* FloatingButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,7 @@
 		88BEF73D2C6F362A001F390D /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		88BEF7452C6F5BDD001F390D /* BaseDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDateFormatter.swift; sourceTree = "<group>"; };
 		88BEF7472C6F70FC001F390D /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		88BEF7492C6F828A001F390D /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -383,6 +385,7 @@
 				8833A2E32C6CF3FD007DBE47 /* BasicTextField.swift */,
 				8833A2E92C6CF789007DBE47 /* BasicButton.swift */,
 				88BEF7472C6F70FC001F390D /* PaddingLabel.swift */,
+				88BEF7492C6F828A001F390D /* FloatingButton.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 			files = (
 				88BEF7372C6F30E2001F390D /* FetchPostError.swift in Sources */,
 				8874A1912C6E16EC00299265 /* ProfileResponse.swift in Sources */,
+				88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */,
 				8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */,
 				8833A2BB2C6CACF0007DBE47 /* Design.swift in Sources */,
 				8874A1892C6E040F00299265 /* AuthResponse.swift in Sources */,
