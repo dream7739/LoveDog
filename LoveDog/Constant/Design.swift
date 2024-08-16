@@ -21,5 +21,10 @@ enum Design {
             static let quarternary: CGFloat = 13
         }
     }
+    
+    enum Image {
+        static let comment = UIImage(systemName: "message")!
+        static let like = UIImage(systemName: "heart")!
+    }
 }
 

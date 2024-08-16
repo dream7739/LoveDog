@@ -10,7 +10,7 @@ import Alamofire
 
 enum PostRouter {
     case posts(param: FetchPostRequest)
-    
+    case postImages(path: String)
 }
 
 extension PostRouter: TargetType {
@@ -21,9 +21,8 @@ extension PostRouter: TargetType {
     
     var method: Alamofire.HTTPMethod {
         switch self {
-        case .posts:
+        case .posts, .postImages:
             return .get
-            
         }
     }
     
@@ -31,12 +30,20 @@ extension PostRouter: TargetType {
         switch self {
         case .posts:
             return "posts"
+        case .postImages(let path):
+            return path
         }
     }
     
     var header: [String : String] {
         switch self {
         case .posts:
+            return [
+                HeaderKey.authorization.rawValue: UserDefaultsManager.token,
+                HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
+                HeaderKey.sesacKey.rawValue : APIKey.sesacKey
+            ]
+        case .postImages:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -57,12 +64,13 @@ extension PostRouter: TargetType {
                 URLQueryItem(name: "limit", value: param.limit),
                 URLQueryItem(name: "product_id", value: param.product_id)
                 ]
+        case .postImages:
+            return nil
         }
     }
     
     var body: Data? {
         return nil
-        
     }
     
 }

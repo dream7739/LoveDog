@@ -25,6 +25,13 @@ struct Post: Decodable {
     let likes2: [String] //추후 사용
     let hashTags: [String] //추후 사용
     let comments: [Comment]
+    
+    var dateDescription: String {
+        let date = BaseDateFormatter.basicDateFormatter.date(from: createdAt)
+        let dateString = BaseDateFormatter.postDateFormatter.string(from: date ?? Date())
+        let description = "작성일 " + dateString
+        return description
+    }
 }
 
 struct Creator: Decodable {
