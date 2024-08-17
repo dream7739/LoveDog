@@ -12,6 +12,7 @@ class BaseViewController: UIViewController, BaseProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
         configureHierarchy()
         configureLayout()
         configureView()

@@ -1,5 +1,5 @@
 //
-//  CommunityCollectionViewCell.swift
+//  StoryViewModel.swift
 //  LoveDog
 //
 //  Created by 홍정민 on 8/16/24.
@@ -9,11 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 
-//이미지
-//타이틀
-//생성일
-//좋아요 댓글 수
-final class CommunityCollectionViewCell: BaseCollectionViewCell {
+final class StoryCollectionViewCell: BaseCollectionViewCell {
     private let baseView = UIView()
     private let mainImageView = UIImageView()
     private let titleLabel = UILabel()
