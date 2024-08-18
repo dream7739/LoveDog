@@ -73,7 +73,7 @@ final class MakeStoryViewController: BaseViewController {
         imageCollectionView.snp.makeConstraints { make in
             make.top.equalTo(cameraButton.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(75)
+            make.height.equalTo(0)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -108,10 +108,11 @@ final class MakeStoryViewController: BaseViewController {
             make.height.equalTo(200)
             make.horizontalEdges.equalTo(titleLabel)
         }
+        
     }
     
     override func configureView() {
-  
+        
         cameraButton.configuration = ButtonConfiguration.camera
         
         imageCollectionView.register(StoryImageCollectionViewCell.self, forCellWithReuseIdentifier: StoryImageCollectionViewCell.identifier)
@@ -127,7 +128,6 @@ final class MakeStoryViewController: BaseViewController {
         categoryStackView.axis = .horizontal
         categoryStackView.spacing = 8
         categoryStackView.distribution = .fillEqually
-        
         for (idx, button) in categoryButtonList.enumerated() {
             button.tag = idx
             if idx == 0 {
@@ -163,7 +163,7 @@ final class MakeStoryViewController: BaseViewController {
         
         selectedImages
             .bind(to: imageCollectionView.rx.items(cellIdentifier: StoryImageCollectionViewCell.identifier, cellType: StoryImageCollectionViewCell.self)){
-               row, element, cell in
+                row, element, cell in
                 
                 cell.configureImage(element)
                 
@@ -171,12 +171,28 @@ final class MakeStoryViewController: BaseViewController {
                     .bind(with: self) { owner, _ in
                         owner.imageList.remove(at: row)
                         owner.selectedImages.accept(owner.imageList)
+                        
+                        
                     }
                     .disposed(by: cell.disposeBag)
-            
+                
             }
             .disposed(by: disposeBag)
-         
+        
+        selectedImages
+            .bind(with: self) { owner, value in
+                if owner.imageCollectionView.frame.height == .zero && value.count > 0 {
+                    owner.imageCollectionView.snp.updateConstraints { make in
+                        make.height.equalTo(75)
+                    }
+                }else if owner.imageCollectionView.frame.height != .zero && value.count == 0 {
+                    owner.imageCollectionView.snp.updateConstraints { make in
+                        make.height.equalTo(0)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
         categoryButtonList.forEach { button in
             button.rx.tap
                 .bind(with: self) { owner, value in
@@ -185,8 +201,6 @@ final class MakeStoryViewController: BaseViewController {
                 }
                 .disposed(by: disposeBag)
         }
-        
-        
     }
 }
 
@@ -226,16 +240,15 @@ extension MakeStoryViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
         
-        imageList = []
+        var images: [UIImage] = []
         
-        for (idx, result) in results.enumerated() {
-    
-            guard idx < 5 else { break }
+        for (_, result) in results.enumerated() {
             
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
                 if let image = object as? UIImage {
                     DispatchQueue.main.async {
-                        self?.imageList.append(image)
+                        images.append(image)
+                        self?.imageList = images
                         self?.selectedImages.accept(self?.imageList ?? [])
                     }
                 }
