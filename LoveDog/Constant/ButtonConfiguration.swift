@@ -12,9 +12,6 @@ enum ButtonConfiguration {
         var configuration = UIButton.Configuration.plain()
         configuration.baseBackgroundColor = .main
         configuration.baseForegroundColor = .white
-        var container = AttributeContainer()
-        container.font = Design.Font.tertiary
-        configuration.attributedTitle = AttributedString("", attributes: container)
         return configuration
     }()
     
@@ -41,6 +38,15 @@ enum ButtonConfiguration {
         configuration.background.backgroundColor = .black
         configuration.background.cornerRadius = 10
         configuration.baseForegroundColor = .white
+        return configuration
+    }()
+    
+    static let option: UIButton.Configuration = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.baseForegroundColor = .black
+        configuration.cornerStyle = .capsule
+        configuration.background.strokeColor = .main
+        configuration.background.strokeWidth = 1
         return configuration
     }()
 }

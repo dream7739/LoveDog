@@ -20,9 +20,14 @@ final class MakeStoryViewController: BaseViewController {
     private let titleLabel = UILabel()
     private let titleTextField = BasicTextField()
     private let categoryLabel = UILabel()
+    private let reviewButton = OptionButton(title: MakeCategory.review.rawValue)
+    private let reportButton = OptionButton(title: MakeCategory.report.rawValue)
+    private let dailyButton = OptionButton(title: MakeCategory.daily.rawValue)
+    private let promotionButton = OptionButton(title: MakeCategory.promotion.rawValue)
     private let categoryStackView = UIStackView()
     private let contentLabel = UILabel()
     private let contentTextView = BasicTextView(placeholder: "내용을 입력해주세요")
+    private lazy var categoryButtonList = [reviewButton, reportButton, dailyButton, promotionButton]
     
     private var imageList: [UIImage] = []
     private lazy var selectedImages = BehaviorRelay(value: imageList)
@@ -52,6 +57,10 @@ final class MakeStoryViewController: BaseViewController {
          categoryLabel, categoryStackView, contentLabel, contentTextView
         ].forEach {
             view.addSubview($0)
+        }
+        
+        categoryButtonList.forEach {
+            categoryStackView.addArrangedSubview($0)
         }
     }
     
@@ -85,7 +94,7 @@ final class MakeStoryViewController: BaseViewController {
         
         categoryStackView.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(8)
-            make.height.equalTo(44)
+            make.height.equalTo(38)
             make.horizontalEdges.equalTo(titleLabel)
         }
         
@@ -116,7 +125,15 @@ final class MakeStoryViewController: BaseViewController {
         categoryLabel.text = "카테고리"
         categoryLabel.font = Design.Font.tertiary_bold
         categoryStackView.axis = .horizontal
-        categoryStackView.backgroundColor = .main
+        categoryStackView.spacing = 8
+        categoryStackView.distribution = .fillEqually
+        
+        for (idx, button) in categoryButtonList.enumerated() {
+            button.tag = idx
+            if idx == 0 {
+                button.isClicked = true
+            }
+        }
         
         contentLabel.text = "내용"
         contentLabel.font = Design.Font.tertiary_bold
@@ -132,17 +149,13 @@ final class MakeStoryViewController: BaseViewController {
     }
     
     private func bind(){
-        navigationItem.leftBarButtonItem?
-            .rx
-            .tap
+        navigationItem.leftBarButtonItem?.rx.tap
             .bind(with: self) { owner, value in
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
         
-        cameraButton
-            .rx
-            .tap
+        cameraButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.openGallery()
             }
@@ -154,9 +167,7 @@ final class MakeStoryViewController: BaseViewController {
                 
                 cell.configureImage(element)
                 
-                cell.deleteButton
-                    .rx
-                    .tap
+                cell.deleteButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.imageList.remove(at: row)
                         owner.selectedImages.accept(owner.imageList)
@@ -165,7 +176,38 @@ final class MakeStoryViewController: BaseViewController {
             
             }
             .disposed(by: disposeBag)
- 
+         
+        categoryButtonList.forEach { button in
+            button.rx.tap
+                .bind(with: self) { owner, value in
+                    button.isClicked = true
+                    owner.deselectOptionButtons(button.tag)
+                }
+                .disposed(by: disposeBag)
+        }
+        
+        
+    }
+}
+
+extension MakeStoryViewController {
+    private enum MakeCategory: String, CaseIterable {
+        case review = "입양후기"
+        case report = "신고/제보"
+        case daily = "일상"
+        case promotion = "입양홍보"
+    }
+    
+    private func deselectOptionButtons(_ selectedIndex: Int) {
+        for (idx, button) in categoryButtonList.enumerated() {
+            if idx == selectedIndex { continue }
+            button.isClicked = false
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
     }
 }
 
@@ -187,6 +229,7 @@ extension MakeStoryViewController: PHPickerViewControllerDelegate {
         imageList = []
         
         for (idx, result) in results.enumerated() {
+    
             guard idx < 5 else { break }
             
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
