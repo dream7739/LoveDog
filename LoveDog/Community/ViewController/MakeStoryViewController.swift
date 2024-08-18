@@ -6,10 +6,10 @@
 //
 
 import UIKit
+import PhotosUI
 import SnapKit
 import RxSwift
 import RxCocoa
-
 
 //사진 - 사진 collection - 제목 - 카테고리 - 콘텐츠
 //카테고리: 입양후기, 실종/제보, 일상, 입양홍보
@@ -24,6 +24,8 @@ final class MakeStoryViewController: BaseViewController {
     private let contentLabel = UILabel()
     private let contentTextView = BasicTextView(placeholder: "내용을 입력해주세요")
     
+    private var imageList: [UIImage] = []
+    private lazy var selectedImages = BehaviorRelay(value: imageList)
     private let disposeBag = DisposeBag()
     
     private func layout() -> UICollectionViewLayout {
@@ -119,8 +121,6 @@ final class MakeStoryViewController: BaseViewController {
         contentLabel.text = "내용"
         contentLabel.font = Design.Font.tertiary_bold
         contentTextView.font = Design.Font.secondary
-        
-        
     }
     
     private func configureNav(){
@@ -140,11 +140,63 @@ final class MakeStoryViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        Observable.just(["a", "b", "c", "d", "e"])
-            .bind(to: imageCollectionView.rx.items(cellIdentifier: StoryImageCollectionViewCell.identifier, cellType: StoryImageCollectionViewCell.self)){
-               collectionView, row, element in
-                     
+        cameraButton
+            .rx
+            .tap
+            .bind(with: self) { owner, _ in
+                owner.openGallery()
             }
             .disposed(by: disposeBag)
+        
+        selectedImages
+            .bind(to: imageCollectionView.rx.items(cellIdentifier: StoryImageCollectionViewCell.identifier, cellType: StoryImageCollectionViewCell.self)){
+               row, element, cell in
+                
+                cell.configureImage(element)
+                
+                cell.deleteButton
+                    .rx
+                    .tap
+                    .bind(with: self) { owner, _ in
+                        owner.imageList.remove(at: row)
+                        owner.selectedImages.accept(owner.imageList)
+                    }
+                    .disposed(by: cell.disposeBag)
+            
+            }
+            .disposed(by: disposeBag)
+ 
+    }
+}
+
+extension MakeStoryViewController: PHPickerViewControllerDelegate {
+    
+    private func openGallery() {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 5
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+        
+        imageList = []
+        
+        for (idx, result) in results.enumerated() {
+            guard idx < 5 else { break }
+            
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+                if let image = object as? UIImage {
+                    DispatchQueue.main.async {
+                        self?.imageList.append(image)
+                        self?.selectedImages.accept(self?.imageList ?? [])
+                    }
+                }
+            }
+        }
     }
 }

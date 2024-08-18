@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 
 final class BasicTextView: UITextView {
     private var placeholderText = ""

@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+final class MakeStoryViewModel: BaseViewModel {
+    struct Input {
+        
+    }
+    
+    struct Output {
+    }
+    
+    func transform(input: Input) -> Output {
+        return Output()
+    }
+}

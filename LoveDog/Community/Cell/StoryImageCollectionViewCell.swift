@@ -7,11 +7,19 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 final class StoryImageCollectionViewCell: BaseCollectionViewCell {
     
     private let mainImageView = UIImageView()
-    private let deleteButton = UIButton()
+    let deleteButton = UIButton()
+    
+    var disposeBag = DisposeBag()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         [mainImageView, deleteButton].forEach {
@@ -38,6 +46,10 @@ final class StoryImageCollectionViewCell: BaseCollectionViewCell {
         mainImageView.clipsToBounds = true
         
         deleteButton.configuration = ButtonConfiguration.delete
+    }
+    
+    func configureImage(_ image: UIImage){
+        mainImageView.image = image
     }
     
 }
