@@ -9,8 +9,10 @@ import Foundation
 import Alamofire
 
 enum PostRouter {
-    case posts(param: FetchPostRequest)
-    case postImages(path: String)
+    case fetchPosts(param: FetchPostRequest)
+    case fetchPostImage(path: String)
+    case uploadPost(param: UploadPostRequest)
+    case uploadPostImage
 }
 
 extension PostRouter: TargetType {
@@ -21,29 +23,27 @@ extension PostRouter: TargetType {
     
     var method: Alamofire.HTTPMethod {
         switch self {
-        case .posts, .postImages:
+        case .fetchPosts, .fetchPostImage:
             return .get
+        case .uploadPost, .uploadPostImage:
+            return .post
         }
     }
     
     var path: String {
         switch self {
-        case .posts:
+        case .fetchPosts, .uploadPost:
             return "posts"
-        case .postImages(let path):
+        case .uploadPostImage:
+            return "posts/files"
+        case .fetchPostImage(let path):
             return path
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .posts:
-            return [
-                HeaderKey.authorization.rawValue: UserDefaultsManager.token,
-                HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
-                HeaderKey.sesacKey.rawValue : APIKey.sesacKey
-            ]
-        case .postImages:
+        case .fetchPosts, .fetchPostImage, .uploadPost, .uploadPostImage:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -58,19 +58,25 @@ extension PostRouter: TargetType {
     
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .posts(let param):
+        case .fetchPosts(let param):
             return [
                 URLQueryItem(name: "next", value: param.next),
                 URLQueryItem(name: "limit", value: param.limit),
                 URLQueryItem(name: "product_id", value: param.product_id)
-                ]
-        case .postImages:
+            ]
+        case .fetchPostImage, .uploadPost, .uploadPostImage:
             return nil
         }
     }
     
     var body: Data? {
-        return nil
+        switch self {
+        case .fetchPosts, .fetchPostImage, .uploadPostImage:
+            return nil
+        case .uploadPost(let param):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(param)
+        }
     }
     
 }

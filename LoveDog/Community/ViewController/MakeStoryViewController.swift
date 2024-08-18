@@ -29,8 +29,8 @@ final class MakeStoryViewController: BaseViewController {
     private let contentTextView = BasicTextView(placeholder: "내용을 입력해주세요")
     private lazy var categoryButtonList = [reviewButton, reportButton, dailyButton, promotionButton]
     
-    private var imageList: [UIImage] = []
-    private lazy var selectedImages = BehaviorRelay(value: imageList)
+
+    let viewModel = MakeStoryViewModel()
     private let disposeBag = DisposeBag()
     
     private func layout() -> UICollectionViewLayout {
@@ -149,6 +149,10 @@ final class MakeStoryViewController: BaseViewController {
     }
     
     private func bind(){
+        let input = MakeStoryViewModel.Input(save: navigationItem.rightBarButtonItem!.rx.tap)
+        
+        let output = viewModel.transform(input: input)
+        
         navigationItem.leftBarButtonItem?.rx.tap
             .bind(with: self) { owner, value in
                 owner.dismiss(animated: true)
@@ -161,7 +165,7 @@ final class MakeStoryViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        selectedImages
+        viewModel.selectedImages
             .bind(to: imageCollectionView.rx.items(cellIdentifier: StoryImageCollectionViewCell.identifier, cellType: StoryImageCollectionViewCell.self)){
                 row, element, cell in
                 
@@ -169,17 +173,17 @@ final class MakeStoryViewController: BaseViewController {
                 
                 cell.deleteButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.imageList.remove(at: row)
-                        owner.selectedImages.accept(owner.imageList)
-                        
-                        
+                        owner.viewModel.imageList.remove(at: row)
+                        owner.viewModel.fileList.remove(at: row)
+                        owner.viewModel.selectedImages.accept(owner.viewModel.imageList)
+                        owner.viewModel.fileNames.accept(owner.viewModel.fileList)
                     }
                     .disposed(by: cell.disposeBag)
                 
             }
             .disposed(by: disposeBag)
         
-        selectedImages
+        viewModel.selectedImages
             .bind(with: self) { owner, value in
                 if owner.imageCollectionView.frame.height == .zero && value.count > 0 {
                     owner.imageCollectionView.snp.updateConstraints { make in
@@ -241,15 +245,18 @@ extension MakeStoryViewController: PHPickerViewControllerDelegate {
         dismiss(animated: true)
         
         var images: [UIImage] = []
+        var fileNames: [String] = []
         
         for (_, result) in results.enumerated() {
-            
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
                 if let image = object as? UIImage {
                     DispatchQueue.main.async {
                         images.append(image)
-                        self?.imageList = images
-                        self?.selectedImages.accept(self?.imageList ?? [])
+                        fileNames.append(result.itemProvider.suggestedName ?? "")
+                        self?.viewModel.imageList = images
+                        self?.viewModel.fileList = fileNames
+                        self?.viewModel.selectedImages.accept(self?.viewModel.imageList ?? [])
+                        self?.viewModel.fileNames.accept(self?.viewModel.fileList ?? [])
                     }
                 }
             }

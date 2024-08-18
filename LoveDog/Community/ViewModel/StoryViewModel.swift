@@ -31,7 +31,7 @@ final class StoryViewModel: BaseViewModel {
 //                    print(error.localizedDescription)
 //                }
 //            }.disposed(by: disposeBag)
-//        
+        
         
         return Output(postList: postList)
     }

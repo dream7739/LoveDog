@@ -1,14 +1,14 @@
 //
-//  FetchPostError.swift
+//  UploadPostImageError.swift
 //  LoveDog
 //
-//  Created by 홍정민 on 8/16/24.
+//  Created by 홍정민 on 8/18/24.
 //
 
 import Foundation
 
-enum FetchPostError: Error, LocalizedError {
-    case invalidRequest
+enum UploadPostImageError: Error, LocalizedError {
+    case badRequest
     case unavailableToken
     case forbidden
     case expiredRefresh
@@ -17,11 +17,11 @@ enum FetchPostError: Error, LocalizedError {
     init(statusCode: Int) {
         switch statusCode {
         case 400:
-            self = .invalidRequest
+            self = .badRequest
         case 401:
-            self =  .unavailableToken
+            self = .unavailableToken
         case 403:
-            self = .forbidden
+            self =  .forbidden
         case 419:
             self = .expiredRefresh
         default:
@@ -31,7 +31,7 @@ enum FetchPostError: Error, LocalizedError {
     
     var errorDescription: String? {
         switch self {
-        case .invalidRequest:
+        case .badRequest:
             return "잘못된 요청입니다"
         case .unavailableToken:
             return "유효하지 않은 토큰입니다"

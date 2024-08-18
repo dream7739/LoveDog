@@ -10,5 +10,5 @@ import Foundation
 struct FetchPostRequest: Encodable {
     let next: String //페이지네이션에 사용할 커서
     let limit: String //한 페이지당 개수
-    let product_id: String = "luvdog_community"
+    let product_id: String = Constant.productId
 }

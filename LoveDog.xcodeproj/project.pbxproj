@@ -39,6 +39,11 @@
 		8833A2EA2C6CF789007DBE47 /* BasicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E92C6CF789007DBE47 /* BasicButton.swift */; };
 		8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */; };
 		8851F1B82C71D4F100B7BD57 /* OptionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8851F1B72C71D4F100B7BD57 /* OptionButton.swift */; };
+		8851F1BE2C72069B00B7BD57 /* UploadPostRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8851F1BD2C72069B00B7BD57 /* UploadPostRequest.swift */; };
+		8851F1C02C720D1A00B7BD57 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8851F1BF2C720D1A00B7BD57 /* Constant.swift */; };
+		8851F1C42C720FD100B7BD57 /* UploadPostError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8851F1C32C720FD100B7BD57 /* UploadPostError.swift */; };
+		8851F1C62C72122F00B7BD57 /* UploadPostImageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8851F1C52C72122F00B7BD57 /* UploadPostImageResponse.swift */; };
+		8851F1CA2C7212F600B7BD57 /* UploadPostImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8851F1C92C7212F600B7BD57 /* UploadPostImageError.swift */; };
 		8874A1742C6DB35500299265 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1732C6DB35500299265 /* String+.swift */; };
 		8874A1782C6DC40800299265 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1772C6DC40800299265 /* UserManager.swift */; };
 		8874A17F2C6DD38000299265 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A17E2C6DD38000299265 /* UserDefaultsManager.swift */; };
@@ -98,6 +103,11 @@
 		8833A2E92C6CF789007DBE47 /* BasicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicButton.swift; sourceTree = "<group>"; };
 		8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfiguration.swift; sourceTree = "<group>"; };
 		8851F1B72C71D4F100B7BD57 /* OptionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionButton.swift; sourceTree = "<group>"; };
+		8851F1BD2C72069B00B7BD57 /* UploadPostRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostRequest.swift; sourceTree = "<group>"; };
+		8851F1BF2C720D1A00B7BD57 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		8851F1C32C720FD100B7BD57 /* UploadPostError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostError.swift; sourceTree = "<group>"; };
+		8851F1C52C72122F00B7BD57 /* UploadPostImageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostImageResponse.swift; sourceTree = "<group>"; };
+		8851F1C92C7212F600B7BD57 /* UploadPostImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostImageError.swift; sourceTree = "<group>"; };
 		8874A1732C6DB35500299265 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		8874A1772C6DC40800299265 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		8874A17E2C6DD38000299265 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
@@ -279,6 +289,7 @@
 			children = (
 				8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */,
 				8833A2BA2C6CACF0007DBE47 /* Design.swift */,
+				8851F1BF2C720D1A00B7BD57 /* Constant.swift */,
 			);
 			path = Constant;
 			sourceTree = "<group>";
@@ -397,6 +408,33 @@
 			path = CustomView;
 			sourceTree = "<group>";
 		};
+		8851F1B92C71F05F00B7BD57 /* UploadPost */ = {
+			isa = PBXGroup;
+			children = (
+				8851F1C82C72127400B7BD57 /* Image */,
+				8851F1C72C72126100B7BD57 /* Content */,
+			);
+			path = UploadPost;
+			sourceTree = "<group>";
+		};
+		8851F1C72C72126100B7BD57 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				8851F1C32C720FD100B7BD57 /* UploadPostError.swift */,
+				8851F1BD2C72069B00B7BD57 /* UploadPostRequest.swift */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		8851F1C82C72127400B7BD57 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				8851F1C52C72122F00B7BD57 /* UploadPostImageResponse.swift */,
+				8851F1C92C7212F600B7BD57 /* UploadPostImageError.swift */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
 		8874A17B2C6DC45400299265 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,6 +493,7 @@
 		88BEF72C2C6F2665001F390D /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				8851F1B92C71F05F00B7BD57 /* UploadPost */,
 				881E09432C6F9A9F003EDD78 /* Manager */,
 				88BEF7312C6F27DC001F390D /* FetchPost */,
 			);
@@ -563,6 +602,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88BEF7372C6F30E2001F390D /* FetchPostError.swift in Sources */,
+				8851F1C62C72122F00B7BD57 /* UploadPostImageResponse.swift in Sources */,
 				8874A1912C6E16EC00299265 /* ProfileResponse.swift in Sources */,
 				88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */,
 				8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */,
@@ -580,6 +620,7 @@
 				8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */,
 				8833A2CD2C6CD1B9007DBE47 /* LoginRequest.swift in Sources */,
 				8833A2BD2C6CC4FB007DBE47 /* APIKey.swift in Sources */,
+				8851F1C42C720FD100B7BD57 /* UploadPostError.swift in Sources */,
 				88BEF7462C6F5BDD001F390D /* BaseDateFormatter.swift in Sources */,
 				8833A2E62C6CF4B9007DBE47 /* SignInViewModel.swift in Sources */,
 				881E09422C6F9A51003EDD78 /* MakeStoryViewModel.swift in Sources */,
@@ -592,10 +633,13 @@
 				8874A1852C6DFE7600299265 /* AuthInterceptor.swift in Sources */,
 				8833A2C42C6CC69D007DBE47 /* IntroduceViewController.swift in Sources */,
 				88BEF73C2C6F3621001F390D /* StoryCollectionViewCell.swift in Sources */,
+				8851F1BE2C72069B00B7BD57 /* UploadPostRequest.swift in Sources */,
+				8851F1CA2C7212F600B7BD57 /* UploadPostImageError.swift in Sources */,
 				8874A1812C6DDD9700299265 /* CommonError.swift in Sources */,
 				8833A2D22C6CD418007DBE47 /* Header.swift in Sources */,
 				8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */,
 				88BEF73E2C6F362A001F390D /* BaseCollectionViewCell.swift in Sources */,
+				8851F1C02C720D1A00B7BD57 /* Constant.swift in Sources */,
 				88BEF7392C6F355C001F390D /* StoryViewModel.swift in Sources */,
 				88BEF7482C6F70FC001F390D /* PaddingLabel.swift in Sources */,
 				88BEF72E2C6F267B001F390D /* PostRouter.swift in Sources */,

@@ -18,7 +18,7 @@ final class PostManager {
     func fetchPost(request: FetchPostRequest) -> Single<Result<FetchPostResponse, FetchPostError>> {
         let result = Single<Result<FetchPostResponse, FetchPostError>>.create { observer in
             do {
-                let fetchPostRequest = try PostRouter.posts(param: request).asURLRequest()
+                let fetchPostRequest = try PostRouter.fetchPosts(param: request).asURLRequest()
                 AF.request(fetchPostRequest, interceptor: AuthInterceptor.shared)
                     .responseDecodable(of: FetchPostResponse.self) { response in
                         let status = response.response?.statusCode ?? 0
@@ -46,7 +46,7 @@ final class PostManager {
     func fetchPostImage(path: String) -> Single<Result<UIImage, CommonError>> {
         let result = Single<Result<UIImage, CommonError>>.create { observer in
             do {
-                let fetchPostImageResquest = try PostRouter.postImages(path: path).asURLRequest()
+                let fetchPostImageResquest = try PostRouter.fetchPostImage(path: path).asURLRequest()
                 AF.download(fetchPostImageResquest, interceptor: AuthInterceptor.shared)
                     .downloadProgress { progress in
                         print("DOWNLOAD PROGRESS: \(progress.fractionCompleted)")
@@ -77,6 +77,66 @@ final class PostManager {
         return result
     }
     
+    //게시글 이미지 업로드
+    func uploadPostImage(images: [String: Data]) -> Single<Result<UploadPostImageResponse, UploadPostImageError>> {
+        let result = Single<Result<UploadPostImageResponse, UploadPostImageError>>.create { observer in
+            do {
+                let uploadPostImageRequest = try PostRouter.uploadPostImage.asURLRequest()
+                
+                AF.upload(multipartFormData: { multipart in
+                    images.forEach { fileName, image in
+                        multipart.append(image, withName: "files", fileName: fileName, mimeType: "image/png")
+                    }
+                }, with: uploadPostImageRequest, interceptor: AuthInterceptor.shared)
+                .responseDecodable(of: UploadPostImageResponse.self) { response in
+                    let status = response.response?.statusCode ?? 0
+                    print(status)
+                    switch response.result {
+                    case .success(let value):
+                        print(value.files)
+                        observer(.success(.success(value)))
+                    case .failure(let error):
+                        print(error)
+                        observer(.success(.failure(UploadPostImageError.common(.unknown))))
+                    }
+                }
+                
+            }catch {
+                print(#function, "UPLOAD POST IMAGE REQUEST FAILED")
+                observer(.success(.failure(.common(.unknown))))
+            }
+            return Disposables.create()
+        }
+        return result
+    }
+    
+    //게시글 업로드
+    func uploadPost(request: UploadPostRequest) -> Single<Result<Post, UploadPostError>> {
+        let result = Single<Result<Post, UploadPostError>>.create { observer in
+            do {
+                let uploadPostRequest = try PostRouter.uploadPost(param: request).asURLRequest()
+                AF.request(uploadPostRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: Post.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(UploadPostError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "UPLOAD POST FAILED")
+                observer(.success(.failure(UploadPostError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
     
     
 }
