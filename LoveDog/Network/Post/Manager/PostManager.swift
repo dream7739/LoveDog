@@ -48,9 +48,6 @@ final class PostManager {
             do {
                 let fetchPostImageResquest = try PostRouter.fetchPostImage(path: path).asURLRequest()
                 AF.download(fetchPostImageResquest, interceptor: AuthInterceptor.shared)
-                    .downloadProgress { progress in
-                        print("DOWNLOAD PROGRESS: \(progress.fractionCompleted)")
-                    }
                     .responseData { response in
                         let status = response.response?.statusCode ?? 0
                         print("STATUS CODE ==== \(status)")

@@ -165,7 +165,8 @@ extension MakeStoryViewController {
         let input = MakeStoryViewModel.Input(
             saveTap: navigationItem.rightBarButtonItem!.rx.tap,
             title: titleTextField.rx.text.orEmpty,
-            content: contentTextView.rx.text.orEmpty
+            content: contentTextView.rx.text.orEmpty,
+            category: BehaviorRelay(value: MakeCategory.review.rawValue)
         )
         
         let output = viewModel.transform(input: input)
@@ -188,6 +189,7 @@ extension MakeStoryViewController {
                 
                 cell.configureImage(element)
                 
+                // - TODO: 수정 필요
                 cell.deleteButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.viewModel.imageList.remove(at: row)
@@ -205,6 +207,7 @@ extension MakeStoryViewController {
             button.rx.tap
                 .bind(with: self) { owner, value in
                     button.isClicked = true
+                    input.category.accept(MakeCategory.allCases[button.tag].rawValue)
                     owner.deselectOptionButtons(button.tag)
                 }
                 .disposed(by: disposeBag)
@@ -247,6 +250,7 @@ extension MakeStoryViewController: PHPickerViewControllerDelegate {
         var images: [UIImage] = []
         var fileNames: [String] = []
         
+        // - TODO: 수정 필요
         for (_, result) in results.enumerated() {
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
                 if let image = object as? UIImage {

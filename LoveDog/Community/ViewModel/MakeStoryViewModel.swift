@@ -22,6 +22,7 @@ final class MakeStoryViewModel: BaseViewModel {
         let saveTap: ControlEvent<Void>
         let title: ControlProperty<String>
         let content: ControlProperty<String>
+        let category: BehaviorRelay<String>
     }
     
     struct Output {
@@ -43,9 +44,15 @@ final class MakeStoryViewModel: BaseViewModel {
         
         //컨텐츠
         let content = input.saveTap
-            .withLatestFrom(Observable.combineLatest(input.title, input.content))
+            .withLatestFrom(Observable.combineLatest(input.title, input.content, input.category))
             .debug("CONTENT")
         
+        input.category
+            .bind(with: self) { owner, value in
+                print(value)
+            }
+            .disposed(by: disposeBag)
+            
         //업로드 이미지
         let postImage = images
             .filter { !$0.isEmpty }
@@ -62,10 +69,20 @@ final class MakeStoryViewModel: BaseViewModel {
         //업로드 포스트(제목, 내용, 카테고리)
         Observable.zip(postImage, content)
             .map { value in
-                return (images: value.0, title: value.1.0, content: value.1.1)
+                return (
+                    images: value.0,
+                    title: value.1.0,
+                    content: value.1.1,
+                    category: value.1.2
+                )
             }
             .map { value in
-                return UploadPostRequest(title: value.title, content: value.content, content1: "입양후기", files: value.images)
+                return UploadPostRequest(
+                    title: value.title,
+                    content: value.content,
+                    content1: value.category,
+                    files: value.images
+                )
             }.flatMap { value in
                 PostManager.shared.uploadPost(request: value)
             }

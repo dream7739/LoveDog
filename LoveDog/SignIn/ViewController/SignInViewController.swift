@@ -72,6 +72,10 @@ final class SignInViewController: BaseViewController {
         validationLabel.font = Design.Font.quarternary
         validationLabel.textColor = .deep_gray
         signInButton.isEnabled = false
+        
+        //TEST
+        emailTextField.text = "jm123@naver.com"
+        passwordTextField.text = "123"
     }
     
     private func bind() {

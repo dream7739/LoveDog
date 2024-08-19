@@ -21,16 +21,16 @@ final class StoryViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         let postList: BehaviorSubject<[Post]> = BehaviorSubject(value: [])
         
-//        let request = FetchPostRequest(next: "", limit: "5")
-//        PostManager.shared.fetchPost(request: request)
-//            .subscribe(with: self) { owner, result in
-//                switch result {
-//                case .success(let value):
-//                    postList.onNext(value.data)
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }
-//            }.disposed(by: disposeBag)
+        let request = FetchPostRequest(next: "", limit: "5")
+        PostManager.shared.fetchPost(request: request)
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    postList.onNext(value.data)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }.disposed(by: disposeBag)
         
         
         return Output(postList: postList)
