@@ -65,7 +65,9 @@ final class SignInViewController: BaseViewController {
         navigationItem.title = "로그인"
         
         emailTextField.font = Design.Font.tertiary
+        emailTextField.placeholder = "이메일을 입력해주세요"
         passwordTextField.font = Design.Font.tertiary
+        passwordTextField.placeholder = "비밀번호를 입력해주세요"
         passwordTextField.isSecureTextEntry = true
         validationLabel.font = Design.Font.quarternary
         validationLabel.textColor = .deep_gray

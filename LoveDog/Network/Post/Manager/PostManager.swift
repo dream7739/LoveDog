@@ -78,8 +78,8 @@ final class PostManager {
     }
     
     //게시글 이미지 업로드
-    func uploadPostImage(images: [String: Data]) -> Single<Result<UploadPostImageResponse, UploadPostImageError>> {
-        let result = Single<Result<UploadPostImageResponse, UploadPostImageError>>.create { observer in
+    func uploadPostImage(images: [String: Data]) -> Single<UploadPostImageResponse> {
+        let result = Single<UploadPostImageResponse>.create { observer in
             do {
                 let uploadPostImageRequest = try PostRouter.uploadPostImage.asURLRequest()
                 
@@ -90,20 +90,20 @@ final class PostManager {
                 }, with: uploadPostImageRequest, interceptor: AuthInterceptor.shared)
                 .responseDecodable(of: UploadPostImageResponse.self) { response in
                     let status = response.response?.statusCode ?? 0
-                    print(status)
+                    print("STATUS CODE ==== \(status)")
                     switch response.result {
                     case .success(let value):
-                        print(value.files)
-                        observer(.success(.success(value)))
+                        print("UPLOAD FILES ===", value.files)
+                        observer(.success((value)))
                     case .failure(let error):
                         print(error)
-                        observer(.success(.failure(UploadPostImageError.common(.unknown))))
+                        observer(.failure(UploadPostImageError.common(.unknown)))
                     }
                 }
                 
             }catch {
                 print(#function, "UPLOAD POST IMAGE REQUEST FAILED")
-                observer(.success(.failure(.common(.unknown))))
+                observer(.failure(UploadPostImageError.common(.unknown)))
             }
             return Disposables.create()
         }

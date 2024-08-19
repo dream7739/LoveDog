@@ -12,5 +12,5 @@ struct UploadPostRequest: Encodable {
     let content: String
     let content1: String
     let product_id = Constant.productId
-    var files: [String] = []
+    var files: [String]
 }

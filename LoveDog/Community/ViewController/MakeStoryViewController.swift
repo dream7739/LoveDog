@@ -28,7 +28,7 @@ final class MakeStoryViewController: BaseViewController {
     private let contentLabel = UILabel()
     private let contentTextView = BasicTextView(placeholder: "내용을 입력해주세요")
     private lazy var categoryButtonList = [reviewButton, reportButton, dailyButton, promotionButton]
-    
+    private let emptyView = UIView()
 
     let viewModel = MakeStoryViewModel()
     private let disposeBag = DisposeBag()
@@ -54,7 +54,7 @@ final class MakeStoryViewController: BaseViewController {
     
     override func configureHierarchy() {
         [cameraButton, imageCollectionView, titleLabel, titleTextField,
-         categoryLabel, categoryStackView, contentLabel, contentTextView
+         categoryLabel, categoryStackView, contentLabel, contentTextView, emptyView
         ].forEach {
             view.addSubview($0)
         }
@@ -71,13 +71,14 @@ final class MakeStoryViewController: BaseViewController {
         }
         
         imageCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(cameraButton.snp.bottom).offset(4)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(0)
+            make.centerY.equalTo(cameraButton)
+            make.leading.equalTo(cameraButton.snp.trailing).offset(4)
+            make.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(75)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageCollectionView.snp.bottom).offset(16)
+            make.top.equalTo(cameraButton.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
         
@@ -109,6 +110,11 @@ final class MakeStoryViewController: BaseViewController {
             make.horizontalEdges.equalTo(titleLabel)
         }
         
+        emptyView.snp.makeConstraints { make in
+            make.top.equalTo(contentTextView.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
     }
     
     override func configureView() {
@@ -148,8 +154,19 @@ final class MakeStoryViewController: BaseViewController {
         navigationItem.rightBarButtonItem = save
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+}
+
+extension MakeStoryViewController {
     private func bind(){
-        let input = MakeStoryViewModel.Input(save: navigationItem.rightBarButtonItem!.rx.tap)
+        let input = MakeStoryViewModel.Input(
+            saveTap: navigationItem.rightBarButtonItem!.rx.tap,
+            title: titleTextField.rx.text.orEmpty,
+            content: contentTextView.rx.text.orEmpty
+        )
         
         let output = viewModel.transform(input: input)
         
@@ -183,19 +200,6 @@ final class MakeStoryViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        viewModel.selectedImages
-            .bind(with: self) { owner, value in
-                if owner.imageCollectionView.frame.height == .zero && value.count > 0 {
-                    owner.imageCollectionView.snp.updateConstraints { make in
-                        make.height.equalTo(75)
-                    }
-                }else if owner.imageCollectionView.frame.height != .zero && value.count == 0 {
-                    owner.imageCollectionView.snp.updateConstraints { make in
-                        make.height.equalTo(0)
-                    }
-                }
-            }
-            .disposed(by: disposeBag)
         
         categoryButtonList.forEach { button in
             button.rx.tap
@@ -223,10 +227,6 @@ extension MakeStoryViewController {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        view.endEditing(true)
-    }
 }
 
 extension MakeStoryViewController: PHPickerViewControllerDelegate {
