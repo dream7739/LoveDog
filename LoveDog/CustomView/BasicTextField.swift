@@ -13,7 +13,7 @@ final class BasicTextField: UITextField {
         super.init(frame: frame)
         
         layer.cornerRadius = 10
-        layer.borderColor = UIColor.dark_gray.cgColor
+        layer.borderColor = UIColor.main.cgColor
         layer.borderWidth = 1.0
         leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
         leftViewMode = .always

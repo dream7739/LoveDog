@@ -11,7 +11,7 @@ import RxSwift
 
 final class ProfileViewController: BaseViewController {
     private let refreshButton = UIButton()
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()

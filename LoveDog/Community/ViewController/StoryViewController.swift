@@ -1,5 +1,5 @@
 //
-//  CommunityViewController.swift
+//  StoryViewModel.swift
 //  LoveDog
 //
 //  Created by 홍정민 on 8/14/24.
@@ -10,8 +10,8 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class CommunityViewController: BaseViewController {
-    
+final class StoryViewController: BaseViewController {
+    private let writeButton = FloatingButton()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     
     private func layout() -> UICollectionViewLayout {
@@ -24,9 +24,8 @@ final class CommunityViewController: BaseViewController {
         return layout
     }
     
-    let viewModel = CommunityViewModel()
-    
-    let disposeBag = DisposeBag()
+    let viewModel = StoryViewModel()
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +33,17 @@ final class CommunityViewController: BaseViewController {
     }
     
     override func configureHierarchy() {
-        view.addSubview(collectionView)
+        [collectionView, writeButton].forEach {
+            view.addSubview($0)
+        }
     }
     
     override func configureLayout() {
+        writeButton.snp.makeConstraints { make in
+            make.size.equalTo(44)
+            make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+        
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -45,19 +51,27 @@ final class CommunityViewController: BaseViewController {
     
     override func configureView() {
         navigationItem.title = "스토리"
-        collectionView.register(CommunityCollectionViewCell.self, forCellWithReuseIdentifier: CommunityCollectionViewCell.identifier)
+        collectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: StoryCollectionViewCell.identifier)
     }
     
     private func bind() {
-        let input = CommunityViewModel.Input()
+        let input = StoryViewModel.Input()
         let output = viewModel.transform(input: input)
         
         output.postList
-            .debug("POST LIST")
-            .bind(to: collectionView.rx.items(cellIdentifier: CommunityCollectionViewCell.identifier, cellType: CommunityCollectionViewCell.self)){ row, element, cell in
+            .bind(to: collectionView.rx.items(cellIdentifier: StoryCollectionViewCell.identifier, cellType: StoryCollectionViewCell.self)){ row, element, cell in
                 cell.configureData(element)
         }
         .disposed(by: disposeBag)
+        
+        writeButton.rx.tap
+            .bind(with: self){ owner, value in
+                let makeVC = UINavigationController(rootViewController: MakeStoryViewController())
+                makeVC.modalPresentationStyle = .fullScreen
+                owner.present(makeVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+            
     }
     
 }

@@ -5,10 +5,11 @@
 //  Created by 홍정민 on 8/14/24.
 //
 
-import Foundation
+import UIKit
+import SnapKit
 
 final class IntroduceViewController: BaseViewController {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }

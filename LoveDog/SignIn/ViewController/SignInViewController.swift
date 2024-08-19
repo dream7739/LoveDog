@@ -18,7 +18,7 @@ final class SignInViewController: BaseViewController {
     private let signInButton = BasicButton(title: "로그인")
     
     let viewModel = SignInViewModel()
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,12 +62,20 @@ final class SignInViewController: BaseViewController {
     }
     
     override func configureView() {
+        navigationItem.title = "로그인"
+        
         emailTextField.font = Design.Font.tertiary
+        emailTextField.placeholder = "이메일을 입력해주세요"
         passwordTextField.font = Design.Font.tertiary
+        passwordTextField.placeholder = "비밀번호를 입력해주세요"
         passwordTextField.isSecureTextEntry = true
         validationLabel.font = Design.Font.quarternary
         validationLabel.textColor = .deep_gray
         signInButton.isEnabled = false
+        
+        //TEST
+        emailTextField.text = "jm123@naver.com"
+        passwordTextField.text = "123"
     }
     
     private func bind() {

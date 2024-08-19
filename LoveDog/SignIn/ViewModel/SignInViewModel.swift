@@ -11,7 +11,7 @@ import RxCocoa
 
 final class SignInViewModel: BaseViewModel {
     
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     struct Input {
         let emailText: ControlProperty<String>

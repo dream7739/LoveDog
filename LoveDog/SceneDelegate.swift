@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         
         print(UserDefaultsManager.token)
+        
         if UserDefaultsManager.token.isEmpty {
             window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
         }else {

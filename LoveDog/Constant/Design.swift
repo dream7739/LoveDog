@@ -13,7 +13,9 @@ enum Design {
         static let secondary = UIFont.systemFont(ofSize: FontSize.secondary)
         static let tertiary = UIFont.systemFont(ofSize: FontSize.tertiary)
         static let quarternary = UIFont.systemFont(ofSize: FontSize.quarternary)
-        
+        static let tertiary_bold = UIFont.boldSystemFont(ofSize: FontSize.tertiary)
+        static let quarternary_bold = UIFont.boldSystemFont(ofSize: FontSize.quarternary)
+
         enum FontSize {
             static let primary: CGFloat = 17
             static let secondary: CGFloat = 15
@@ -25,6 +27,9 @@ enum Design {
     enum Image {
         static let comment = UIImage(systemName: "message")!
         static let like = UIImage(systemName: "heart")!
+        static let add = UIImage(systemName: "plus")!
+        static let close = UIImage(systemName: "xmark")!
+        static let camera = UIImage(systemName: "camera")!
     }
 }
 
