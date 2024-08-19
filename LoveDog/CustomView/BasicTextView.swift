@@ -36,8 +36,10 @@ final class BasicTextView: UITextView {
 
 extension BasicTextView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        text = ""
-        textColor = .black
+        if textColor == .placeholderText {
+            text = ""
+            textColor = .black
+        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
