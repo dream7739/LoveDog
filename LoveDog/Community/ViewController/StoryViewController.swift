@@ -55,7 +55,11 @@ final class StoryViewController: BaseViewController {
     }
     
     private func bind() {
-        let input = StoryViewModel.Input()
+        let input = StoryViewModel.Input(
+            request: BehaviorRelay(value: FetchPostRequest(next: "")),
+            prefetch: PublishRelay<Void>()
+        )
+        
         let output = viewModel.transform(input: input)
         
         output.postList
@@ -63,6 +67,15 @@ final class StoryViewController: BaseViewController {
                 cell.configureData(element)
         }
         .disposed(by: disposeBag)
+        
+        collectionView.rx.prefetchItems
+            .compactMap { $0.last }
+            .bind(with: self) { owner, value in
+                if owner.viewModel.postResponse.data.count - 1 == value.item {
+                    input.prefetch.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
         
         writeButton.rx.tap
             .bind(with: self){ owner, value in

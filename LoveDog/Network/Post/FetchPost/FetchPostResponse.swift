@@ -8,8 +8,8 @@
 import Foundation
 
 struct FetchPostResponse: Decodable {
-    let data: [Post]
-    let next_cursor: String //0일경우 추가요청 불가
+    var data: [Post]
+    var next_cursor: String //0일경우 추가요청 불가
 }
 
 struct Post: Decodable {
