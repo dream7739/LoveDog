@@ -9,7 +9,7 @@ import UIKit
 import PhotosUI
 
 final class BasicTextView: UITextView {
-    private var placeholderText = ""
+    private var placeholderText: String!
     
     init(placeholder: String) {
         super.init(frame: .zero, textContainer: nil)

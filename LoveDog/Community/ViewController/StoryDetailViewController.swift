@@ -12,6 +12,10 @@ import RxCocoa
 
 final class StoryDetailViewController: BaseViewController {
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let profileView = FeedProfileView()
+    
     private let viewModel: StoryDetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -26,7 +30,36 @@ final class StoryDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "스토리 상세"
         bind()
+    }
+    
+    override func configureHierarchy() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(profileView)
+    }
+    
+    override func configureLayout() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.width.equalTo(view.safeAreaLayoutGuide)
+            make.verticalEdges.equalTo(scrollView)
+        }
+        
+        profileView.snp.makeConstraints { make in
+            make.top.equalTo(contentView)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(55)
+        }
+        
+    }
+    
+    override func configureView() {
+        profileView.backgroundColor = .blue
     }
 }
 

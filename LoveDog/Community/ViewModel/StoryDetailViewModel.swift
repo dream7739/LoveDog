@@ -26,19 +26,19 @@ final class StoryDetailViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         let postDetail = PublishRelay<Post>()
         
-        postId
-            .flatMap { id in
-                PostManager.shared.fetchPost(id: id)
-            }
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    postDetail.accept(value)
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            .disposed(by: disposeBag)
+//        postId
+//            .flatMap { id in
+//                PostManager.shared.fetchPost(id: id)
+//            }
+//            .subscribe(with: self) { owner, result in
+//                switch result {
+//                case .success(let value):
+//                    postDetail.accept(value)
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            }
+//            .disposed(by: disposeBag)
         
         return Output(postDetail: postDetail)
     }

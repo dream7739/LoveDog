@@ -43,18 +43,17 @@ final class ImageCacheManager {
                         observer.onNext(nil)
                     }
                 }
-            
         }
     }
     
     private func cachingImage(url: URL, image: UIImage?) {
-        print("이미지 저장", url)
+        print(#function, "이미지 저장")
         guard let image = image else { return }
         cache.setObject(image, forKey: url as NSURL)
     }
     
     private func cachedImage(url: URL) -> UIImage? {
-        print("저장된 이미지", url)
+        print(#function, "저장된 이미지")
         return cache.object(forKey: url as NSURL)
     }
     

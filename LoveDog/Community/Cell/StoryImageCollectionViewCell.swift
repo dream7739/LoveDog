@@ -18,6 +18,7 @@ final class StoryImageCollectionViewCell: BaseCollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        mainImageView.image = nil
         disposeBag = DisposeBag()
     }
     

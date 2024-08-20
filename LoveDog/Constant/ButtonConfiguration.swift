@@ -10,7 +10,7 @@ import UIKit
 enum ButtonConfiguration {
     static let basic: UIButton.Configuration = {
         var configuration = UIButton.Configuration.plain()
-        configuration.baseBackgroundColor = .main
+        configuration.background.backgroundColor = .main
         configuration.baseForegroundColor = .white
         return configuration
     }()
