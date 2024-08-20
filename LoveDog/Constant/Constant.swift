@@ -8,5 +8,7 @@
 import Foundation
 
 enum Constant {
-    static let productId = "luvdog_community"
+    enum ProductId {
+        static let community = "luvdog_community"
+    }
 }

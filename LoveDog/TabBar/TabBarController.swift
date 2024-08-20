@@ -33,7 +33,7 @@ final class TabBarController: UITabBarController {
         introduceVC.tabBarItem = introduceItem
         
         let communityItem = UITabBarItem(title: "스토리", image: UIImage(systemName: "heart"), tag: 1)
-        let communityVC = UINavigationController(rootViewController: StoryViewController())
+        let communityVC = UINavigationController(rootViewController: StoryViewController(viewModel: StoryViewModel()))
         communityVC.tabBarItem = communityItem
         
         let profileItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "heart"), tag: 2)

@@ -30,7 +30,7 @@ final class MakeStoryViewController: BaseViewController {
     private lazy var categoryButtonList = [reviewButton, reportButton, dailyButton, promotionButton]
     private let emptyView = UIView()
 
-    let viewModel = MakeStoryViewModel()
+    private let viewModel: MakeStoryViewModel
     private let disposeBag = DisposeBag()
     
     private func layout() -> UICollectionViewLayout {
@@ -44,6 +44,15 @@ final class MakeStoryViewController: BaseViewController {
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
+    }
+    
+    init(viewModel: MakeStoryViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {

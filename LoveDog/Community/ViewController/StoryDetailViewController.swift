@@ -12,14 +12,12 @@ import RxCocoa
 
 final class StoryDetailViewController: BaseViewController {
     
-    let viewModel: StoryDetailViewModel
-    
+    private let viewModel: StoryDetailViewModel
     private let disposeBag = DisposeBag()
     
     init(viewModel: StoryDetailViewModel){
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder: NSCoder) {

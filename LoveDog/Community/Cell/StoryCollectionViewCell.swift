@@ -126,15 +126,15 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     }
     
     private func configureMainImage(path: String) {
-//        PostManager.shared.fetchPostImage(path: path)
-//            .subscribe(with: self){ owner, result in
-//                switch result {
-//                case .success(let value):
-//                    owner.mainImageView.image = value
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }
-//            }.disposed(by: disposeBag)
+        ImageCacheManager.shared.loadImage(path: path)
+            .bind(with: self) { owner, value in
+                if let value {
+                    owner.mainImageView.image = value
+                }else {
+                    owner.mainImageView.backgroundColor = .dark_gray
+                }
+            }
+            .disposed(by: disposeBag)
         
     }
     
