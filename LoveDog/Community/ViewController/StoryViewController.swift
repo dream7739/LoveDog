@@ -77,6 +77,15 @@ final class StoryViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(Post.self))
+            .bind(with: self) { owner, value in
+                let viewModel = StoryDetailViewModel()
+                viewModel.postId.accept(value.1.post_id)
+                let detailVC = StoryDetailViewController(viewModel: viewModel)
+                owner.navigationController?.pushViewController(detailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         writeButton.rx.tap
             .bind(with: self){ owner, value in
                 let makeVC = UINavigationController(rootViewController: MakeStoryViewController())

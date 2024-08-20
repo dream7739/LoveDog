@@ -35,7 +35,7 @@ final class StoryViewModel: BaseViewModel {
                 FetchPostRequest(next: self.postResponse.next_cursor)
             }
             .flatMap { request in
-                PostManager.shared.fetchPost(request: request)
+                PostManager.shared.fetchPostList(request: request)
             }
             .debug("PREFETCH POST")
             .subscribe { result in
@@ -53,7 +53,7 @@ final class StoryViewModel: BaseViewModel {
         
         input.request
             .flatMap { request in
-                PostManager.shared.fetchPost(request: request)
+                PostManager.shared.fetchPostList(request: request)
             }
             .debug("FETCH POST")
             .subscribe(with: self) { owner, result in
