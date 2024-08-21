@@ -49,11 +49,9 @@ final class StoryDetailViewController: BaseViewController {
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
-    
             }
         }
         
-        layout.configuration.interSectionSpacing = 4
         return layout
     }
     
@@ -99,55 +97,7 @@ final class StoryDetailViewController: BaseViewController {
             DetailContentCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailContentCollectionViewCell.identifier
         )
-
-        let sections: [MultipleSectionModel] = [
-            .profile(items: [.profile(data: Creator(user_id: "1234", nick: "asdf", profileImage: "asdf"))] ),
-            .image(items: [.image(image: "heart"), .image(image: "heart.fill")]),
-            .like(items: [.like(data: "asdf")]),
-            .content(items: [.content(data: "aaa")])
-        ]
-        
-        let dataSource = dataSource()
-        Observable.just(sections)
-            .bind(to: collectionView.rx.items(dataSource: dataSource))
-            .disposed(by: disposeBag)
     }
-}
-
-extension StoryDetailViewController {
-
-    
-    private func bind() {
-        let input = StoryDetailViewModel.Input()
-        let output = viewModel.transform(input: input)
-        
-        output.postDetail
-            .bind(with: self) { owner, post in
-                print("응답으로 받은 post", post)
-            }
-            .disposed(by: disposeBag)
-    }
-    
-    private func dataSource() -> RxCollectionViewSectionedReloadDataSource<MultipleSectionModel> {
-        return RxCollectionViewSectionedReloadDataSource { dataSource, collectionView, indexPath, _ in
-            switch dataSource[indexPath] {
-            case .profile(data: let data):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as! DetailProfileCollectionViewCell
-                return cell
-            case .image(let image):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as! DetailImageCollectionViewCell
-                cell.configureImage(image)
-                return cell
-            case .like(let data):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLikeCollectionViewCell.identifier, for: indexPath) as! DetailLikeCollectionViewCell
-                return cell
-            case .content(let data):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailContentCollectionViewCell.identifier, for: indexPath) as! DetailContentCollectionViewCell
-                return cell
-            }
-        }
-    }
-
 }
 
 extension StoryDetailViewController {
@@ -156,54 +106,88 @@ extension StoryDetailViewController {
         case image
         case like
         case content
-        //        case comment
     }
     
-    enum MultipleSectionModel: SectionModelType {
-        typealias Item = SectionItem
+    private func bind() {
+        let input = StoryDetailViewModel.Input()
+        let output = viewModel.transform(input: input)
+        
+        let dataSource = configureDataSource()
 
-        //섹션
-        case profile(items: [SectionItem])
-        case image(items: [SectionItem])
-        case like(items: [SectionItem])
-        case content(items: [SectionItem])
-        
-        //섹션별 아이템
-        var items: [SectionItem] {
-            switch self {
-            case .profile(let items):
-                return items.map { $0 }
-            case .image(let items):
-                return items.map { $0 }
-            case .like(items: let items):
-                return items.map { $0}
-            case .content(let items):
-                return items.map { $0 }
-     
-            }
-        }
-        
-        //섹션 생성자
-        init(original: MultipleSectionModel, items: [SectionItem]) {
-            switch original {
-            case .profile(let items):
-                self = .profile(items: items)
-            case .image(let items):
-                self = .image(items: items)
-            case .like(let items):
-                self = .like(items: items)
-            case .content(items: let items):
-                self = .content(items: items)
-            }
-        }
-        
+        output.sections
+            .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
     
-    enum SectionItem {
-        //섹션에 들어갈 아이템 단건
-        case profile(data: Creator)
-        case image(image: String)
-        case like(data: String)
-        case content(data: String)
+    private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<MultipleSectionModel> {
+        return RxCollectionViewSectionedReloadDataSource { dataSource, collectionView, indexPath, _ in
+            switch dataSource[indexPath] {
+            case .profile(let data):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as?  DetailProfileCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureData(data)
+                return cell
+            case .image(let image):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as? DetailImageCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureImage(image)
+                return cell
+            case .like(let likeCount, let commentCount):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLikeCollectionViewCell.identifier, for: indexPath) as? DetailLikeCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureData(likeCount, commentCount)
+                return cell
+            case .content(let title, let content):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailContentCollectionViewCell.identifier, for: indexPath) as? DetailContentCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureData(title, content)
+                return cell
+            }
+        }
     }
+    
+}
+
+enum MultipleSectionModel: SectionModelType {
+    typealias Item = SectionItem
+    
+    //섹션
+    case profile(items: [SectionItem])
+    case image(items: [SectionItem])
+    case like(items: [SectionItem])
+    case content(items: [SectionItem])
+    
+    //섹션별 아이템
+    var items: [SectionItem] {
+        switch self {
+        case .profile(let items):
+            return items.map { $0 }
+        case .image(let items):
+            return items.map { $0 }
+        case .like(items: let items):
+            return items.map { $0}
+        case .content(let items):
+            return items.map { $0 }
+            
+        }
+    }
+    
+    //섹션 생성자
+    init(original: MultipleSectionModel, items: [SectionItem]) {
+        switch original {
+        case .profile(let items):
+            self = .profile(items: items)
+        case .image(let items):
+            self = .image(items: items)
+        case .like(let items):
+            self = .like(items: items)
+        case .content(items: let items):
+            self = .content(items: items)
+        }
+    }
+    
+}
+
+enum SectionItem {
+    //섹션에 들어갈 아이템 단건
+    case profile(data: Creator)
+    case image(image: String)
+    case like(likeCount: String, commentCount: String)
+    case content(title: String, content: String)
 }

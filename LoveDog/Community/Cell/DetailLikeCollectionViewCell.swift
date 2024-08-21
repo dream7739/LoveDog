@@ -48,17 +48,17 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     override func configureView() {
         var configuration = UIButton.Configuration.plain()
         configuration.baseForegroundColor = .black
-        
         likeButton.configuration = configuration
         likeButton.configuration?.image = Design.Image.like
         commentButton.configuration = configuration
         commentButton.configuration?.image = Design.Image.comment
         
-        likeLabel.text = "3"
         likeLabel.font = Design.Font.tertiary
-        commentLabel.text = "10"
         commentLabel.font = Design.Font.tertiary
-
     }
     
+    func configureData(_ likeCount: String, _ commentCount: String) {
+        likeLabel.text = likeCount
+        commentLabel.text = commentCount
+    }
 }

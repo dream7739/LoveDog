@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import RxSwift
 
 final class DetailImageCollectionViewCell: BaseCollectionViewCell {
     
     private let imageView = UIImageView()
+    private let disposeBag = DisposeBag()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -35,6 +37,14 @@ final class DetailImageCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureImage(_ image: String){
-        imageView.image = UIImage(resource: .dogSample1)
+        ImageCacheManager.shared.loadImage(path: image)
+            .bind(with: self) { owner, image in
+                if let image {
+                    owner.imageView.image = image
+                }else {
+                    owner.imageView.backgroundColor = .dark_gray
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }

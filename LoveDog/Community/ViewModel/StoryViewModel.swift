@@ -26,52 +26,52 @@ final class StoryViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         let postList = BehaviorRelay(value: postResponse.data)
         
-//        input.prefetch
-//            .withUnretained(self)
-//            .filter { _ in
-//                self.postResponse.next_cursor != "0"
-//            }
-//            .map { _ in
-//                FetchPostRequest(next: self.postResponse.next_cursor)
-//            }
-//            .flatMap { request in
-//                PostManager.shared.fetchPostList(request: request)
-//            }
-//            .debug("PREFETCH POST")
-//            .subscribe { result in
-//                switch result {
-//                case .success(let value):
-//                    self.postResponse.next_cursor = value.next_cursor
-//                    self.postResponse.data.append(contentsOf: value.data)
-//                    postList.accept(self.postResponse.data)
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }           
-//            }
-//            .disposed(by: disposeBag)
-        
-        
-//        input.request
-//            .flatMap { request in
-//                PostManager.shared.fetchPostList(request: request)
-//            }
-//            .debug("FETCH POST")
-//            .subscribe(with: self) { owner, result in
-//                switch result {
-//                case .success(let value):
-//                    owner.postResponse = value
-//                    postList.accept(owner.postResponse.data)
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }
-//            }
-//            .disposed(by: disposeBag)
-        
-        input.request
-            .subscribe(with: self) { owner, value in
-                postList.accept(StoryViewModel.testList)
+        input.prefetch
+            .withUnretained(self)
+            .filter { _ in
+                self.postResponse.next_cursor != "0"
+            }
+            .map { _ in
+                FetchPostRequest(next: self.postResponse.next_cursor)
+            }
+            .flatMap { request in
+                PostManager.shared.fetchPostList(request: request)
+            }
+            .debug("PREFETCH POST")
+            .subscribe { result in
+                switch result {
+                case .success(let value):
+                    self.postResponse.next_cursor = value.next_cursor
+                    self.postResponse.data.append(contentsOf: value.data)
+                    postList.accept(self.postResponse.data)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }           
             }
             .disposed(by: disposeBag)
+        
+        
+        input.request
+            .flatMap { request in
+                PostManager.shared.fetchPostList(request: request)
+            }
+            .debug("FETCH POST")
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    owner.postResponse = value
+                    postList.accept(owner.postResponse.data)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+//        input.request
+//            .subscribe(with: self) { owner, value in
+//                postList.accept(StoryViewModel.testList)
+//            }
+//            .disposed(by: disposeBag)
         
       
         return Output(postList: postList)

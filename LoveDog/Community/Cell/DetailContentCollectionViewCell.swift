@@ -32,14 +32,16 @@ final class DetailContentCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureView() {
-        titleLabel.text = "랄랄랄라라라라라라랄"
-        contentLabel.text = "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfa"
-
         titleLabel.font = Design.Font.primary_bold
         titleLabel.numberOfLines = 2
         
         contentLabel.font = Design.Font.secondary
         contentLabel.numberOfLines = 0
+    }
+    
+    func configureData(_ title: String, _ content: String) {
+        titleLabel.text = title
+        contentLabel.text = content
     }
     
 }

@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 final class FeedProfileView: BaseView {
-    private let profileImage = UIImageView()
-    private let nicknameLabel = UILabel()
-    private let followButton = UIButton()
+    let profileImage = UIImageView()
+    let nicknameLabel = UILabel()
+    let followButton = UIButton()
     
     override func configureHierarchy() {
         [profileImage, nicknameLabel, followButton]
@@ -48,7 +48,6 @@ final class FeedProfileView: BaseView {
         profileImage.image = UIImage(resource: .profileEmpty)
         
         nicknameLabel.font = Design.Font.tertiary_bold
-        nicknameLabel.text = "스폰지밥홍"
         
         followButton.configuration = ButtonConfiguration.basic
         followButton.configuration?.title = "팔로우"
