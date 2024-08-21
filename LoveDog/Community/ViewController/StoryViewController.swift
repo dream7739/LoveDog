@@ -24,8 +24,17 @@ final class StoryViewController: BaseViewController {
         return layout
     }
     
-    let viewModel = StoryViewModel()
+    private let viewModel: StoryViewModel
     private let disposeBag = DisposeBag()
+    
+    init(viewModel: StoryViewModel){
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,9 +86,19 @@ final class StoryViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(Post.self))
+            .bind(with: self) { owner, value in
+                let viewModel = StoryDetailViewModel()
+                viewModel.postId.accept(value.1.post_id)
+                let detailVC = StoryDetailViewController(viewModel: viewModel)
+                owner.navigationController?.pushViewController(detailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         writeButton.rx.tap
             .bind(with: self){ owner, value in
-                let makeVC = UINavigationController(rootViewController: MakeStoryViewController())
+                let viewModel = MakeStoryViewModel()
+                let makeVC = UINavigationController(rootViewController: MakeStoryViewController(viewModel: viewModel))
                 makeVC.modalPresentationStyle = .fullScreen
                 owner.present(makeVC, animated: true)
             }

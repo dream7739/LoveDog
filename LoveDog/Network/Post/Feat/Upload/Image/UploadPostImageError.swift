@@ -21,7 +21,7 @@ enum UploadPostImageError: Error, LocalizedError {
         case 401:
             self = .unavailableToken
         case 403:
-            self =  .forbidden
+            self = .forbidden
         case 419:
             self = .expiredRefresh
         default:

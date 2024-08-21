@@ -35,7 +35,7 @@ final class StoryViewModel: BaseViewModel {
                 FetchPostRequest(next: self.postResponse.next_cursor)
             }
             .flatMap { request in
-                PostManager.shared.fetchPost(request: request)
+                PostManager.shared.fetchPostList(request: request)
             }
             .debug("PREFETCH POST")
             .subscribe { result in
@@ -53,7 +53,7 @@ final class StoryViewModel: BaseViewModel {
         
         input.request
             .flatMap { request in
-                PostManager.shared.fetchPost(request: request)
+                PostManager.shared.fetchPostList(request: request)
             }
             .debug("FETCH POST")
             .subscribe(with: self) { owner, result in
@@ -67,8 +67,94 @@ final class StoryViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+//        input.request
+//            .subscribe(with: self) { owner, value in
+//                postList.accept(StoryViewModel.testList)
+//            }
+//            .disposed(by: disposeBag)
+        
       
         return Output(postList: postList)
     }
     
+}
+
+extension StoryViewModel {
+    static let testList: [Post] = [
+        Post(
+            post_id: "12341234",
+            product_id: "luvdog_community",
+            title: "루피공주",
+            content: "루피공주",
+            content1: "입양홍보",
+            createdAt: "2024-08-20T13:54:09.939Z",
+            creator: Creator(user_id: "12341234", nick: "스폰지밥홍", profileImage: nil),
+            files: [],
+            likes: ["111", "2222", "33333"],
+            likes2: [],
+            hashTags: [],
+            comments: [
+                Comment(comment_id: "12341234", content: "역시 루피 귀엽", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil)),
+                Comment(comment_id: "12341234", content: "역시 루피 귀엽2", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil)),
+                Comment(comment_id: "12341234", content: "역시 루피 귀엽3", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil)),
+                      ]
+        ),
+        Post(
+            post_id: "12341234",
+            product_id: "luvdog_community",
+            title: "루피공주",
+            content: "루피공주",
+            content1: "입양홍보",
+            createdAt: "2024-08-20T13:54:09.939Z",
+            creator: Creator(user_id: "12341234", nick: "스폰지밥홍", profileImage: nil),
+            files: [],
+            likes: [],
+            likes2: [],
+            hashTags: [],
+            comments: [Comment(comment_id: "12341234", content: "역시 루피 귀엽", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil))]
+        ),
+        Post(
+            post_id: "12341234",
+            product_id: "luvdog_community",
+            title: "루피공주",
+            content: "루피공주",
+            content1: "입양홍보",
+            createdAt: "2024-08-20T13:54:09.939Z",
+            creator: Creator(user_id: "12341234", nick: "스폰지밥홍", profileImage: nil),
+            files: [],
+            likes: [],
+            likes2: [],
+            hashTags: [],
+            comments: [Comment(comment_id: "12341234", content: "역시 루피 귀엽", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil))]
+        ),
+        Post(
+            post_id: "12341234",
+            product_id: "luvdog_community",
+            title: "루피공주",
+            content: "루피공주",
+            content1: "입양홍보",
+            createdAt: "2024-08-20T13:54:09.939Z",
+            creator: Creator(user_id: "12341234", nick: "스폰지밥홍", profileImage: nil),
+            files: [],
+            likes: [],
+            likes2: [],
+            hashTags: [],
+            comments: [Comment(comment_id: "12341234", content: "역시 루피 귀엽", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil))]
+        ),
+        Post(
+            post_id: "12341234",
+            product_id: "luvdog_community",
+            title: "루피공주",
+            content: "루피공주",
+            content1: "입양홍보",
+            createdAt: "2024-08-20T13:54:09.939Z",
+            creator: Creator(user_id: "12341234", nick: "스폰지밥홍", profileImage: nil),
+            files: [],
+            likes: [],
+            likes2: [],
+            hashTags: [],
+            comments: [Comment(comment_id: "12341234", content: "역시 루피 귀엽", createdAt: "2024-08-20T13:54:09.939Z", creator: Creator(user_id: "12341234", nick: "징징이홍", profileImage: nil))]
+        )
+        
+    ]
 }

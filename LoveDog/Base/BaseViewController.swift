@@ -13,6 +13,7 @@ class BaseViewController: UIViewController, BaseProtocol {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.tintColor = .black
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         configureHierarchy()
         configureLayout()
         configureView()

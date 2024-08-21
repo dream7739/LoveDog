@@ -18,6 +18,7 @@ final class StoryImageCollectionViewCell: BaseCollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        mainImageView.image = nil
         disposeBag = DisposeBag()
     }
     
@@ -49,7 +50,7 @@ final class StoryImageCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureImage(_ image: UIImage){
-        mainImageView.image = image
+        mainImageView.image = UIImage(resource: .dogSample1)
     }
     
 }

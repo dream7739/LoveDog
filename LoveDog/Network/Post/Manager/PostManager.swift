@@ -15,12 +15,40 @@ final class PostManager {
     private init() { }
     
     //게시글 조회
-    func fetchPost(request: FetchPostRequest) -> Single<Result<FetchPostResponse, FetchPostError>> {
+    func fetchPostList(request: FetchPostRequest) -> Single<Result<FetchPostResponse, FetchPostError>> {
         let result = Single<Result<FetchPostResponse, FetchPostError>>.create { observer in
             do {
-                let fetchPostRequest = try PostRouter.fetchPosts(param: request).asURLRequest()
-                AF.request(fetchPostRequest, interceptor: AuthInterceptor.shared)
+                let fetchPostListRequest = try PostRouter.fetchPostList(param: request).asURLRequest()
+                AF.request(fetchPostListRequest, interceptor: AuthInterceptor.shared)
                     .responseDecodable(of: FetchPostResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(FetchPostError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "FETCH POST FAILED")
+                observer(.success(.failure(FetchPostError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
+    
+    //특정 게시글 조회
+    func fetchPost(id: String) -> Single<Result<Post, FetchPostError>> {
+        let result = Single<Result<Post, FetchPostError>>.create { observer in
+            do {
+                let fetchPostRequest = try PostRouter.fetchPost(id: id).asURLRequest()
+                AF.request(fetchPostRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: Post.self) { response in
                         let status = response.response?.statusCode ?? 0
                         print("STATUS CODE ==== \(status)")
                         switch response.result {

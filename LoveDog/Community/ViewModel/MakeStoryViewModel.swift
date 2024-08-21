@@ -67,7 +67,7 @@ final class MakeStoryViewModel: BaseViewModel {
             .debug("IMAGE UPLOAD")
         
         //업로드 포스트(제목, 내용, 카테고리)
-        Observable.zip(postImage, content)
+        Observable.combineLatest(postImage, content)
             .map { value in
                 return (
                     images: value.0,
