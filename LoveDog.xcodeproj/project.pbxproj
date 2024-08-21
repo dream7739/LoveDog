@@ -63,6 +63,11 @@
 		8874A1912C6E16EC00299265 /* ProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A1902C6E16EC00299265 /* ProfileResponse.swift */; };
 		8874A1992C6E399600299265 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8874A1982C6E399600299265 /* Alamofire */; };
 		8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8874A19C2C6E3A1B00299265 /* TargetType.swift */; };
+		88761BF62C75DA0A00D2FCC8 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 88761BF52C75DA0A00D2FCC8 /* RxDataSources */; };
+		88761BF82C75E20F00D2FCC8 /* DetailImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88761BF72C75E20F00D2FCC8 /* DetailImageCollectionViewCell.swift */; };
+		88761BFA2C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88761BF92C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift */; };
+		88761BFC2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88761BFB2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift */; };
+		88761BFE2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88761BFD2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift */; };
 		88B3171B2C70849F0079E275 /* StoryImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B3171A2C70849F0079E275 /* StoryImageCollectionViewCell.swift */; };
 		88B3171D2C7092E70079E275 /* BasicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B3171C2C7092E70079E275 /* BasicTextView.swift */; };
 		88BEF72E2C6F267B001F390D /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF72D2C6F267B001F390D /* PostRouter.swift */; };
@@ -133,6 +138,10 @@
 		8874A18C2C6E120300299265 /* SceneChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneChanger.swift; sourceTree = "<group>"; };
 		8874A1902C6E16EC00299265 /* ProfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponse.swift; sourceTree = "<group>"; };
 		8874A19C2C6E3A1B00299265 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
+		88761BF72C75E20F00D2FCC8 /* DetailImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		88761BF92C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProfileCollectionViewCell.swift; sourceTree = "<group>"; };
+		88761BFB2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailContentCollectionViewCell.swift; sourceTree = "<group>"; };
+		88761BFD2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailLikeCollectionViewCell.swift; sourceTree = "<group>"; };
 		88B3171A2C70849F0079E275 /* StoryImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		88B3171C2C7092E70079E275 /* BasicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTextView.swift; sourceTree = "<group>"; };
 		88BEF72D2C6F267B001F390D /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
@@ -156,6 +165,7 @@
 				8833A2DC2C6CDD52007DBE47 /* RxSwift in Frameworks */,
 				8874A1992C6E399600299265 /* Alamofire in Frameworks */,
 				8833A2DF2C6CDD5F007DBE47 /* SnapKit in Frameworks */,
+				88761BF62C75DA0A00D2FCC8 /* RxDataSources in Frameworks */,
 				8833A2DA2C6CDD52007DBE47 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -552,6 +562,10 @@
 			children = (
 				88BEF73B2C6F3621001F390D /* StoryCollectionViewCell.swift */,
 				88B3171A2C70849F0079E275 /* StoryImageCollectionViewCell.swift */,
+				88761BF72C75E20F00D2FCC8 /* DetailImageCollectionViewCell.swift */,
+				88761BF92C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift */,
+				88761BFB2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift */,
+				88761BFD2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -577,6 +591,7 @@
 				8833A2DB2C6CDD52007DBE47 /* RxSwift */,
 				8833A2DE2C6CDD5F007DBE47 /* SnapKit */,
 				8874A1982C6E399600299265 /* Alamofire */,
+				88761BF52C75DA0A00D2FCC8 /* RxDataSources */,
 			);
 			productName = LoveDog;
 			productReference = 880E39E52C6C9CED00C57C2C /* LoveDog.app */;
@@ -610,6 +625,7 @@
 				8833A2D82C6CDD52007DBE47 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				8833A2DD2C6CDD5F007DBE47 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				8874A1972C6E399600299265 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				88761BF42C75DA0A00D2FCC8 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = 880E39E62C6C9CED00C57C2C /* Products */;
 			projectDirPath = "";
@@ -640,6 +656,7 @@
 			files = (
 				88BEF7372C6F30E2001F390D /* FetchPostError.swift in Sources */,
 				8851F1C62C72122F00B7BD57 /* UploadPostImageResponse.swift in Sources */,
+				88761BFC2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift in Sources */,
 				8874A1912C6E16EC00299265 /* ProfileResponse.swift in Sources */,
 				88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */,
 				8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */,
@@ -655,6 +672,7 @@
 				8833A2992C6CA6E3007DBE47 /* BaseViewController.swift in Sources */,
 				8874A1832C6DFDE400299265 /* LoginError.swift in Sources */,
 				880E39E92C6C9CED00C57C2C /* AppDelegate.swift in Sources */,
+				88761BFE2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift in Sources */,
 				8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */,
 				8833A2CD2C6CD1B9007DBE47 /* LoginRequest.swift in Sources */,
 				8833A2BD2C6CC4FB007DBE47 /* APIKey.swift in Sources */,
@@ -681,6 +699,7 @@
 				88BEF73E2C6F362A001F390D /* BaseCollectionViewCell.swift in Sources */,
 				8851F1C02C720D1A00B7BD57 /* Constant.swift in Sources */,
 				88BEF7392C6F355C001F390D /* StoryViewModel.swift in Sources */,
+				88761BFA2C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift in Sources */,
 				88BEF7482C6F70FC001F390D /* PaddingLabel.swift in Sources */,
 				88BEF72E2C6F267B001F390D /* PostRouter.swift in Sources */,
 				884CB0D82C74CD8100B7E8CC /* ImageCacheManager.swift in Sources */,
@@ -692,6 +711,7 @@
 				8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */,
 				88B3171B2C70849F0079E275 /* StoryImageCollectionViewCell.swift in Sources */,
 				8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */,
+				88761BF82C75E20F00D2FCC8 /* DetailImageCollectionViewCell.swift in Sources */,
 				884CB0D02C74C25300B7E8CC /* Post.swift in Sources */,
 				8833A2E42C6CF3FD007DBE47 /* BasicTextField.swift in Sources */,
 				8874A17F2C6DD38000299265 /* UserDefaultsManager.swift in Sources */,
@@ -948,6 +968,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		88761BF42C75DA0A00D2FCC8 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -970,6 +998,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8874A1972C6E399600299265 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		88761BF52C75DA0A00D2FCC8 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 88761BF42C75DA0A00D2FCC8 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

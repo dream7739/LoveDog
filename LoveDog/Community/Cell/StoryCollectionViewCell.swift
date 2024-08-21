@@ -117,7 +117,7 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(_ data: Post){
-        configureMainImage(path: data.files[0])
+//        configureMainImage(path: data.files[0])
         titleLabel.text = data.title
         dateLabel.text = data.dateDescription
         categoryLabel.text = data.content1
