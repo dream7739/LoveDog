@@ -1,5 +1,5 @@
 //
-//  FetchAbondonResponse.swift
+//  FetchAbandonResponse.swift
 //  LoveDog
 //
 //  Created by 홍정민 on 8/22/24.
@@ -8,17 +8,17 @@
 import Foundation
 
 //기본 20개 페이지네이션
-struct FetchAbondonResponse: Decodable {
-    let response: FetchAbondonResult
+struct FetchAbandonResponse: Decodable {
+    let response: FetchAbandonResult
 }
 
-struct FetchAbondonResult: Decodable {
-    let header: FetchAbondonHeader
-    let body: FetchAbondonBody? //바디는 있을수도, 없을 수도 있음
+struct FetchAbandonResult: Decodable {
+    let header: FetchAbandonHeader
+    let body: FetchAbandonBody? //바디는 있을수도, 없을 수도 있음
 }
 
 //에러가 발생하면 errorMsg
-struct FetchAbondonHeader: Decodable {
+struct FetchAbandonHeader: Decodable {
     let reqNo: Int?
     let resultCode: String
     let resultMsg: String
@@ -26,18 +26,18 @@ struct FetchAbondonHeader: Decodable {
 }
 
 //실질적인 데이터
-struct FetchAbondonBody: Decodable {
-    let items: FetchAbondonItemList
+struct FetchAbandonBody: Decodable {
+    let items: FetchAbandonItemList
     let numOfRows: Int
     let pageNo: Int
     let totalCount: Int
 }
 
-struct FetchAbondonItemList: Decodable {
-    let item: [FetchAbondonItem]
+struct FetchAbandonItemList: Decodable {
+    let item: [FetchAbandonItem]
 }
 
-struct FetchAbondonItem: Decodable {
+struct FetchAbandonItem: Decodable {
     let desertionNo: String //유기번호
     let filename: String //썸네일 이미지
     let happenDt: String //접수일

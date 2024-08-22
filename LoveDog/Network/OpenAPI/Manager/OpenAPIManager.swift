@@ -14,8 +14,8 @@ final class OpenAPIManager {
     static let shared = OpenAPIManager()
     private init() { }
     
-    func fetchAbondonPublic(request: FetchAbandonRequest) -> Single<Result<FetchAbondonResponse, CommonError>> {
-        let result = Single<Result<FetchAbondonResponse, CommonError>>.create { observer in
+    func fetchAbondonPublic(request: FetchAbandonRequest) -> Single<Result<FetchAbandonResponse, CommonError>> {
+        let result = Single<Result<FetchAbandonResponse, CommonError>>.create { observer in
             guard let url = URL(string: APIURL.abondonPublicURL) else {
                 observer(.success(.failure(.invalidURL)))
                 return Disposables.create()
@@ -34,7 +34,7 @@ final class OpenAPIManager {
                 url,
                 parameters: parameter,
                 encoding: URLEncoding.queryString
-            ).responseDecodable(of: FetchAbondonResponse.self) { response in
+            ).responseDecodable(of: FetchAbandonResponse.self) { response in
                 let status = response.response?.statusCode ?? 0
                 print("STATUS CODE ==== \(status)")
                 switch response.result {

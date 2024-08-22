@@ -13,13 +13,5 @@ struct FetchAbandonRequest: Encodable {
     let upperCd: Int = 6110000 //시도코드
     let responseType = "json" //응답타입
     let pageNo: Int
-    let pageCnt: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case kindCd = "upkind"
-        case upperCd = "upr_cd"
-        case responseType = "_type"
-        case pageCnt = "numOfRows"
-    }
-
+    let pageCnt: Int = 20
 }
