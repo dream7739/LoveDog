@@ -27,14 +27,14 @@ struct FetchAbandonHeader: Decodable {
 
 //실질적인 데이터
 struct FetchAbandonBody: Decodable {
-    let items: FetchAbandonItemList
+    var items: FetchAbandonItemList
     let numOfRows: Int
     let pageNo: Int
     let totalCount: Int
 }
 
 struct FetchAbandonItemList: Decodable {
-    let item: [FetchAbandonItem]
+    var item: [FetchAbandonItem]
 }
 
 struct FetchAbandonItem: Decodable {
@@ -58,7 +58,20 @@ struct FetchAbandonItem: Decodable {
     let careTel: String //보호소 전화번호
     let careAddr: String //보호소 주소
     let orgNm: String //관할기관
-    let chargeNm: String //담당자
+    let chargeNm: String? //담당자
     let officetel: String //담당자 연락처
     let noticeComment: String? //특이사항
+    
+    var infoDescription: String {
+        return "\(ageDescription) \(weightDescription)"
+    }
+    
+    var ageDescription: String {
+        return age.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    var weightDescription: String {
+        return  weight.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
 }

@@ -5,7 +5,7 @@
 //  Created by 홍정민 on 8/21/24.
 //
 
-import Foundation
+import UIKit
 import Alamofire
 import RxSwift
 
@@ -45,6 +45,38 @@ final class OpenAPIManager {
                     observer(.success(.failure(.unknown)))
                 }
             }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
+    
+    func fetchAbondonPublicImage(_ urlString: String) -> Single<Result<UIImage, CommonError>> {
+        let result = Single<Result<UIImage, CommonError>>.create { observer in
+            
+            guard let url = URL(string: urlString) else {
+                observer(.success(.failure(.invalidURL)))
+                return Disposables.create()
+            }
+            
+            AF.download(url)
+                .responseData { response in
+                    let status = response.response?.statusCode ?? 0
+                    print("STATUS CODE ==== \(status)")
+                    switch response.result {
+                    case .success(let value):
+                        if let image = UIImage(data: value) {
+                            ImageCacheManager.shared.cachingImage(url: url, image: image)
+                            observer(.success(.success(image)))
+                        }else {
+                            observer(.failure(CommonError.init(statusCode: status)))
+                        }
+                    case .failure(let error):
+                        print(error)
+                        observer(.success(.failure(CommonError.init(statusCode: status))))
+                    }
+                }
             
             return Disposables.create()
         }

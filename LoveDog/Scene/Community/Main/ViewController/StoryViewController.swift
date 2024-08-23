@@ -78,10 +78,11 @@ final class StoryViewController: BaseViewController {
         .disposed(by: disposeBag)
         
         collectionView.rx.prefetchItems
-            .compactMap { $0.last }
             .bind(with: self) { owner, value in
-                if owner.viewModel.postResponse.data.count - 1 == value.item {
-                    input.prefetch.accept(())
+                value.forEach  { idx in
+                    if idx.item == owner.viewModel.postResponse.data.count - 4 {
+                        input.prefetch.accept(())
+                    }
                 }
             }
             .disposed(by: disposeBag)

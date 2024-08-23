@@ -82,7 +82,7 @@ final class SignInViewModel: BaseViewModel {
     private func checkInput(_ email: String, _ password: String) throws -> Bool {
         if email.trimmingCharacters(in: .whitespaces).isEmpty {
             throw UserInputError.isEmpty
-        }else if !email.isValidEmail() {
+        }else if !email.isValidEmail {
             throw UserInputError.invalidEmail
         }else if password.count < 3 {
             throw UserInputError.invalidPassword

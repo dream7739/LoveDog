@@ -13,47 +13,27 @@ final class ImageCacheManager {
     private init() { }
     
     private let cache = NSCache<NSURL, UIImage>()
+    private let disposeBag = DisposeBag()
     
-    func loadImage(path: String) -> Observable<UIImage?> {
-        let urlString = APIURL.sesacBaseURL + "/\(path)"
+    func loadImage(urlString: String) -> Observable<UIImage?> {
         guard let url = URL(string: urlString) else {
             return Observable.just(nil)
         }
         
         if let image = cachedImage(url: url) {
+            print("저장된 이미지 있음")
             return Observable.just(image)
         }
         
-        return callFetchPostImage(url: url, path: path)
-        
+        return Observable.just(nil)
     }
     
-    private func callFetchPostImage(url: URL, path: String) -> Observable<UIImage?> {
-        Observable<UIImage?>.create { observer in
-            PostManager.shared.fetchPostImage(path: path)
-                .debug("이미지 없어용")
-                .subscribe(with: self){ owner, result in
-                    switch result {
-                    case .success(let value):
-                        owner.cachingImage(url: url, image: value)
-                        observer.onNext(value)
-                        observer.onCompleted()
-                    case .failure(let error):
-                        print(error)
-                        observer.onNext(nil)
-                    }
-                }
-        }
-    }
-    
-    private func cachingImage(url: URL, image: UIImage?) {
-        print(#function, "이미지 저장")
+    func cachingImage(url: URL, image: UIImage?) {
         guard let image = image else { return }
         cache.setObject(image, forKey: url as NSURL)
     }
     
     private func cachedImage(url: URL) -> UIImage? {
-        print(#function, "저장된 이미지")
         return cache.object(forKey: url as NSURL)
     }
     

@@ -23,6 +23,11 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     
     private let disposeBag = DisposeBag()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        mainImageView.image = nil
+    }
+    
     override func configureHierarchy() {
         contentView.addSubview(baseView)
         
@@ -77,7 +82,6 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
         commentImage.snp.makeConstraints { make in
             make.width.equalTo(17)
         }
-        
     }
     
     override func configureView() {
@@ -94,10 +98,7 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
         dateLabel.font = Design.Font.tertiary
         dateLabel.textColor = .dark_gray
         
-        categoryLabel.backgroundColor = .light_gray
-        categoryLabel.layer.cornerRadius = 8
-        categoryLabel.clipsToBounds = true
-        categoryLabel.font = Design.Font.quarternary
+        categoryLabel.makeLightGrayBorder()
         
         iconStackView.axis = .horizontal
         iconStackView.spacing = 2
@@ -126,16 +127,31 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     }
     
     private func configureMainImage(path: String) {
-        ImageCacheManager.shared.loadImage(path: path)
+        let urlString = APIURL.sesacBaseURL + "/\(path)"
+
+        ImageCacheManager.shared.loadImage(urlString: urlString)
             .bind(with: self) { owner, value in
                 if let value {
                     owner.mainImageView.image = value
                 }else {
-                    owner.mainImageView.backgroundColor = .dark_gray
+                    owner.callFetchPostImage(path)
                 }
             }
             .disposed(by: disposeBag)
         
+    }
+    
+    private func callFetchPostImage(_ path: String) {
+        PostManager.shared.fetchPostImage(path: path)
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    owner.mainImageView.image = value
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
 }

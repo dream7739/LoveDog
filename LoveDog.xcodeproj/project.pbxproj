@@ -12,6 +12,7 @@
 		880E39F22C6C9CEE00C57C2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 880E39F12C6C9CEE00C57C2C /* Assets.xcassets */; };
 		880E39F52C6C9CEE00C57C2C /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 880E39F42C6C9CEE00C57C2C /* Base */; };
 		880E39FD2C6C9D6C00C57C2C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 880E39FC2C6C9D6C00C57C2C /* .gitignore */; };
+		880E414C2C7888A50067F93A /* IntroduceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880E414B2C7888A50067F93A /* IntroduceCollectionViewCell.swift */; };
 		881E09402C6F93E2003EDD78 /* MakeStoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881E093F2C6F93E2003EDD78 /* MakeStoryViewController.swift */; };
 		881E09422C6F9A51003EDD78 /* MakeStoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881E09412C6F9A50003EDD78 /* MakeStoryViewModel.swift */; };
 		8833A2942C6CA66C007DBE47 /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2932C6CA66C007DBE47 /* ReusableProtocol.swift */; };
@@ -95,6 +96,7 @@
 		880E39F42C6C9CEE00C57C2C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		880E39F62C6C9CEE00C57C2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		880E39FC2C6C9D6C00C57C2C /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		880E414B2C7888A50067F93A /* IntroduceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceCollectionViewCell.swift; sourceTree = "<group>"; };
 		881E093F2C6F93E2003EDD78 /* MakeStoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeStoryViewController.swift; sourceTree = "<group>"; };
 		881E09412C6F9A50003EDD78 /* MakeStoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeStoryViewModel.swift; sourceTree = "<group>"; };
 		8833A2932C6CA66C007DBE47 /* ReusableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProtocol.swift; sourceTree = "<group>"; };
@@ -222,6 +224,14 @@
 			path = LoveDog;
 			sourceTree = "<group>";
 		};
+		880E414A2C7888990067F93A /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				880E414B2C7888A50067F93A /* IntroduceCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		881E09432C6F9A9F003EDD78 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -252,6 +262,7 @@
 		8833A28A2C6CA322007DBE47 /* Introduce */ = {
 			isa = PBXGroup;
 			children = (
+				880E414A2C7888990067F93A /* Cell */,
 				8833A2B62C6CABDD007DBE47 /* ViewModel */,
 				8833A2B42C6CABD4007DBE47 /* ViewController */,
 			);
@@ -788,6 +799,7 @@
 				8833A2992C6CA6E3007DBE47 /* BaseViewController.swift in Sources */,
 				8874A1832C6DFDE400299265 /* LoginError.swift in Sources */,
 				880E39E92C6C9CED00C57C2C /* AppDelegate.swift in Sources */,
+				880E414C2C7888A50067F93A /* IntroduceCollectionViewCell.swift in Sources */,
 				88761BFE2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift in Sources */,
 				8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */,
 				8833A2CD2C6CD1B9007DBE47 /* LoginRequest.swift in Sources */,

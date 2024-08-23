@@ -83,6 +83,7 @@ final class PostManager {
                         case .success(let value):
                             if let image = UIImage(data: value) {
                                 observer(.success(.success(image)))
+                                ImageCacheManager.shared.cachingImage(url: fetchPostImageResquest.url!, image: image)
                             }else {
                                 observer(.failure(CommonError.init(statusCode: status)))
                             }

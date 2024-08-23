@@ -15,9 +15,9 @@ final class IntroduceViewController: BaseViewController {
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     
     private func layout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(230))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(270))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(230))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(270))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.interItemSpacing = .fixed(10)
         let section = NSCollectionLayoutSection(group: group)
@@ -46,22 +46,34 @@ final class IntroduceViewController: BaseViewController {
     }
     
     override func configureView() {
-        collectionView.register(BaseCollectionViewCell.self, forCellWithReuseIdentifier: BaseCollectionViewCell.identifier)
+        collectionView.register(IntroduceCollectionViewCell.self, forCellWithReuseIdentifier: IntroduceCollectionViewCell.identifier)
     }
 }
 
 extension IntroduceViewController {
     private func bind() {
         let input = IntroduceViewModel.Input(
-            request: BehaviorRelay(value: FetchAbandonRequest(pageNo: 1))
+            request: BehaviorRelay(value: FetchAbandonRequest(pageNo: 1)),
+            prefetch: PublishRelay<Void>()
         )
         let output = viewModel.transform(input: input)
         
         output.abondonList
-            .debug("abondonList")
-            .bind(to: collectionView.rx.items(cellIdentifier: BaseCollectionViewCell.identifier, cellType: BaseCollectionViewCell.self)){
+            .bind(to: collectionView.rx.items(cellIdentifier: IntroduceCollectionViewCell.identifier, cellType: IntroduceCollectionViewCell.self)){
                 (row, element, cell) in
-                cell.backgroundColor = .magenta
+                cell.configureData(data: element)
+            }
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.prefetchItems
+            .bind(with: self) { owner, value in
+                let itemList = owner.viewModel.abandonResponse.items.item
+                print(itemList.count, value)
+                value.forEach { idx in
+                    if idx.item == itemList.count - 4 {
+                        input.prefetch.accept(())
+                    }
+                }
             }
             .disposed(by: disposeBag)
     }

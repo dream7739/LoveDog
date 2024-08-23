@@ -10,39 +10,54 @@ import RxSwift
 
 final class DetailImageCollectionViewCell: BaseCollectionViewCell {
     
-    private let imageView = UIImageView()
+    private let mainImageView = UIImageView()
     private let disposeBag = DisposeBag()
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        mainImageView.image = nil
     }
     
     override func configureHierarchy() {
-        [imageView].forEach {
+        [mainImageView].forEach {
             contentView.addSubview($0)
         }
     }
     
     override func configureLayout() {
-        imageView.snp.makeConstraints { make in
+        mainImageView.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
     }
     
     override func configureView() {
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
+        mainImageView.contentMode = .scaleAspectFill
+        mainImageView.clipsToBounds = true
         
     }
     
-    func configureImage(_ image: String){
-        ImageCacheManager.shared.loadImage(path: image)
+    func configureImage(_ imagePath: String){
+        let urlString = APIURL.sesacBaseURL + "/\(imagePath)"
+        
+        ImageCacheManager.shared.loadImage(urlString: urlString)
             .bind(with: self) { owner, image in
                 if let image {
-                    owner.imageView.image = image
+                    owner.mainImageView.image = image
                 }else {
-                    owner.imageView.backgroundColor = .dark_gray
+                    owner.callFetchPostImage(imagePath)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func callFetchPostImage(_ path: String) {
+        PostManager.shared.fetchPostImage(path: path)
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    owner.mainImageView.image = value
+                case .failure(let error):
+                    print(error)
                 }
             }
             .disposed(by: disposeBag)
