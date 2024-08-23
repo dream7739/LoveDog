@@ -28,12 +28,14 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
     
     func configureData(_ data: Creator) {
         if let profileImagePath = data.profileImage {
-            ImageCacheManager.shared.loadImage(path: profileImagePath)
+            let urlString = APIURL.sesacBaseURL + "/\(profileImagePath)"
+            
+            ImageCacheManager.shared.loadImage(urlString: urlString)
                 .bind(with: self) { owner, value in
-                    if let image = value {
+                    if let value {
                         owner.profileView.profileImage.image = value
                     }else {
-                        owner.profileView.profileImage.image = UIImage(resource: .profileEmpty)
+                        owner.callFetchPostImage(profileImagePath)
                     }
                 }
                 .disposed(by: disposeBag)
@@ -42,6 +44,19 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
         }
         
         profileView.nicknameLabel.text = data.nick
+    }
+    
+    private func callFetchPostImage(_ path: String) {
+        PostManager.shared.fetchPostImage(path: path)
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    owner.profileView.profileImage.image = value
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
 }

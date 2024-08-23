@@ -28,4 +28,11 @@ final class PaddingLabel: UILabel {
         size.width += (padding.left + padding.right)
         return size
     }
+    
+    func makeLightGrayBorder() {
+       backgroundColor = .light_gray
+       layer.cornerRadius = 8
+       clipsToBounds = true
+       font = Design.Font.quarternary
+    }
 }

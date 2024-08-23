@@ -19,7 +19,7 @@ enum FetchPostError: Error, LocalizedError {
         case 400:
             self = .invalidRequest
         case 401:
-            self =  .unavailableToken
+            self = .unavailableToken
         case 403:
             self = .forbidden
         case 419:
