@@ -1,5 +1,5 @@
 //
-//  SceneChanger.swift
+//  SceneManager.swift
 //  LoveDog
 //
 //  Created by 홍정민 on 8/15/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct SceneChanger {
+struct SceneManager {
     private init(){ }
     
     static func transitionScene<T: UIViewController>(_ viewController: T){

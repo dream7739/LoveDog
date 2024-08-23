@@ -1,5 +1,5 @@
 //
-//  BaseDateFormatter.swift
+//  BaseDateFormatterManager.swift
 //  LoveDog
 //
 //  Created by 홍정민 on 8/16/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum BaseDateFormatter {
+enum BaseDateFormatterManager {
     enum DateType: String {
         case yyMMdd = "yy년 MM월 dd일"
     }

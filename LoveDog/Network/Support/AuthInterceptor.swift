@@ -46,7 +46,7 @@ final class AuthInterceptor: RequestInterceptor {
                     //리프레시 토큰까지 만료되었을 경우, UserDefaults 값 삭제 후 로그인 화면으로 바꾸어줌
                     UserDefaultsManager.removeTokens()
                     let signInVC = SignInViewController()
-                    SceneChanger.transitionScene(signInVC)
+                    SceneManager.transitionScene(signInVC)
                     completion(.doNotRetryWithError(error))
                 }
             }

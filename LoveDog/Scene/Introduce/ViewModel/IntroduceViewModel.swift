@@ -23,16 +23,19 @@ final class IntroduceViewModel: BaseViewModel {
     )
     
     struct Input {
+        let jsonParse: BehaviorRelay<String>
         let request: BehaviorRelay<FetchAbandonRequest>
         let prefetch: PublishRelay<Void>
     }
     
     struct Output {
-        let abondonList: PublishRelay<[FetchAbandonItem]>
+        let sidoList: BehaviorRelay<[String]>
+        let abondonList: BehaviorRelay<[FetchAbandonItem]>
     }
     
     func transform(input: Input) -> Output {
-        let abondonList = PublishRelay<[FetchAbandonItem]>()
+        let sidoList = BehaviorRelay<[String]>(value: [])
+        let abondonList = BehaviorRelay<[FetchAbandonItem]>(value: [])
         
         input.request
             .withUnretained(self)
@@ -48,6 +51,23 @@ final class IntroduceViewModel: BaseViewModel {
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        input.jsonParse
+            .flatMap { value in
+                JsonManager.configureBundleData(fileName: value, type: [SidoModel].self)
+                    .catch { error in
+                        print(error)
+                        print(error.localizedDescription)
+                        return Observable.never()
+                    }
+            }
+            .map { value in
+                return value.map { $0.orgdownNm }
+            }
+            .subscribe(with: self) { owner, value in
+                sidoList.accept(value)
             }
             .disposed(by: disposeBag)
         
@@ -75,8 +95,10 @@ final class IntroduceViewModel: BaseViewModel {
                 }           
             }
             .disposed(by: disposeBag)
-        
-           
-        return Output(abondonList: abondonList)
+          
+        return Output(
+            sidoList: sidoList,
+            abondonList: abondonList
+        )
     }
 }
