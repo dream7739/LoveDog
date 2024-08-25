@@ -89,6 +89,8 @@
 		88BEF7462C6F5BDD001F390D /* BaseDateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7452C6F5BDD001F390D /* BaseDateFormatterManager.swift */; };
 		88BEF7482C6F70FC001F390D /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7472C6F70FC001F390D /* PaddingLabel.swift */; };
 		88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7492C6F828A001F390D /* FloatingButton.swift */; };
+		88C1E5E92C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1E5E82C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift */; };
+		88C1E5EC2C7B6CB900A13B92 /* CommentTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1E5EB2C7B6CB900A13B92 /* CommentTitleView.swift */; };
 		88F8D0BC2C7763D500AF9DED /* FetchAbandonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F8D0BB2C7763D500AF9DED /* FetchAbandonResponse.swift */; };
 		88F8D0C02C777F2500AF9DED /* IntroduceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F8D0BF2C777F2500AF9DED /* IntroduceViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -173,6 +175,8 @@
 		88BEF7452C6F5BDD001F390D /* BaseDateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDateFormatterManager.swift; sourceTree = "<group>"; };
 		88BEF7472C6F70FC001F390D /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		88BEF7492C6F828A001F390D /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
+		88C1E5E82C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentCollectionViewCell.swift; sourceTree = "<group>"; };
+		88C1E5EB2C7B6CB900A13B92 /* CommentTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTitleView.swift; sourceTree = "<group>"; };
 		88F8D0BB2C7763D500AF9DED /* FetchAbandonResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAbandonResponse.swift; sourceTree = "<group>"; };
 		88F8D0BF2C777F2500AF9DED /* IntroduceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -566,6 +570,7 @@
 		88761C012C7624B200D2FCC8 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				88C1E5EA2C7B6CA000A13B92 /* SupplementaryView */,
 				88761C062C7624F200D2FCC8 /* ViewController */,
 				88761C052C7624EE00D2FCC8 /* ViewModel */,
 				88761C042C7624EB00D2FCC8 /* Cell */,
@@ -600,6 +605,7 @@
 				88761BF92C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift */,
 				88761BFB2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift */,
 				88761BFD2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift */,
+				88C1E5E82C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -760,6 +766,14 @@
 			path = Fetch;
 			sourceTree = "<group>";
 		};
+		88C1E5EA2C7B6CA000A13B92 /* SupplementaryView */ = {
+			isa = PBXGroup;
+			children = (
+				88C1E5EB2C7B6CB900A13B92 /* CommentTitleView.swift */,
+			);
+			path = SupplementaryView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -918,7 +932,9 @@
 				884CB0D42C74C25C00B7E8CC /* Comment.swift in Sources */,
 				880E39EB2C6C9CED00C57C2C /* SceneDelegate.swift in Sources */,
 				8833A2CF2C6CD1E2007DBE47 /* LoginResponse.swift in Sources */,
+				88C1E5E92C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift in Sources */,
 				881E09402C6F93E2003EDD78 /* MakeStoryViewController.swift in Sources */,
+				88C1E5EC2C7B6CB900A13B92 /* CommentTitleView.swift in Sources */,
 				8833A2942C6CA66C007DBE47 /* ReusableProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1065,6 +1081,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LoveDog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "사랑할개";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -1097,6 +1114,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LoveDog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "사랑할개";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

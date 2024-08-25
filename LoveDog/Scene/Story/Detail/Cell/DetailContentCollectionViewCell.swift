@@ -21,7 +21,7 @@ final class DetailContentCollectionViewCell: BaseCollectionViewCell {
     override func configureLayout() {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.safeAreaLayoutGuide)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
         contentLabel.snp.makeConstraints { make in

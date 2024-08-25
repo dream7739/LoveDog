@@ -22,25 +22,25 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     
     override func configureLayout() {
         likeButton.snp.makeConstraints { make in
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(18)
-            make.size.equalTo(35)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(13)
+            make.size.equalTo(24)
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
         }
         
         likeLabel.snp.makeConstraints { make in
-            make.leading.equalTo(likeButton.snp.trailing)
+            make.leading.equalTo(likeButton.snp.trailing).offset(4)
             make.centerY.equalTo(likeButton)
         }
         
         commentButton.snp.makeConstraints { make in
-            make.leading.equalTo(likeLabel.snp.trailing).offset(2)
-            make.size.equalTo(35)
+            make.leading.equalTo(likeLabel.snp.trailing).offset(10)
+            make.size.equalTo(20)
             make.centerY.equalTo(likeButton)
         }
         
         commentLabel.snp.makeConstraints { make in
-            make.leading.equalTo(commentButton.snp.trailing)
-            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.leading.equalTo(commentButton.snp.trailing).offset(8)
+            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(15)
             make.centerY.equalTo(commentButton)
         }
     }
@@ -54,7 +54,9 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         commentButton.configuration?.image = Design.Image.comment
         
         likeLabel.font = Design.Font.tertiary
+        likeLabel.textAlignment = .left
         commentLabel.font = Design.Font.tertiary
+        commentLabel.textAlignment = .left
     }
     
     func configureData(_ likeCount: String, _ commentCount: String) {

@@ -41,6 +41,11 @@ final class StoryViewController: BaseViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     override func configureHierarchy() {
         [collectionView, writeButton].forEach {
             view.addSubview($0)

@@ -83,9 +83,20 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .debug("CONTENT")
         
-        sections = Observable.zip(profile, image, like, content)
+        let comment = postDetail
+            .map { $0.comments }
             .map { value in
-                return [value.0, value.1, value.2, value.3]
+                value.map {
+                    SectionItem.comment(comments: $0)
+                }
+            }
+            .map { value in
+                MultipleSectionModel.comment(items: value)
+            }
+        
+        sections = Observable.zip(profile, image, like, content, comment)
+            .map { value in
+                return [value.0, value.1, value.2, value.3, value.4]
             }
             .debug("SECTION")
         
