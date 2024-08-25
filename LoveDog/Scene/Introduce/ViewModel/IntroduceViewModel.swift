@@ -13,7 +13,7 @@ final class IntroduceViewModel: BaseViewModel {
     
     private let disposeBag = DisposeBag()
     
-    var abandonRequest = FetchAbandonRequest(pageNo: 1)
+    var abandonRequest = FetchAbandonRequest(upperCd: 6110000, pageNo: 1)
     
     var abandonResponse = FetchAbandonBody(
         items: FetchAbandonItemList(item: []),
@@ -29,25 +29,37 @@ final class IntroduceViewModel: BaseViewModel {
     }
     
     struct Output {
-        let sidoList: BehaviorRelay<[String]>
+        let sidoList: BehaviorRelay<[SidoModel]>
         let abondonList: BehaviorRelay<[FetchAbandonItem]>
+        let scrollToTop: PublishRelay<Void>
     }
     
     func transform(input: Input) -> Output {
-        let sidoList = BehaviorRelay<[String]>(value: [])
+        let sidoList = BehaviorRelay<[SidoModel]>(value: [])
         let abondonList = BehaviorRelay<[FetchAbandonItem]>(value: [])
+        let scrollToTop = PublishRelay<Void>()
         
         input.request
             .withUnretained(self)
-            .flatMap { request in
-                OpenAPIManager.shared.fetchAbondonPublic(request: self.abandonRequest)
+            .distinctUntilChanged { $0.1.upperCd }
+            .map {
+                self.abandonRequest = $1
+                return $1
             }
+            .flatMap { request in
+                OpenAPIManager.shared.fetchAbondonPublic(request: request)
+            }
+            .debug("REQUEST")
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
                     guard let body = value.response.body else { return }
                     owner.abandonResponse = body
                     abondonList.accept(body.items.item)
+                    
+                    if !body.items.item.isEmpty {
+                        scrollToTop.accept(())
+                    }
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -58,13 +70,9 @@ final class IntroduceViewModel: BaseViewModel {
             .flatMap { value in
                 JsonManager.configureBundleData(fileName: value, type: [SidoModel].self)
                     .catch { error in
-                        print(error)
                         print(error.localizedDescription)
                         return Observable.never()
                     }
-            }
-            .map { value in
-                return value.map { $0.orgdownNm }
             }
             .subscribe(with: self) { owner, value in
                 sidoList.accept(value)
@@ -73,7 +81,7 @@ final class IntroduceViewModel: BaseViewModel {
         
         input.prefetch
             .withUnretained(self)
-            .filter { _ in
+            .filter { request in
                 let count = (self.abandonRequest.pageNo + 1) * (self.abandonRequest.pageCnt)
                 return count < self.abandonResponse.totalCount
             }
@@ -84,21 +92,23 @@ final class IntroduceViewModel: BaseViewModel {
             .flatMap { request in
                 OpenAPIManager.shared.fetchAbondonPublic(request: request)
             }
-            .subscribe(with: self) { owner, result in
+            .debug("PREFETCH")
+            .subscribe { result in
                 switch result {
                 case .success(let value):
                     guard let body = value.response.body else { return }
-                    owner.abandonResponse.items.item.append(contentsOf: body.items.item)
-                    abondonList.accept(owner.abandonResponse.items.item)
+                    self.abandonResponse.items.item.append(contentsOf: body.items.item)
+                    abondonList.accept(self.abandonResponse.items.item)
                 case .failure(let error):
                     print(error.localizedDescription)
-                }           
+                }
             }
             .disposed(by: disposeBag)
-          
+        
         return Output(
             sidoList: sidoList,
-            abondonList: abondonList
+            abondonList: abondonList,
+            scrollToTop: scrollToTop
         )
     }
 }

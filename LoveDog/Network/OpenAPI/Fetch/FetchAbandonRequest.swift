@@ -10,7 +10,7 @@ import Foundation
 struct FetchAbandonRequest: Encodable {
     let serviceKey: String = APIKey.abondonPublicKey
     let kindCd: Int = 417000 //품종코드
-    let upperCd: Int = 6110000 //시도코드
+    var upperCd: Int
     let responseType = "json" //응답타입
     var pageNo: Int
     let pageCnt: Int = 20

@@ -40,7 +40,7 @@ final class JsonManager {
 }
 
 extension JsonManager {
-    enum JsonParseError: Error, LocalizedError {
+    private enum JsonParseError: Error, LocalizedError {
         case invalidLocation
         case failedConvertData
         case failedDecodeData
