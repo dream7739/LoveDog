@@ -306,8 +306,9 @@ final class IntroduceDetailViewController: BaseViewController {
         }
         
         careAddrInfoLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(careAddrLabel)
+            make.top.equalTo(careAddrLabel)
             make.leading.equalTo(careAddrLabel.snp.trailing).offset(4)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
         mapView.snp.makeConstraints { make in

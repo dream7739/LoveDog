@@ -14,12 +14,13 @@ import RxDataSources
 final class StoryDetailViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
+    private let commentView = CommentView()
     private let viewModel: StoryDetailViewModel
     private let disposeBag = DisposeBag()
     
     static let commentSectionHeader = "commentSectionHeader"
     
-    func layout() -> UICollectionViewLayout {
+    private func layout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { section, env in
             switch Section.allCases[section] {
             case .profile:
@@ -91,16 +92,24 @@ final class StoryDetailViewController: BaseViewController {
     
     override func configureHierarchy() {
         view.addSubview(collectionView)
+        view.addSubview(commentView)
     }
     
     override func configureLayout() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(commentView.snp.top)
+        }
+        
+        commentView.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            make.height.greaterThanOrEqualTo(45)
         }
     }
     
     override func configureView() {
-        
+        collectionView.keyboardDismissMode = .interactive
         collectionView.register(
             DetailProfileCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailProfileCollectionViewCell.identifier
@@ -144,6 +153,25 @@ extension StoryDetailViewController {
         
         output.sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        commentView.inputTextView
+            .rx.didChange
+            .bind(with: self) { owner, _ in
+                let size = CGSize(width: owner.commentView.inputTextView.frame.width, height: owner.commentView.frame.height)
+                let estimatedSize = owner.commentView.inputTextView.sizeThatFits(size)
+                let isMaxHeight = estimatedSize.height > 88
+                if isMaxHeight {
+                    owner.commentView.inputTextView.isScrollEnabled = true
+                } else {
+                    owner.commentView.inputTextView.isScrollEnabled = false
+                    
+                    owner.commentView.inputTextView.snp.updateConstraints { make in
+                        make.height.equalTo(estimatedSize.height)
+                    }
+
+                }
+            }
             .disposed(by: disposeBag)
     }
     
