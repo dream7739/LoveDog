@@ -49,7 +49,6 @@ final class IntroduceViewModel: BaseViewModel {
             .flatMap { request in
                 OpenAPIManager.shared.fetchAbondonPublic(request: request)
             }
-            .debug("REQUEST")
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
@@ -92,7 +91,6 @@ final class IntroduceViewModel: BaseViewModel {
             .flatMap { request in
                 OpenAPIManager.shared.fetchAbondonPublic(request: request)
             }
-            .debug("PREFETCH")
             .subscribe { result in
                 switch result {
                 case .success(let value):

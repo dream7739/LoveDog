@@ -7,16 +7,20 @@
 
 import UIKit
 
-class BaseViewController: UIViewController, BaseProtocol {
+class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        configureNav()
         configureHierarchy()
         configureLayout()
         configureView()
+    }
+    
+    func configureNav() { 
+        view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
     }
     
     func configureHierarchy() { }

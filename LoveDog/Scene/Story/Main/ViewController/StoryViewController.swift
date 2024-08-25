@@ -59,7 +59,7 @@ final class StoryViewController: BaseViewController {
     }
     
     override func configureView() {
-        navigationItem.title = "스토리"
+        navigationItem.title = Constant.Navigation.story
         collectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: StoryCollectionViewCell.identifier)
     }
     

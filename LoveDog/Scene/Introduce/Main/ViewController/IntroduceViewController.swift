@@ -34,7 +34,7 @@ final class IntroduceViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "소개"
+        navigationItem.title = Constant.Navigation.introduce
         bind()
     }
     
@@ -66,8 +66,9 @@ final class IntroduceViewController: BaseViewController {
         toolBar.sizeToFit()
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done = UIBarButtonItem(title: "완료", style: .plain, target: self, action: nil)
-        toolBar.setItems([flexibleSpace, done], animated: false)
+        let cancel = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
+        let done = UIBarButtonItem(title: "완료", style: .done, target: self, action: nil)
+        toolBar.setItems([flexibleSpace, cancel, done], animated: false)
         toolBar.isUserInteractionEnabled = true
         
         //텍스트필드
@@ -77,16 +78,13 @@ final class IntroduceViewController: BaseViewController {
         cityTextField.text = "서울특별시"
         cityTextField.font = Design.Font.primary
         cityTextField.tintColor = .clear
-
         let iconImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        iconImage.image = UIImage(systemName: "chevron.down")?.withTintColor(.black).withRenderingMode(.alwaysOriginal)
-        
+        iconImage.image = Design.Image.down.withTintColor(.black).withRenderingMode(.alwaysOriginal)
         cityTextField.rightView = iconImage
         cityTextField.rightViewMode = .always
         
         //컬렉션뷰
         collectionView.register(IntroduceCollectionViewCell.self, forCellWithReuseIdentifier: IntroduceCollectionViewCell.identifier)
-
     }
     
 }
@@ -108,17 +106,24 @@ extension IntroduceViewController {
              }
             .disposed(by: disposeBag)
                 
-        toolBar.items?.last?
-            .rx.tap
-            .withLatestFrom(pickerView.rx.modelSelected(SidoModel.self))
-            .compactMap { $0.first }
-            .debug("TOOLBAR")
-            .bind(with: self) { owner, value in
-                owner.cityTextField.text = value.orgdownNm
-                owner.cityTextField.endEditing(true)
-                input.request.accept(FetchAbandonRequest(upperCd: Int(value.orgCd) ?? 0, pageNo: 1))
-            }
-            .disposed(by: disposeBag)
+        if let items = toolBar.items, items.count == 3 {
+            items[1].rx.tap
+                .bind(with: self) { owner, _ in
+                    owner.cityTextField.endEditing(true)
+                }
+                .disposed(by: disposeBag)
+            
+            items[2]
+                .rx.tap
+                .withLatestFrom(pickerView.rx.modelSelected(SidoModel.self))
+                .compactMap { $0.first }
+                .bind(with: self) { owner, value in
+                    owner.cityTextField.text = value.orgdownNm
+                    owner.cityTextField.endEditing(true)
+                    input.request.accept(FetchAbandonRequest(upperCd: Int(value.orgCd) ?? 0, pageNo: 1))
+                }
+                .disposed(by: disposeBag)
+        }
         
         output.abondonList
             .bind(to: collectionView.rx.items(cellIdentifier: IntroduceCollectionViewCell.identifier, cellType: IntroduceCollectionViewCell.self)){
@@ -141,6 +146,14 @@ extension IntroduceViewController {
                         input.prefetch.accept(())
                     }
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.modelSelected(FetchAbandonItem.self)
+            .bind(with: self) { owner, value in
+                let detailVC = IntroduceDetailViewController()
+                detailVC.viewModel.fetchAbandonItem.accept(value)
+                owner.navigationController?.pushViewController(detailVC, animated: true)
             }
             .disposed(by: disposeBag)
     }
