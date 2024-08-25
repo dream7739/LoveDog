@@ -21,7 +21,6 @@ final class ImageCacheManager {
         }
         
         if let image = cachedImage(url: url) {
-            print("저장된 이미지 있음")
             return Observable.just(image)
         }
         

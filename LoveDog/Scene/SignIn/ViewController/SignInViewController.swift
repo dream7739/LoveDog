@@ -104,7 +104,7 @@ final class SignInViewController: BaseViewController {
         
         output.navigationTrigger
             .drive(with: self) { owner, value in
-                SceneChanger.transitionScene(TabBarController())
+                SceneManager.transitionScene(TabBarController())
             }
             .disposed(by: disposeBag)
     }

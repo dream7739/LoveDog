@@ -47,12 +47,6 @@ final class MakeStoryViewModel: BaseViewModel {
             .withLatestFrom(Observable.combineLatest(input.title, input.content, input.category))
             .debug("CONTENT")
         
-        input.category
-            .bind(with: self) { owner, value in
-                print(value)
-            }
-            .disposed(by: disposeBag)
-            
         //업로드 이미지
         let postImage = images
             .filter { !$0.isEmpty }
