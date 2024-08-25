@@ -98,7 +98,7 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
         dateLabel.font = Design.Font.tertiary
         dateLabel.textColor = .dark_gray
         
-        categoryLabel.makeLightGrayBorder()
+        categoryLabel.makeLightGrayRound()
         
         iconStackView.axis = .horizontal
         iconStackView.spacing = 2
@@ -129,16 +129,11 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     private func configureMainImage(path: String) {
         let urlString = APIURL.sesacBaseURL + "/\(path)"
 
-        ImageCacheManager.shared.loadImage(urlString: urlString)
-            .bind(with: self) { owner, value in
-                if let value {
-                    owner.mainImageView.image = value
-                }else {
-                    owner.callFetchPostImage(path)
-                }
-            }
-            .disposed(by: disposeBag)
-        
+        if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
+            mainImageView.image = image
+        } else {
+            callFetchPostImage(path)
+        }
     }
     
     private func callFetchPostImage(_ path: String) {

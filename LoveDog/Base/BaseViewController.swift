@@ -11,6 +11,7 @@ class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         configureNav()
         configureHierarchy()
         configureLayout()
@@ -18,7 +19,6 @@ class BaseViewController: UIViewController {
     }
     
     func configureNav() { 
-        view.backgroundColor = .white
         navigationController?.navigationBar.tintColor = .black
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
     }
