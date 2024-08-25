@@ -30,15 +30,11 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
         if let profileImagePath = data.profileImage {
             let urlString = APIURL.sesacBaseURL + "/\(profileImagePath)"
             
-            ImageCacheManager.shared.loadImage(urlString: urlString)
-                .bind(with: self) { owner, value in
-                    if let value {
-                        owner.profileView.profileImage.image = value
-                    }else {
-                        owner.callFetchPostImage(profileImagePath)
-                    }
-                }
-                .disposed(by: disposeBag)
+            if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
+                profileView.profileImage.image = image
+            } else {
+                callFetchPostImage(profileImagePath)
+            }
         }else {
             profileView.profileImage.image = UIImage(resource: .profileEmpty)
         }

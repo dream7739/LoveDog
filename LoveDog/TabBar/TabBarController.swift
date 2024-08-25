@@ -28,18 +28,18 @@ final class TabBarController: UITabBarController {
     }
     
     private func configureTabItem(){
-        let introduceItem = UITabBarItem(title: "소개", image: UIImage(systemName: "heart"), tag: 0)
+        let introduceItem = UITabBarItem(title: Constant.Navigation.introduce, image: UIImage(systemName: "heart"), tag: 0)
         let introduceVC = UINavigationController(rootViewController: IntroduceViewController())
         introduceVC.tabBarItem = introduceItem
         
-        let communityItem = UITabBarItem(title: "스토리", image: UIImage(systemName: "heart"), tag: 1)
-        let communityVC = UINavigationController(rootViewController: StoryViewController(viewModel: StoryViewModel()))
-        communityVC.tabBarItem = communityItem
+        let storyItem = UITabBarItem(title: Constant.Navigation.story, image: UIImage(systemName: "heart"), tag: 1)
+        let storyVC = UINavigationController(rootViewController: StoryViewController(viewModel: StoryViewModel()))
+        storyVC.tabBarItem = storyItem
         
-        let profileItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "heart"), tag: 2)
+        let profileItem = UITabBarItem(title: Constant.Navigation.profile, image: UIImage(systemName: "heart"), tag: 2)
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         profileVC.tabBarItem = profileItem
         
-        setViewControllers([introduceVC, communityVC, profileVC], animated: true)
+        setViewControllers([introduceVC, storyVC, profileVC], animated: true)
     }
 }

@@ -11,9 +11,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-//사진 - 사진 collection - 제목 - 카테고리 - 콘텐츠
-//카테고리: 입양후기, 실종/제보, 일상, 입양홍보
-
 final class MakeStoryViewController: BaseViewController {
     private let cameraButton = UIButton()
     private lazy var imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
@@ -57,7 +54,6 @@ final class MakeStoryViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNav()
         bind()
     }
     
@@ -155,8 +151,9 @@ final class MakeStoryViewController: BaseViewController {
         contentTextView.font = Design.Font.secondary
     }
     
-    private func configureNav(){
-        navigationItem.title = "스토리 작성"
+    override func configureNav(){
+        super.configureNav()
+        navigationItem.title = Constant.Navigation.makeStory
         let close = UIBarButtonItem(image: Design.Image.close, style: .plain, target: self, action: nil)
         let save = UIBarButtonItem(title: "저장", style: .plain, target: self, action: nil)
         navigationItem.leftBarButtonItem = close

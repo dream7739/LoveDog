@@ -66,12 +66,30 @@ struct FetchAbandonItem: Decodable {
         return "\(ageDescription) \(weightDescription)"
     }
     
+    var dateDescription: String {
+        let startDate = BaseDateFormatterManager.basicDateFormatter.date(from: noticeSdt) ?? Date()
+        let endDate = BaseDateFormatterManager.basicDateFormatter.date(from: noticeEdt) ?? Date()
+        
+        let startDateString = BaseDateFormatterManager.shortDateFormatter.string(from: startDate)
+        let endDateString = BaseDateFormatterManager.shortDateFormatter.string(from: endDate)
+        
+        return "공고기간 " + startDateString + " - " + endDateString
+    }
+    
     var ageDescription: String {
         return age.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     var weightDescription: String {
-        return  weight.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
+        return weight.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    var findDateDescription: String {
+        let findDate = BaseDateFormatterManager.basicDateFormatter.date(from: happenDt) ?? Date()
+        let findDateString = BaseDateFormatterManager.postDateFormatter.string(from: findDate)
+        return findDateString
     }
     
 }
+
+

@@ -15,16 +15,16 @@ final class ImageCacheManager {
     private let cache = NSCache<NSURL, UIImage>()
     private let disposeBag = DisposeBag()
     
-    func loadImage(urlString: String) -> Observable<UIImage?> {
+    func loadImage(urlString: String) -> UIImage? {
         guard let url = URL(string: urlString) else {
-            return Observable.just(nil)
+            return nil
         }
         
         if let image = cachedImage(url: url) {
-            return Observable.just(image)
+            return image
         }
         
-        return Observable.just(nil)
+        return nil
     }
     
     func cachingImage(url: URL, image: UIImage?) {

@@ -67,7 +67,7 @@ final class IntroduceCollectionViewCell: BaseCollectionViewCell {
         mainImage.contentMode = .scaleAspectFill
         mainImage.clipsToBounds = true
         
-        stateLabel.makeLightGrayBorder()
+        stateLabel.makeLightGrayRound()
         
         noticeNoLabel.font = Design.Font.quarternary_bold
         noticeNoLabel.numberOfLines = 2
@@ -96,15 +96,11 @@ extension IntroduceCollectionViewCell {
     }
     
     private func configureProfile(_ profileURL: String) {
-        ImageCacheManager.shared.loadImage(urlString: profileURL)
-            .bind(with: self) { owner, value in
-                if let value {
-                    owner.mainImage.image = value
-                }else {
-                    owner.callFetchProfileImage(profileURL)
-                }
-            }
-            .disposed(by: disposeBag)
+        if let image = ImageCacheManager.shared.loadImage(urlString: profileURL) {
+            mainImage.image = image
+        } else {
+            callFetchProfileImage(profileURL)
+        }
     }
     
     private func callFetchProfileImage(_ urlString: String) {

@@ -66,7 +66,7 @@ final class StoryDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "스토리 상세"
+        navigationItem.title = Constant.Navigation.story
         bind()
     }
     
