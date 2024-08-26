@@ -15,7 +15,6 @@ final class StoryDetailViewModel: BaseViewModel {
     let likeButtonClicked = PublishRelay<Bool>()
     
     private var post: Post?
-    
     private let disposeBag = DisposeBag()
     
     struct Input {
@@ -58,15 +57,19 @@ final class StoryDetailViewModel: BaseViewModel {
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
-                    guard var post = owner.post else { return }
                     if value.like_status {
-                        if !post.likes.contains(UserDefaultsManager.userId) {
-                            post.likes.append(UserDefaultsManager.userId)
+                        if let post = owner.post, !post.likes.contains(UserDefaultsManager.userId) {
+                            owner.post?.likes.append(UserDefaultsManager.userId)
                         }
-                        postDetail.accept(post)
+                        if let post = owner.post {
+                            postDetail.accept(post)
+                        }
                     } else {
-                        post.likes.removeAll { $0 == UserDefaultsManager.userId }
-                        postDetail.accept(post)
+                        owner.post?.likes.removeAll { $0 == UserDefaultsManager.userId }
+                        
+                        if let post = owner.post {
+                            postDetail.accept(post)
+                        }
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -150,9 +153,10 @@ final class StoryDetailViewModel: BaseViewModel {
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
-                    guard var post = owner.post else { return }
-                    post.comments.insert(value, at: 0)
-                    postDetail.accept(post)
+                    owner.post?.comments.insert(value, at: 0)
+                    if let post = owner.post {
+                        postDetail.accept(post)
+                    }
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
