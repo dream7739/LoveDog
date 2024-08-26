@@ -11,7 +11,7 @@ enum UploadPostImageError: Error, LocalizedError {
     case badRequest
     case unavailableToken
     case forbidden
-    case expiredRefresh
+    case expiredAccessToken
     case common(_ error: CommonError)
     
     init(statusCode: Int) {
@@ -23,7 +23,7 @@ enum UploadPostImageError: Error, LocalizedError {
         case 403:
             self = .forbidden
         case 419:
-            self = .expiredRefresh
+            self = .expiredAccessToken
         default:
             self = .common(CommonError.init(statusCode: statusCode))
         }
@@ -37,8 +37,8 @@ enum UploadPostImageError: Error, LocalizedError {
             return "유효하지 않은 토큰입니다"
         case .forbidden:
             return "접근 권한이 없습니다"
-        case .expiredRefresh:
-            return "리프레시 토큰이 만료되었습니다"
+        case .expiredAccessToken:
+            return "액세스 토큰이 만료되었습니다"
         case .common(let error):
             return error.localizedDescription
         }

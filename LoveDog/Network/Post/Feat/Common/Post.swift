@@ -16,7 +16,7 @@ struct Post: Decodable {
     let createdAt: String
     let creator: Creator
     let files: [String]
-    let likes: [String]
+    var likes: [String]
     let likes2: [String] //추후 사용
     let hashTags: [String] //추후 사용
     var comments: [Comment]

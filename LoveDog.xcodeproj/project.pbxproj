@@ -43,6 +43,8 @@
 		8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */; };
 		884881932C7C627500156411 /* UploadCommentsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881922C7C627500156411 /* UploadCommentsRequest.swift */; };
 		884881952C7C63A900156411 /* UploadCommentsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881942C7C63A900156411 /* UploadCommentsError.swift */; };
+		884881982C7C82C300156411 /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881972C7C82C300156411 /* Like.swift */; };
+		8848819C2C7C83C300156411 /* LikeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8848819B2C7C83C300156411 /* LikeError.swift */; };
 		884CB0CB2C74B76000B7E8CC /* StoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CA2C74B76000B7E8CC /* StoryDetailViewController.swift */; };
 		884CB0CD2C74B96600B7E8CC /* StoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CC2C74B96600B7E8CC /* StoryDetailViewModel.swift */; };
 		884CB0D02C74C25300B7E8CC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CF2C74C25300B7E8CC /* Post.swift */; };
@@ -134,6 +136,8 @@
 		8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfiguration.swift; sourceTree = "<group>"; };
 		884881922C7C627500156411 /* UploadCommentsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCommentsRequest.swift; sourceTree = "<group>"; };
 		884881942C7C63A900156411 /* UploadCommentsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCommentsError.swift; sourceTree = "<group>"; };
+		884881972C7C82C300156411 /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
+		8848819B2C7C83C300156411 /* LikeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeError.swift; sourceTree = "<group>"; };
 		884CB0CA2C74B76000B7E8CC /* StoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewController.swift; sourceTree = "<group>"; };
 		884CB0CC2C74B96600B7E8CC /* StoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewModel.swift; sourceTree = "<group>"; };
 		884CB0CF2C74C25300B7E8CC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -479,6 +483,15 @@
 			path = Comment;
 			sourceTree = "<group>";
 		};
+		884881962C7C82B500156411 /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				884881972C7C82C300156411 /* Like.swift */,
+				8848819B2C7C83C300156411 /* LikeError.swift */,
+			);
+			path = Like;
+			sourceTree = "<group>";
+		};
 		884CB0CE2C74C22D00B7E8CC /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -512,6 +525,7 @@
 		8851F1B92C71F05F00B7BD57 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
+				884881962C7C82B500156411 /* Like */,
 				8848818F2C7C625600156411 /* Comment */,
 				8851F1C82C72127400B7BD57 /* Image */,
 				8851F1C72C72126100B7BD57 /* Content */,
@@ -897,6 +911,7 @@
 				880E39E92C6C9CED00C57C2C /* AppDelegate.swift in Sources */,
 				887A5D5C2C7B26CE00ED0527 /* AbandonConstant.swift in Sources */,
 				880E414C2C7888A50067F93A /* IntroduceCollectionViewCell.swift in Sources */,
+				8848819C2C7C83C300156411 /* LikeError.swift in Sources */,
 				88761BFE2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift in Sources */,
 				880E41542C78D85C0067F93A /* SidoModel.swift in Sources */,
 				8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */,
@@ -952,6 +967,7 @@
 				884CB0D42C74C25C00B7E8CC /* Comment.swift in Sources */,
 				880E39EB2C6C9CED00C57C2C /* SceneDelegate.swift in Sources */,
 				8833A2CF2C6CD1E2007DBE47 /* LoginResponse.swift in Sources */,
+				884881982C7C82C300156411 /* Like.swift in Sources */,
 				88C1E5E92C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift in Sources */,
 				881E09402C6F93E2003EDD78 /* MakeStoryViewController.swift in Sources */,
 				88C1E5EC2C7B6CB900A13B92 /* CommentTitleView.swift in Sources */,

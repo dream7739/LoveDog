@@ -191,9 +191,16 @@ extension StoryDetailViewController {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as? DetailImageCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureImage(image)
                 return cell
-            case .like(let likeCount, let commentCount):
+            case .like(let isLiked, let likeCount, let commentCount):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLikeCollectionViewCell.identifier, for: indexPath) as? DetailLikeCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(likeCount, commentCount)
+                cell.isClicked = isLiked
+                cell.likeButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        cell.isClicked.toggle()
+                        owner.viewModel.likeButtonClicked.accept(cell.isClicked)
+                    }
+                    .disposed(by: cell.disposeBag)
                 return cell
             case .content(let title, let content):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailContentCollectionViewCell.identifier, for: indexPath) as? DetailContentCollectionViewCell else { return UICollectionViewCell() }
@@ -264,7 +271,7 @@ enum SectionItem {
     //섹션에 들어갈 아이템 단건
     case profile(data: Creator)
     case image(image: String)
-    case like(likeCount: String, commentCount: String)
+    case like(isLiked: Bool, likeCount: String, commentCount: String)
     case content(title: String, content: String)
     case comment(comments: Comment)
 }

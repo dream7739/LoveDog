@@ -15,6 +15,7 @@ enum PostRouter {
     case uploadPost(param: UploadPostRequest)
     case uploadPostImage
     case uploadComments(id: String, param: UploadCommentsRequest)
+    case like(id: String, param: Like)
 }
 
 extension PostRouter: TargetType {
@@ -27,7 +28,7 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPostList, .fetchPost, .fetchPostImage:
             return .get
-        case .uploadPost, .uploadPostImage, .uploadComments:
+        case .uploadPost, .uploadPostImage, .uploadComments, .like:
             return .post
         }
     }
@@ -44,12 +45,14 @@ extension PostRouter: TargetType {
             return path
         case .uploadComments(let id, _):
             return "posts/\(id)/comments"
+        case .like(let id, _):
+            return "posts/\(id)/like"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments, .like:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -70,7 +73,7 @@ extension PostRouter: TargetType {
                 URLQueryItem(name: "limit", value: param.limit),
                 URLQueryItem(name: "product_id", value: param.product_id)
             ]
-        case .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments:
+        case .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments, .like:
             return nil
         }
     }
@@ -83,6 +86,9 @@ extension PostRouter: TargetType {
             let encoder = JSONEncoder()
             return try? encoder.encode(param)
         case .uploadComments(_, let param):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(param)
+        case .like(_, let param):
             let encoder = JSONEncoder()
             return try? encoder.encode(param)
         }
