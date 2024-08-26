@@ -164,5 +164,33 @@ final class PostManager {
         return result
     }
     
+    //댓글 작성
+    func uploadComments(id: String, request: UploadCommentsRequest) -> Single<Result<Comment, UploadCommentsError>> {
+        let result = Single<Result<Comment, UploadCommentsError>>.create { observer in
+            do {
+                print(#function)
+                let uploadCommentsRequest = try PostRouter.uploadComments(id: id, param: request).asURLRequest()
+                AF.request(uploadCommentsRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: Comment.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(UploadCommentsError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "UPLOAD COMMENTS FAILED")
+                observer(.success(.failure(UploadCommentsError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
     
 }

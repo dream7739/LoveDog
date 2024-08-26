@@ -19,7 +19,7 @@ struct Post: Decodable {
     let likes: [String]
     let likes2: [String] //추후 사용
     let hashTags: [String] //추후 사용
-    let comments: [Comment]
+    var comments: [Comment]
     
     var dateDescription: String {
         let date = BaseDateFormatterManager.basicDateFormatter.date(from: createdAt)

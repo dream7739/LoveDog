@@ -146,7 +146,11 @@ extension StoryDetailViewController {
     }
     
     private func bind() {
-        let input = StoryDetailViewModel.Input()
+        let input = StoryDetailViewModel.Input(
+            uploadComment: commentView.sendButton.rx.tap, 
+            commentContent: commentView.inputTextView.rx.text.orEmpty
+        )
+        
         let output = viewModel.transform(input: input)
         
         let dataSource = configureDataSource()
@@ -154,6 +158,7 @@ extension StoryDetailViewController {
         output.sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+
         
         commentView.inputTextView
             .rx.didChange
