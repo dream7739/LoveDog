@@ -14,6 +14,7 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     private let likeLabel = UILabel()
     private let commentButton = UIButton()
     private let commentLabel = UILabel()
+    private let seperatorLabel = UILabel()
     
     var isClicked = false {
         didSet {
@@ -33,7 +34,7 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureHierarchy() {
-        [likeButton, likeLabel, commentButton, commentLabel].forEach {
+        [likeButton, likeLabel, commentButton, commentLabel, seperatorLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -61,6 +62,11 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
             make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(15)
             make.centerY.equalTo(commentButton)
         }
+        
+        seperatorLabel.snp.makeConstraints { make in
+            make.bottom.horizontalEdges.equalTo(contentView)
+            make.height.equalTo(1)
+        }
     }
     
     override func configureView() {
@@ -75,6 +81,8 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         likeLabel.textAlignment = .left
         commentLabel.font = Design.Font.tertiary
         commentLabel.textAlignment = .left
+        
+        seperatorLabel.backgroundColor = .light_gray
     }
     
     func configureData(_ likeCount: String, _ commentCount: String) {

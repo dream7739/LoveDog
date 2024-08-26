@@ -15,7 +15,7 @@ final class SignInViewController: BaseViewController {
     private let emailTextField = BasicTextField()
     private let passwordTextField = BasicTextField()
     private let validationLabel = UILabel()
-    private let signInButton = BasicButton(title: "로그인")
+    private let signInButton = UIButton()
     
     let viewModel = SignInViewModel()
     private let disposeBag = DisposeBag()
@@ -72,6 +72,8 @@ final class SignInViewController: BaseViewController {
         validationLabel.font = Design.Font.quarternary
         validationLabel.textColor = .deep_gray
         signInButton.isEnabled = false
+        signInButton.configuration = ButtonConfiguration.basic
+        signInButton.configuration?.title = "로그인"
         
         //TEST
         emailTextField.text = "jm123@naver.com"

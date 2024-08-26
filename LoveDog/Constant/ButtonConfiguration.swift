@@ -8,30 +8,15 @@
 import UIKit
 
 enum ButtonConfiguration {
+    //기본 버튼
     static let basic: UIButton.Configuration = {
-        var configuration = UIButton.Configuration.plain()
+        var configuration = UIButton.Configuration.filled()
         configuration.background.backgroundColor = .main
         configuration.baseForegroundColor = .white
         return configuration
     }()
     
-    static let floating: UIButton.Configuration = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.background.backgroundColor = .main
-        configuration.baseForegroundColor = .white
-        configuration.image = Design.Image.add
-        return configuration
-    }()
-
-    static let camera: UIButton.Configuration = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = Design.Image.camera.applyingSymbolConfiguration(.init(pointSize: 15))
-        configuration.cornerStyle = .medium
-        configuration.background.strokeColor = .main
-        configuration.baseForegroundColor = .dark_gray
-        return configuration
-    }()
-    
+    //삭제 버튼
     static let delete: UIButton.Configuration = {
         var configuration = UIButton.Configuration.plain()
         configuration.image = Design.Image.close.applyingSymbolConfiguration(.init(pointSize: 10))
@@ -41,6 +26,7 @@ enum ButtonConfiguration {
         return configuration
     }()
     
+    //옵션 선택 버튼
     static let option: UIButton.Configuration = {
         var configuration = UIButton.Configuration.plain()
         configuration.baseForegroundColor = .black

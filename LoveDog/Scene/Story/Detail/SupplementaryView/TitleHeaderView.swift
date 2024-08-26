@@ -1,5 +1,5 @@
 //
-//  CommentTitleView.swift
+//  TitleHeaderView.swift
 //  LoveDog
 //
 //  Created by 홍정민 on 8/25/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class CommentTitleView: UICollectionReusableView {
+final class TitleHeaderView: UICollectionReusableView {
     let seperatorLabel = UILabel()
     let titleLabel = UILabel()
 

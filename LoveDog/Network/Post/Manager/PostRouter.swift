@@ -52,10 +52,16 @@ extension PostRouter: TargetType {
     
     var header: [String : String] {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments, .like:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadComments, .like:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
+                HeaderKey.sesacKey.rawValue : APIKey.sesacKey
+            ]
+        case .uploadPostImage:
+            return [
+                HeaderKey.authorization.rawValue: UserDefaultsManager.token,
+                HeaderKey.contentType.rawValue : HeaderValue.multipart.rawValue,
                 HeaderKey.sesacKey.rawValue : APIKey.sesacKey
             ]
         }

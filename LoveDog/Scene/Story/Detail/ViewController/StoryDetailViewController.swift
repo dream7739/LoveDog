@@ -41,7 +41,7 @@ final class StoryDetailViewController: BaseViewController {
             case .like:
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(35))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
@@ -127,7 +127,7 @@ final class StoryDetailViewController: BaseViewController {
             forCellWithReuseIdentifier: DetailContentCollectionViewCell.identifier
         )
         
-        collectionView.register(CommentTitleView.self, forSupplementaryViewOfKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: CommentTitleView.identifier)
+        collectionView.register(TitleHeaderView.self, forSupplementaryViewOfKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: TitleHeaderView.identifier)
         
         collectionView.register(
             DetailCommentCollectionViewCell.self,
@@ -212,7 +212,7 @@ extension StoryDetailViewController {
                 return cell
             }
         }) { dataSource, collectionView, kind, indexPath in
-            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: CommentTitleView.identifier, for: indexPath) as? CommentTitleView {
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: TitleHeaderView.identifier, for: indexPath) as? TitleHeaderView {
                 header.configureTitle("댓글")
                 return header
             }
