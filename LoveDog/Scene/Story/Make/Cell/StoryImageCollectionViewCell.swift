@@ -50,7 +50,7 @@ final class StoryImageCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureImage(_ image: UIImage){
-        mainImageView.image = UIImage(resource: .dogSample1)
+        mainImageView.image = image
     }
     
 }

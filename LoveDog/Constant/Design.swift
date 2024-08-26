@@ -30,6 +30,7 @@ enum Design {
     enum Image {
         static let comment = UIImage(systemName: "message")!
         static let like = UIImage(systemName: "heart")!
+        static let likeFill = UIImage(systemName: "heart.fill")!
         static let add = UIImage(systemName: "plus")!
         static let close = UIImage(systemName: "xmark")!
         static let camera = UIImage(systemName: "camera")!

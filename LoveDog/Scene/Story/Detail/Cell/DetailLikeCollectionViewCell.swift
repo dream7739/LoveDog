@@ -6,13 +6,31 @@
 //
 
 import UIKit
+import RxSwift
 
 final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     
-    private let likeButton = UIButton()
+    let likeButton = UIButton()
     private let likeLabel = UILabel()
     private let commentButton = UIButton()
     private let commentLabel = UILabel()
+    
+    var isClicked = false {
+        didSet {
+            let color: UIColor = isClicked ? .coral: .black
+            let image: UIImage = isClicked ? Design.Image.likeFill: Design.Image.like
+            
+            likeButton.configuration?.image = image
+            likeButton.configuration?.baseForegroundColor = color
+        }
+    }
+    
+    var disposeBag = DisposeBag()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         [likeButton, likeLabel, commentButton, commentLabel].forEach {

@@ -12,6 +12,8 @@ import RxCocoa
 final class StoryDetailViewModel: BaseViewModel {
     
     let postId = BehaviorRelay<String>(value: "")
+    let likeButtonClicked = PublishRelay<Bool>()
+    
     private var post: Post?
     
     private let disposeBag = DisposeBag()
@@ -45,6 +47,33 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        let likeClick = likeButtonClicked
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+        
+        Observable.combineLatest(postId, likeClick)
+            .filter { !$0.0.isEmpty }
+            .flatMap { value in
+                PostManager.shared.uploadLike(id: value.0, request: Like(like_status: value.1))
+            }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    guard var post = owner.post else { return }
+                    if value.like_status {
+                        if !post.likes.contains(UserDefaultsManager.userId) {
+                            post.likes.append(UserDefaultsManager.userId)
+                        }
+                        postDetail.accept(post)
+                    } else {
+                        post.likes.removeAll { $0 == UserDefaultsManager.userId }
+                        postDetail.accept(post)
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         let profile = postDetail
             .map {
                 MultipleSectionModel.profile(
@@ -68,11 +97,14 @@ final class StoryDetailViewModel: BaseViewModel {
         let commentCount = postDetail
             .map { $0.comments.count }
         
-        let like = Observable.zip(likeCount, commentCount)
-            .map { ("\($0)", "\($1)") }
+        let isLiked = postDetail
+            .map { $0.likes.contains(UserDefaultsManager.userId) }
+        
+        let like = Observable.zip(isLiked, likeCount, commentCount)
+            .map { ($0, "\($1)", "\($2)") }
             .map {
                 MultipleSectionModel.like(
-                    items: [.like(likeCount: $0.0, commentCount: $0.1)]
+                    items: [.like(isLiked: $0.0, likeCount: $0.1, commentCount: $0.2)]
                 )
             }
             .debug("LIKE")
@@ -119,7 +151,7 @@ final class StoryDetailViewModel: BaseViewModel {
                 switch result {
                 case .success(let value):
                     guard var post = owner.post else { return }
-                    post.comments.append(value)
+                    post.comments.insert(value, at: 0)
                     postDetail.accept(post)
                 case .failure(let error):
                     print(error.localizedDescription)

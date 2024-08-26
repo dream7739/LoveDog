@@ -64,6 +64,7 @@ final class SignInViewModel: BaseViewModel {
                 case .success(let value):
                     UserDefaultsManager.token = value.accessToken
                     UserDefaultsManager.refresh = value.refreshToken
+                    UserDefaultsManager.userId = value.user_id
                     navigationTrigger.accept(())
                 case .failure(let error):
                     print(error.localizedDescription)

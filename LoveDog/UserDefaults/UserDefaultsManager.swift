@@ -28,6 +28,7 @@ final class UserDefaultsManager {
     private enum UserDefaultsKey: String {
         case access
         case refresh
+        case userId
     }
     
     @UserDefault(key: UserDefaultsKey.access.rawValue, defaultValue: "")
@@ -35,6 +36,9 @@ final class UserDefaultsManager {
     
     @UserDefault(key: UserDefaultsKey.refresh.rawValue, defaultValue: "")
     static var refresh
+    
+    @UserDefault(key: UserDefaultsKey.userId.rawValue, defaultValue: "")
+    static var userId
     
     static func removeTokens(){
         for key in UserDefaults.standard.dictionaryRepresentation().keys {

@@ -193,4 +193,33 @@ final class PostManager {
         return result
     }
     
+    //좋아요
+    func uploadLike(id: String, request: Like) -> Single<Result<Like, LikeError>> {
+        let result = Single<Result<Like, LikeError>>.create { observer in
+            do {
+                print(#function)
+                let uploadLikeRequest = try PostRouter.like(id: id, param: request).asURLRequest()
+                AF.request(uploadLikeRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: Like.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(LikeError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "UPLOAD COMMENTS FAILED")
+                observer(.success(.failure(LikeError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
+    
 }
