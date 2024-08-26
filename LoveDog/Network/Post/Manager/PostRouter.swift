@@ -14,6 +14,7 @@ enum PostRouter {
     case fetchPostImage(path: String)
     case uploadPost(param: UploadPostRequest)
     case uploadPostImage
+    case uploadComments(id: String, param: UploadCommentsRequest)
 }
 
 extension PostRouter: TargetType {
@@ -26,7 +27,7 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPostList, .fetchPost, .fetchPostImage:
             return .get
-        case .uploadPost, .uploadPostImage:
+        case .uploadPost, .uploadPostImage, .uploadComments:
             return .post
         }
     }
@@ -41,12 +42,14 @@ extension PostRouter: TargetType {
             return "posts/files"
         case .fetchPostImage(let path):
             return path
+        case .uploadComments(let id, _):
+            return "posts/\(id)/comments"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -67,7 +70,7 @@ extension PostRouter: TargetType {
                 URLQueryItem(name: "limit", value: param.limit),
                 URLQueryItem(name: "product_id", value: param.product_id)
             ]
-        case .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage:
+        case .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments:
             return nil
         }
     }
@@ -77,6 +80,9 @@ extension PostRouter: TargetType {
         case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPostImage:
             return nil
         case .uploadPost(let param):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(param)
+        case .uploadComments(_, let param):
             let encoder = JSONEncoder()
             return try? encoder.encode(param)
         }

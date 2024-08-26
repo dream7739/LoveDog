@@ -12,4 +12,10 @@ struct Comment: Decodable {
     let content: String
     let createdAt: String
     let creator: Creator
+    
+    var dateDescription: String {
+        let createDate = BaseDateFormatterManager.basicDateFormatter.date(from: createdAt) ?? Date()
+        let createDateString = BaseDateFormatterManager.shortDateFormatter.string(from: createDate)
+        return createDateString
+    }
 }

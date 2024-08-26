@@ -14,10 +14,13 @@ import RxDataSources
 final class StoryDetailViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
+    private let commentView = CommentView()
     private let viewModel: StoryDetailViewModel
     private let disposeBag = DisposeBag()
     
-    func layout() -> UICollectionViewLayout {
+    static let commentSectionHeader = "commentSectionHeader"
+    
+    private func layout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { section, env in
             switch Section.allCases[section] {
             case .profile:
@@ -38,7 +41,7 @@ final class StoryDetailViewController: BaseViewController {
             case .like:
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(35))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
@@ -48,6 +51,18 @@ final class StoryDetailViewController: BaseViewController {
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(300))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
+                return section
+            case .comment:
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(32))
+                let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: StoryDetailViewController.commentSectionHeader, alignment: .top)
+                
+                let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
+                let item = NSCollectionLayoutItem(layoutSize: itemsSize)
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                let section = NSCollectionLayoutSection(group: group)
+                
+                section.boundarySupplementaryItems = [sectionHeader]
                 return section
             }
         }
@@ -70,17 +85,31 @@ final class StoryDetailViewController: BaseViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
     override func configureHierarchy() {
         view.addSubview(collectionView)
+        view.addSubview(commentView)
     }
     
     override func configureLayout() {
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(commentView.snp.top)
+        }
+        
+        commentView.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            make.height.greaterThanOrEqualTo(45)
         }
     }
     
     override func configureView() {
+        collectionView.keyboardDismissMode = .interactive
         collectionView.register(
             DetailProfileCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailProfileCollectionViewCell.identifier
@@ -97,6 +126,13 @@ final class StoryDetailViewController: BaseViewController {
             DetailContentCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailContentCollectionViewCell.identifier
         )
+        
+        collectionView.register(CommentTitleView.self, forSupplementaryViewOfKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: CommentTitleView.identifier)
+        
+        collectionView.register(
+            DetailCommentCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailCommentCollectionViewCell.identifier
+        )
     }
 }
 
@@ -106,21 +142,46 @@ extension StoryDetailViewController {
         case image
         case like
         case content
+        case comment
     }
     
     private func bind() {
-        let input = StoryDetailViewModel.Input()
+        let input = StoryDetailViewModel.Input(
+            uploadComment: commentView.sendButton.rx.tap, 
+            commentContent: commentView.inputTextView.rx.text.orEmpty
+        )
+        
         let output = viewModel.transform(input: input)
         
         let dataSource = configureDataSource()
-
+        
         output.sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+
+        
+        commentView.inputTextView
+            .rx.didChange
+            .bind(with: self) { owner, _ in
+                let size = CGSize(width: owner.commentView.inputTextView.frame.width, height: owner.commentView.frame.height)
+                let estimatedSize = owner.commentView.inputTextView.sizeThatFits(size)
+                let isMaxHeight = estimatedSize.height > 88
+                if isMaxHeight {
+                    owner.commentView.inputTextView.isScrollEnabled = true
+                } else {
+                    owner.commentView.inputTextView.isScrollEnabled = false
+                    
+                    owner.commentView.inputTextView.snp.updateConstraints { make in
+                        make.height.equalTo(estimatedSize.height)
+                    }
+
+                }
+            }
             .disposed(by: disposeBag)
     }
     
     private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<MultipleSectionModel> {
-        return RxCollectionViewSectionedReloadDataSource { dataSource, collectionView, indexPath, _ in
+        return RxCollectionViewSectionedReloadDataSource(configureCell:  { dataSource, collectionView, indexPath, _ in
             switch dataSource[indexPath] {
             case .profile(let data):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as?  DetailProfileCollectionViewCell else { return UICollectionViewCell() }
@@ -138,7 +199,18 @@ extension StoryDetailViewController {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailContentCollectionViewCell.identifier, for: indexPath) as? DetailContentCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(title, content)
                 return cell
+            case .comment(let comments):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCommentCollectionViewCell.identifier, for: indexPath) as? DetailCommentCollectionViewCell else { return UICollectionViewCell() }
+                cell.configureData(comments)
+                return cell
             }
+        }) { dataSource, collectionView, kind, indexPath in
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: CommentTitleView.identifier, for: indexPath) as? CommentTitleView {
+                header.configureTitle("댓글")
+                return header
+            }
+            
+            return UICollectionReusableView()
         }
     }
     
@@ -152,6 +224,7 @@ enum MultipleSectionModel: SectionModelType {
     case image(items: [SectionItem])
     case like(items: [SectionItem])
     case content(items: [SectionItem])
+    case comment(items: [SectionItem])
     
     //섹션별 아이템
     var items: [SectionItem] {
@@ -164,7 +237,8 @@ enum MultipleSectionModel: SectionModelType {
             return items.map { $0}
         case .content(let items):
             return items.map { $0 }
-            
+        case .comment(let items):
+            return items.map { $0 }
         }
     }
     
@@ -177,8 +251,10 @@ enum MultipleSectionModel: SectionModelType {
             self = .image(items: items)
         case .like(let items):
             self = .like(items: items)
-        case .content(items: let items):
+        case .content(let items):
             self = .content(items: items)
+        case .comment(let items):
+            self = .comment(items: items)
         }
     }
     
@@ -190,4 +266,5 @@ enum SectionItem {
     case image(image: String)
     case like(likeCount: String, commentCount: String)
     case content(title: String, content: String)
+    case comment(comments: Comment)
 }

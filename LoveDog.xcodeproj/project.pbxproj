@@ -41,6 +41,8 @@
 		8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E72C6CF6E9007DBE47 /* BaseViewModel.swift */; };
 		8833A2EA2C6CF789007DBE47 /* BasicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2E92C6CF789007DBE47 /* BasicButton.swift */; };
 		8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */; };
+		884881932C7C627500156411 /* UploadCommentsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881922C7C627500156411 /* UploadCommentsRequest.swift */; };
+		884881952C7C63A900156411 /* UploadCommentsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881942C7C63A900156411 /* UploadCommentsError.swift */; };
 		884CB0CB2C74B76000B7E8CC /* StoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CA2C74B76000B7E8CC /* StoryDetailViewController.swift */; };
 		884CB0CD2C74B96600B7E8CC /* StoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CC2C74B96600B7E8CC /* StoryDetailViewModel.swift */; };
 		884CB0D02C74C25300B7E8CC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CF2C74C25300B7E8CC /* Post.swift */; };
@@ -89,6 +91,9 @@
 		88BEF7462C6F5BDD001F390D /* BaseDateFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7452C6F5BDD001F390D /* BaseDateFormatterManager.swift */; };
 		88BEF7482C6F70FC001F390D /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7472C6F70FC001F390D /* PaddingLabel.swift */; };
 		88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BEF7492C6F828A001F390D /* FloatingButton.swift */; };
+		88C1E5E92C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1E5E82C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift */; };
+		88C1E5EC2C7B6CB900A13B92 /* CommentTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1E5EB2C7B6CB900A13B92 /* CommentTitleView.swift */; };
+		88C1E5EE2C7B74D300A13B92 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C1E5ED2C7B74D300A13B92 /* CommentView.swift */; };
 		88F8D0BC2C7763D500AF9DED /* FetchAbandonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F8D0BB2C7763D500AF9DED /* FetchAbandonResponse.swift */; };
 		88F8D0C02C777F2500AF9DED /* IntroduceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F8D0BF2C777F2500AF9DED /* IntroduceViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -127,6 +132,8 @@
 		8833A2E72C6CF6E9007DBE47 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		8833A2E92C6CF789007DBE47 /* BasicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicButton.swift; sourceTree = "<group>"; };
 		8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfiguration.swift; sourceTree = "<group>"; };
+		884881922C7C627500156411 /* UploadCommentsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCommentsRequest.swift; sourceTree = "<group>"; };
+		884881942C7C63A900156411 /* UploadCommentsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCommentsError.swift; sourceTree = "<group>"; };
 		884CB0CA2C74B76000B7E8CC /* StoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewController.swift; sourceTree = "<group>"; };
 		884CB0CC2C74B96600B7E8CC /* StoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewModel.swift; sourceTree = "<group>"; };
 		884CB0CF2C74C25300B7E8CC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -173,6 +180,9 @@
 		88BEF7452C6F5BDD001F390D /* BaseDateFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDateFormatterManager.swift; sourceTree = "<group>"; };
 		88BEF7472C6F70FC001F390D /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		88BEF7492C6F828A001F390D /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
+		88C1E5E82C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentCollectionViewCell.swift; sourceTree = "<group>"; };
+		88C1E5EB2C7B6CB900A13B92 /* CommentTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTitleView.swift; sourceTree = "<group>"; };
+		88C1E5ED2C7B74D300A13B92 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		88F8D0BB2C7763D500AF9DED /* FetchAbandonResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAbandonResponse.swift; sourceTree = "<group>"; };
 		88F8D0BF2C777F2500AF9DED /* IntroduceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -455,8 +465,18 @@
 				88B3171C2C7092E70079E275 /* BasicTextView.swift */,
 				8851F1B72C71D4F100B7BD57 /* OptionButton.swift */,
 				884CB0D92C74D80600B7E8CC /* FeedProfileView.swift */,
+				88C1E5ED2C7B74D300A13B92 /* CommentView.swift */,
 			);
 			path = CustomView;
+			sourceTree = "<group>";
+		};
+		8848818F2C7C625600156411 /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				884881922C7C627500156411 /* UploadCommentsRequest.swift */,
+				884881942C7C63A900156411 /* UploadCommentsError.swift */,
+			);
+			path = Comment;
 			sourceTree = "<group>";
 		};
 		884CB0CE2C74C22D00B7E8CC /* Common */ = {
@@ -492,6 +512,7 @@
 		8851F1B92C71F05F00B7BD57 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
+				8848818F2C7C625600156411 /* Comment */,
 				8851F1C82C72127400B7BD57 /* Image */,
 				8851F1C72C72126100B7BD57 /* Content */,
 			);
@@ -566,6 +587,7 @@
 		88761C012C7624B200D2FCC8 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				88C1E5EA2C7B6CA000A13B92 /* SupplementaryView */,
 				88761C062C7624F200D2FCC8 /* ViewController */,
 				88761C052C7624EE00D2FCC8 /* ViewModel */,
 				88761C042C7624EB00D2FCC8 /* Cell */,
@@ -600,6 +622,7 @@
 				88761BF92C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift */,
 				88761BFB2C75E86300D2FCC8 /* DetailContentCollectionViewCell.swift */,
 				88761BFD2C75ED9100D2FCC8 /* DetailLikeCollectionViewCell.swift */,
+				88C1E5E82C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -760,6 +783,14 @@
 			path = Fetch;
 			sourceTree = "<group>";
 		};
+		88C1E5EA2C7B6CA000A13B92 /* SupplementaryView */ = {
+			isa = PBXGroup;
+			children = (
+				88C1E5EB2C7B6CB900A13B92 /* CommentTitleView.swift */,
+			);
+			path = SupplementaryView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -874,6 +905,7 @@
 				8851F1C42C720FD100B7BD57 /* UploadPostError.swift in Sources */,
 				88BEF7462C6F5BDD001F390D /* BaseDateFormatterManager.swift in Sources */,
 				8833A2E62C6CF4B9007DBE47 /* SignInViewModel.swift in Sources */,
+				88C1E5EE2C7B74D300A13B92 /* CommentView.swift in Sources */,
 				881E09422C6F9A51003EDD78 /* MakeStoryViewModel.swift in Sources */,
 				88761C142C76285300D2FCC8 /* OpenAPIManager.swift in Sources */,
 				8833A2C92C6CC6B8007DBE47 /* StoryViewController.swift in Sources */,
@@ -885,12 +917,14 @@
 				8874A1742C6DB35500299265 /* String+.swift in Sources */,
 				8874A1852C6DFE7600299265 /* AuthInterceptor.swift in Sources */,
 				88761C122C76267000D2FCC8 /* FetchAbandonRequest.swift in Sources */,
+				884881952C7C63A900156411 /* UploadCommentsError.swift in Sources */,
 				8833A2C42C6CC69D007DBE47 /* IntroduceViewController.swift in Sources */,
 				88F8D0C02C777F2500AF9DED /* IntroduceViewModel.swift in Sources */,
 				88BEF73C2C6F3621001F390D /* StoryCollectionViewCell.swift in Sources */,
 				8851F1BE2C72069B00B7BD57 /* UploadPostRequest.swift in Sources */,
 				884CB0DA2C74D80600B7E8CC /* FeedProfileView.swift in Sources */,
 				8851F1CA2C7212F600B7BD57 /* UploadPostImageError.swift in Sources */,
+				884881932C7C627500156411 /* UploadCommentsRequest.swift in Sources */,
 				8874A1812C6DDD9700299265 /* CommonError.swift in Sources */,
 				8833A2D22C6CD418007DBE47 /* Header.swift in Sources */,
 				8833A2C22C6CC68F007DBE47 /* ProfileViewController.swift in Sources */,
@@ -918,7 +952,9 @@
 				884CB0D42C74C25C00B7E8CC /* Comment.swift in Sources */,
 				880E39EB2C6C9CED00C57C2C /* SceneDelegate.swift in Sources */,
 				8833A2CF2C6CD1E2007DBE47 /* LoginResponse.swift in Sources */,
+				88C1E5E92C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift in Sources */,
 				881E09402C6F93E2003EDD78 /* MakeStoryViewController.swift in Sources */,
+				88C1E5EC2C7B6CB900A13B92 /* CommentTitleView.swift in Sources */,
 				8833A2942C6CA66C007DBE47 /* ReusableProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1065,6 +1101,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LoveDog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "사랑할개";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -1097,6 +1134,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LoveDog/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "사랑할개";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

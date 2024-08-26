@@ -12,11 +12,13 @@ import RxCocoa
 final class StoryDetailViewModel: BaseViewModel {
     
     let postId = BehaviorRelay<String>(value: "")
+    private var post: Post?
     
     private let disposeBag = DisposeBag()
     
     struct Input {
-        
+        let uploadComment: ControlEvent<Void>
+        let commentContent: ControlProperty<String>
     }
     
     struct Output {
@@ -35,6 +37,7 @@ final class StoryDetailViewModel: BaseViewModel {
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
+                    owner.post = value
                     postDetail.accept(value)
                 case .failure(let error):
                     print(error)
@@ -83,11 +86,47 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .debug("CONTENT")
         
-        sections = Observable.zip(profile, image, like, content)
+        let comment = postDetail
+            .map { $0.comments }
             .map { value in
-                return [value.0, value.1, value.2, value.3]
+                value.map {
+                    SectionItem.comment(comments: $0)
+                }
             }
-            .debug("SECTION")
+            .map { value in
+                MultipleSectionModel.comment(items: value)
+            }
+        
+       sections = Observable.zip(profile, image, like, content, comment)
+            .withUnretained(self)
+            .map { _, value in
+                let section = [value.0, value.1, value.2, value.3, value.4]
+                return section
+            }
+        
+        let postContent = input.uploadComment
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(input.commentContent)
+            .filter { value in
+                !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }
+           
+       Observable.combineLatest(postId, postContent)
+            .flatMap { id, content in
+                PostManager.shared.uploadComments(id: id, request: UploadCommentsRequest(content: content))
+            }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    guard var post = owner.post else { return }
+                    post.comments.append(value)
+                    postDetail.accept(post)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+    
         
         return Output(sections: sections)
     }
