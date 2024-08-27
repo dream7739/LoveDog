@@ -95,7 +95,7 @@ final class StoryViewController: BaseViewController {
         Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(Post.self))
             .bind(with: self) { owner, value in
                 let viewModel = StoryDetailViewModel()
-                viewModel.postId.accept(value.1.post_id)
+                viewModel.postId = value.1.post_id
                 let detailVC = StoryDetailViewController(viewModel: viewModel)
                 owner.navigationController?.pushViewController(detailVC, animated: true)
             }

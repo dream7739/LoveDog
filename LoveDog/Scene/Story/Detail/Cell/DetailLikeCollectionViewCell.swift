@@ -16,13 +16,25 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     private let commentLabel = UILabel()
     private let seperatorLabel = UILabel()
     
+    var isLiked = false
+    
     var isClicked = false {
         didSet {
-            let color: UIColor = isClicked ? .coral: .black
-            let image: UIImage = isClicked ? Design.Image.likeFill: Design.Image.like
+            isLiked.toggle()
+            
+            let color: UIColor = isLiked ? .coral: .black
+            let image: UIImage = isLiked ? Design.Image.likeFill: Design.Image.like
             
             likeButton.configuration?.image = image
             likeButton.configuration?.baseForegroundColor = color
+            
+            if let likeCount = Int(likeLabel.text ?? "") {
+                if isLiked {
+                    likeLabel.text = "\(likeCount + 1)"
+                } else {
+                    likeLabel.text = "\(likeCount - 1)"
+                }
+            }
         }
     }
     
@@ -85,7 +97,14 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         seperatorLabel.backgroundColor = .light_gray
     }
     
-    func configureData(_ likeCount: String, _ commentCount: String) {
+    func configureData(_ isLiked: Bool, _ likeCount: String, _ commentCount: String) {
+        print(#function)
+        let color: UIColor = isLiked ? .coral: .black
+        let image: UIImage = isLiked ? Design.Image.likeFill: Design.Image.like
+        self.isLiked = isLiked
+        likeButton.configuration?.image = image
+        likeButton.configuration?.baseForegroundColor = color
+        
         likeLabel.text = likeCount
         commentLabel.text = commentCount
     }
