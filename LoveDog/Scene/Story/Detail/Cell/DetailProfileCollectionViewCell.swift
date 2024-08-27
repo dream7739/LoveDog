@@ -6,13 +6,19 @@
 //
 
 import UIKit
+import SnapKit
 import RxSwift
 
 final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
     
-    private let profileView = FeedProfileView()
+    let profileView = FeedProfileView()
     
-    private let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         [profileView].forEach {
@@ -40,6 +46,12 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
         }
         
         profileView.nicknameLabel.text = data.nick
+        
+        if UserDefaultsManager.userId == data.user_id {
+            profileView.followButton.isHidden = true
+        } else {
+            profileView.followButton.isHidden = false
+        }
     }
     
     private func callFetchPostImage(_ path: String) {

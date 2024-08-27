@@ -186,6 +186,11 @@ extension StoryDetailViewController {
             case .profile(let data):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as?  DetailProfileCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(data)
+                cell.profileView.followButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.viewModel.followButtonClicked.accept(())
+                    }
+                    .disposed(by: cell.disposeBag)
                 return cell
             case .image(let image):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as? DetailImageCollectionViewCell else { return UICollectionViewCell() }

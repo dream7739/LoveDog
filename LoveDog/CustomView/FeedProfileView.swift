@@ -12,7 +12,7 @@ final class FeedProfileView: BaseView {
     let profileImage = ProfileImageView()
     let nicknameLabel = UILabel()
     let followButton = UIButton()
-    
+        
     override func configureHierarchy() {
         [profileImage, nicknameLabel, followButton]
             .forEach {

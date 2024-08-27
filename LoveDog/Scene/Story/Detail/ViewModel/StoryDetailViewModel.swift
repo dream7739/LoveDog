@@ -12,6 +12,7 @@ import RxCocoa
 final class StoryDetailViewModel: BaseViewModel {
     
     let postId = BehaviorRelay<String>(value: "")
+    let followButtonClicked = PublishRelay<Void>()
     let likeButtonClicked = PublishRelay<Bool>()
     
     private var post: Post?
@@ -49,11 +50,12 @@ final class StoryDetailViewModel: BaseViewModel {
         let likeClick = likeButtonClicked
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
         
-        Observable.combineLatest(postId, likeClick)
+        Observable.zip(postId, likeClick)
             .filter { !$0.0.isEmpty }
             .flatMap { value in
                 PostManager.shared.uploadLike(id: value.0, request: Like(like_status: value.1))
             }
+            .debug("LIKE CLICK")
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
@@ -70,6 +72,10 @@ final class StoryDetailViewModel: BaseViewModel {
                         if let post = owner.post {
                             postDetail.accept(post)
                         }
+                    }
+                    
+                    if let id = owner.post?.post_id {
+                        owner.postId.accept(id)
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -139,26 +145,40 @@ final class StoryDetailViewModel: BaseViewModel {
                 return section
             }
         
-        let postContent = input.uploadComment
+        let postComment = input.uploadComment
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(input.commentContent)
             .filter { value in
                 !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             }
            
-       Observable.combineLatest(postId, postContent)
+       Observable.zip(postId, postComment)
             .flatMap { id, content in
                 PostManager.shared.uploadComments(id: id, request: UploadCommentsRequest(content: content))
             }
             .subscribe(with: self) { owner, result in
                 switch result {
-                case .success(let value):
-                    owner.post?.comments.insert(value, at: 0)
-                    if let post = owner.post {
-                        postDetail.accept(post)
+                case .success:
+                    if let id = owner.post?.post_id {
+                        owner.postId.accept(id)
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        followButtonClicked
+            .withLatestFrom(postDetail)
+            .flatMap { value in
+                PostManager.shared.uploadFollow(id: value.creator.user_id)
+            }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    print(value)
+                case .failure(let error):
+                    print(error)
                 }
             }
             .disposed(by: disposeBag)
