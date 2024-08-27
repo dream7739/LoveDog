@@ -23,7 +23,7 @@ struct Post: Decodable {
     
     var dateDescription: String {
         let date = BaseDateFormatterManager.basicDateFormatter.date(from: createdAt)
-        let dateString = BaseDateFormatterManager.postDateFormatter.string(from: date ?? Date())
+        let dateString = BaseDateFormatterManager.longDateFormatter.string(from: date ?? Date())
         let description = "작성일 " + dateString
         return description
     }

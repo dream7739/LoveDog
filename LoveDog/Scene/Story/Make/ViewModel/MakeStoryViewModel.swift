@@ -61,7 +61,7 @@ final class MakeStoryViewModel: BaseViewModel {
             .debug("IMAGE UPLOAD")
         
         //업로드 포스트(제목, 내용, 카테고리)
-        Observable.combineLatest(postImage, content)
+        Observable.zip(postImage, content)
             .map { value in
                 return (
                     images: value.0,
@@ -104,7 +104,6 @@ extension MakeStoryViewModel {
             let fileName = fileList[idx]
             request[fileName] = imageData
         }
-        
         return request
     }
 }

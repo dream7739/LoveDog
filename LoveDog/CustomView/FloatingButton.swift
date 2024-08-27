@@ -11,7 +11,11 @@ final class FloatingButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configuration = ButtonConfiguration.floating
+        var configuration = UIButton.Configuration.filled()
+        configuration.background.backgroundColor = .main
+        configuration.baseForegroundColor = .white
+        configuration.image = Design.Image.add
+        self.configuration = configuration
     }
     
     required init?(coder: NSCoder) {

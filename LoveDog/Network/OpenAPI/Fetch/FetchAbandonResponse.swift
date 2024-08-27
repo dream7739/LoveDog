@@ -86,7 +86,7 @@ struct FetchAbandonItem: Decodable {
     
     var findDateDescription: String {
         let findDate = BaseDateFormatterManager.basicDateFormatter.date(from: happenDt) ?? Date()
-        let findDateString = BaseDateFormatterManager.postDateFormatter.string(from: findDate)
+        let findDateString = BaseDateFormatterManager.longDateFormatter.string(from: findDate)
         return findDateString
     }
     

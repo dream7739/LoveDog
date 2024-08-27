@@ -12,10 +12,10 @@ import RxCocoa
 final class StoryDetailViewModel: BaseViewModel {
     
     let postId = BehaviorRelay<String>(value: "")
+    let followButtonClicked = PublishRelay<Void>()
     let likeButtonClicked = PublishRelay<Bool>()
     
     private var post: Post?
-    
     private let disposeBag = DisposeBag()
     
     struct Input {
@@ -50,23 +50,32 @@ final class StoryDetailViewModel: BaseViewModel {
         let likeClick = likeButtonClicked
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
         
-        Observable.combineLatest(postId, likeClick)
+        Observable.zip(postId, likeClick)
             .filter { !$0.0.isEmpty }
             .flatMap { value in
                 PostManager.shared.uploadLike(id: value.0, request: Like(like_status: value.1))
             }
+            .debug("LIKE CLICK")
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
-                    guard var post = owner.post else { return }
                     if value.like_status {
-                        if !post.likes.contains(UserDefaultsManager.userId) {
-                            post.likes.append(UserDefaultsManager.userId)
+                        if let post = owner.post, !post.likes.contains(UserDefaultsManager.userId) {
+                            owner.post?.likes.append(UserDefaultsManager.userId)
                         }
-                        postDetail.accept(post)
+                        if let post = owner.post {
+                            postDetail.accept(post)
+                        }
                     } else {
-                        post.likes.removeAll { $0 == UserDefaultsManager.userId }
-                        postDetail.accept(post)
+                        owner.post?.likes.removeAll { $0 == UserDefaultsManager.userId }
+                        
+                        if let post = owner.post {
+                            postDetail.accept(post)
+                        }
+                    }
+                    
+                    if let id = owner.post?.post_id {
+                        owner.postId.accept(id)
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -136,25 +145,40 @@ final class StoryDetailViewModel: BaseViewModel {
                 return section
             }
         
-        let postContent = input.uploadComment
+        let postComment = input.uploadComment
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(input.commentContent)
             .filter { value in
                 !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             }
            
-       Observable.combineLatest(postId, postContent)
+       Observable.zip(postId, postComment)
             .flatMap { id, content in
                 PostManager.shared.uploadComments(id: id, request: UploadCommentsRequest(content: content))
             }
             .subscribe(with: self) { owner, result in
                 switch result {
-                case .success(let value):
-                    guard var post = owner.post else { return }
-                    post.comments.insert(value, at: 0)
-                    postDetail.accept(post)
+                case .success:
+                    if let id = owner.post?.post_id {
+                        owner.postId.accept(id)
+                    }
                 case .failure(let error):
                     print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        followButtonClicked
+            .withLatestFrom(postDetail)
+            .flatMap { value in
+                PostManager.shared.uploadFollow(id: value.creator.user_id)
+            }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    print(value)
+                case .failure(let error):
+                    print(error)
                 }
             }
             .disposed(by: disposeBag)

@@ -123,8 +123,12 @@ final class MakeStoryViewController: BaseViewController {
     }
     
     override func configureView() {
-        
-        cameraButton.configuration = ButtonConfiguration.camera
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = Design.Image.camera.applyingSymbolConfiguration(.init(pointSize: 15))
+        configuration.cornerStyle = .medium
+        configuration.background.strokeColor = .main
+        configuration.baseForegroundColor = .dark_gray
+        cameraButton.configuration = configuration
         
         imageCollectionView.register(StoryImageCollectionViewCell.self, forCellWithReuseIdentifier: StoryImageCollectionViewCell.identifier)
         imageCollectionView.alwaysBounceVertical = false

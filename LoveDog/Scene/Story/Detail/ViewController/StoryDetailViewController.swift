@@ -41,7 +41,7 @@ final class StoryDetailViewController: BaseViewController {
             case .like:
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(35))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
@@ -127,7 +127,7 @@ final class StoryDetailViewController: BaseViewController {
             forCellWithReuseIdentifier: DetailContentCollectionViewCell.identifier
         )
         
-        collectionView.register(CommentTitleView.self, forSupplementaryViewOfKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: CommentTitleView.identifier)
+        collectionView.register(TitleHeaderView.self, forSupplementaryViewOfKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: TitleHeaderView.identifier)
         
         collectionView.register(
             DetailCommentCollectionViewCell.self,
@@ -186,6 +186,11 @@ extension StoryDetailViewController {
             case .profile(let data):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as?  DetailProfileCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(data)
+                cell.profileView.followButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.viewModel.followButtonClicked.accept(())
+                    }
+                    .disposed(by: cell.disposeBag)
                 return cell
             case .image(let image):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as? DetailImageCollectionViewCell else { return UICollectionViewCell() }
@@ -212,7 +217,7 @@ extension StoryDetailViewController {
                 return cell
             }
         }) { dataSource, collectionView, kind, indexPath in
-            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: CommentTitleView.identifier, for: indexPath) as? CommentTitleView {
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: StoryDetailViewController.commentSectionHeader, withReuseIdentifier: TitleHeaderView.identifier, for: indexPath) as? TitleHeaderView {
                 header.configureTitle("댓글")
                 return header
             }

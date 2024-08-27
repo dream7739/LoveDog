@@ -212,7 +212,7 @@ final class PostManager {
                         }
                     }
             }catch {
-                print(#function, "UPLOAD COMMENTS FAILED")
+                print(#function, "UPLOAD LIKE FAILED")
                 observer(.success(.failure(LikeError.common(.unknown))))
             }
             
@@ -222,4 +222,32 @@ final class PostManager {
         return result
     }
     
+    //팔로우
+    func uploadFollow(id: String) -> Single<Result<FollowResponse, FollowError>> {
+        let result = Single<Result<FollowResponse, FollowError>>.create { observer in
+            do {
+                print(#function)
+                let uploadFollowRequest = try PostRouter.follow(id: id).asURLRequest()
+                AF.request(uploadFollowRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: FollowResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(FollowError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "UPLOAD FOLLOW FAILED")
+                observer(.success(.failure(FollowError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
 }

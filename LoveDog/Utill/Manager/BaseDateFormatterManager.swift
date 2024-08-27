@@ -18,7 +18,7 @@ enum BaseDateFormatterManager {
         return dateFormatter
     }()
     
-    static let postDateFormatter: DateFormatter = {
+    static let longDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = DateType.yyMMdd.rawValue
         return dateFormatter

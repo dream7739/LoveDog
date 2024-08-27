@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class DetailCommentCollectionViewCell: BaseCollectionViewCell {
-    private let profileImage = UIImageView()
+    private let profileImage = ProfileImageView()
     private let nicknameLabel = UILabel()
     private let dateLabel = UILabel()
     private let contentLabel = UILabel()
@@ -49,9 +49,6 @@ final class DetailCommentCollectionViewCell: BaseCollectionViewCell {
     
     func configureData(_ data: Comment) {
         profileImage.image = UIImage(resource: .profileEmpty)
-        profileImage.clipsToBounds = true
-        profileImage.contentMode = .scaleAspectFill
-        profileImage.layer.cornerRadius = 16
         
         nicknameLabel.text = data.creator.nick
         nicknameLabel.font = Design.Font.tertiary
