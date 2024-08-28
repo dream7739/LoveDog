@@ -15,6 +15,9 @@ final class StoryDetailViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     private let commentView = CommentView()
+
+    private let followButtonClicked = PublishRelay<Void>()
+    private let likeButtonClicked = PublishRelay<Bool>()
     private let viewModel: StoryDetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -55,7 +58,6 @@ final class StoryDetailViewController: BaseViewController {
             case .comment:
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(32))
                 let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: StoryDetailViewController.commentSectionHeader, alignment: .top)
-                
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
@@ -87,6 +89,7 @@ final class StoryDetailViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -147,8 +150,11 @@ extension StoryDetailViewController {
     
     private func bind() {
         let input = StoryDetailViewModel.Input(
-            uploadComment: commentView.sendButton.rx.tap, 
-            commentContent: commentView.inputTextView.rx.text.orEmpty
+            callRequest: BehaviorRelay(value: ()),
+            followButtonClicked: followButtonClicked,
+            likeButtonClicked: likeButtonClicked,
+            commentText: commentView.inputTextView.rx.text.orEmpty,
+            uploadComment: commentView.sendButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
@@ -159,7 +165,6 @@ extension StoryDetailViewController {
             .bind(to: collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
-        
         commentView.inputTextView
             .rx.didChange
             .bind(with: self) { owner, _ in
@@ -188,7 +193,7 @@ extension StoryDetailViewController {
                 cell.configureData(data)
                 cell.profileView.followButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.viewModel.followButtonClicked.accept(())
+                        owner.followButtonClicked.accept(())
                     }
                     .disposed(by: cell.disposeBag)
                 return cell
@@ -198,15 +203,17 @@ extension StoryDetailViewController {
                 return cell
             case .like(let isLiked, let likeCount, let commentCount):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLikeCollectionViewCell.identifier, for: indexPath) as? DetailLikeCollectionViewCell else { return UICollectionViewCell() }
-                cell.configureData(likeCount, commentCount)
-                cell.isClicked = isLiked
+
+                cell.configureData(isLiked, likeCount, commentCount)
+                
                 cell.likeButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        cell.isClicked.toggle()
-                        owner.viewModel.likeButtonClicked.accept(cell.isClicked)
+                        cell.isClicked = false
+                        owner.likeButtonClicked.accept(cell.isLiked)
                     }
                     .disposed(by: cell.disposeBag)
                 return cell
+                
             case .content(let title, let content):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailContentCollectionViewCell.identifier, for: indexPath) as? DetailContentCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(title, content)

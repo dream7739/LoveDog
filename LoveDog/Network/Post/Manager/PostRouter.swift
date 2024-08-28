@@ -12,6 +12,8 @@ enum PostRouter {
     case fetchPostList(param: FetchPostRequest)
     case fetchPost(id: String)
     case fetchPostImage(path: String)
+    case fetchUserPost(id: String, param: FetchPostRequest)
+    case fetchLikePost(param: FetchPostRequest)
     case uploadPost(param: UploadPostRequest)
     case uploadPostImage
     case uploadComments(id: String, param: UploadCommentsRequest)
@@ -27,7 +29,7 @@ extension PostRouter: TargetType {
     
     var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .fetchUserPost, .fetchLikePost:
             return .get
         case .uploadPost, .uploadPostImage, .uploadComments, .like, .follow:
             return .post
@@ -44,6 +46,10 @@ extension PostRouter: TargetType {
             return "posts/files"
         case .fetchPostImage(let path):
             return path
+        case .fetchUserPost(let id, _):
+            return "posts/users/\(id)"
+        case .fetchLikePost:
+            return "posts/likes/me"
         case .uploadComments(let id, _):
             return "posts/\(id)/comments"
         case .like(let id, _):
@@ -55,7 +61,7 @@ extension PostRouter: TargetType {
     
     var header: [String : String] {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .uploadComments, .like, .follow:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .fetchUserPost, .fetchLikePost, .uploadComments, .like, .follow:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -76,11 +82,16 @@ extension PostRouter: TargetType {
     
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .fetchPostList(let param):
+        case .fetchPostList(let param), .fetchUserPost(_, let param):
             return [
                 URLQueryItem(name: "next", value: param.next),
                 URLQueryItem(name: "limit", value: param.limit),
                 URLQueryItem(name: "product_id", value: param.product_id)
+            ]
+        case .fetchLikePost(let param):
+            return [
+                URLQueryItem(name: "next", value: param.next),
+                URLQueryItem(name: "limit", value: param.limit)
             ]
         case .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments, .like, .follow:
             return nil
@@ -89,7 +100,7 @@ extension PostRouter: TargetType {
     
     var body: Data? {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPostImage, .follow:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPostImage, .fetchUserPost, .fetchLikePost, .follow:
             return nil
         case .uploadPost(let param):
             let encoder = JSONEncoder()
