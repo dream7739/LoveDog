@@ -58,7 +58,6 @@ final class StoryDetailViewController: BaseViewController {
             case .comment:
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(32))
                 let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: StoryDetailViewController.commentSectionHeader, alignment: .top)
-                
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))

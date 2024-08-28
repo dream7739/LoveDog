@@ -98,10 +98,10 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(_ isLiked: Bool, _ likeCount: String, _ commentCount: String) {
-        print(#function)
+        self.isLiked = isLiked
+
         let color: UIColor = isLiked ? .coral: .black
         let image: UIImage = isLiked ? Design.Image.likeFill: Design.Image.like
-        self.isLiked = isLiked
         likeButton.configuration?.image = image
         likeButton.configuration?.baseForegroundColor = color
         

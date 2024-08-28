@@ -35,6 +35,7 @@ enum Design {
         static let close = UIImage(systemName: "xmark")!
         static let camera = UIImage(systemName: "camera")!
         static let down = UIImage(systemName: "chevron.down")!
+        static let square = UIImage(systemName: "squareshape.split.2x2")!
     }
 }
 

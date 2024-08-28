@@ -8,17 +8,33 @@
 import Foundation
 
 struct ProfileResponse: Decodable {
-    let user_id: String
+    let userId: String
     let email: String
     let nick: String
     let profileImage: String?
     let followers: [FollowInfo]
     let following: [FollowInfo]
     let posts: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case email
+        case nick
+        case profileImage
+        case followers
+        case following
+        case posts
+    }
 }
 
 struct FollowInfo: Decodable {
-    let user_id: String
+    let userId: String
     let nick: String
     let profileImage: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case nick
+        case profileImage
+    }
 }

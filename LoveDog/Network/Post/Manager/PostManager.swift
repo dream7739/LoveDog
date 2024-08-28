@@ -103,6 +103,62 @@ final class PostManager {
         return result
     }
     
+    //유저별 작성 포스트 조회
+    func fetchUserPost(id: String, request: FetchPostRequest) -> Single<Result<FetchPostResponse, FetchPostError>> {
+        let result = Single<Result<FetchPostResponse, FetchPostError>>.create { observer in
+            do {
+                let fetchUserPostRequest = try PostRouter.fetchUserPost(id: id, param: request).asURLRequest()
+                AF.request(fetchUserPostRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: FetchPostResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(FetchPostError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "FETCH USER POST FAILED")
+                observer(.success(.failure(FetchPostError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
+    
+    //좋아요한 포스트 조회
+    func fetchLikePost(request: FetchPostRequest) -> Single<Result<FetchPostResponse, FetchPostError>> {
+        let result = Single<Result<FetchPostResponse, FetchPostError>>.create { observer in
+            do {
+                let fetchLikePostRequest = try PostRouter.fetchLikePost(param: request).asURLRequest()
+                AF.request(fetchLikePostRequest, interceptor: AuthInterceptor.shared)
+                    .responseDecodable(of: FetchPostResponse.self) { response in
+                        let status = response.response?.statusCode ?? 0
+                        print("STATUS CODE ==== \(status)")
+                        switch response.result {
+                        case .success(let value):
+                            observer(.success(.success(value)))
+                        case .failure(let error):
+                            print(error)
+                            observer(.success(.failure(FetchPostError.init(statusCode: status))))
+                        }
+                    }
+            }catch {
+                print(#function, "FETCH LIKE POST FAILED")
+                observer(.success(.failure(FetchPostError.common(.unknown))))
+            }
+            
+            return Disposables.create()
+        }
+        
+        return result
+    }
+    
     //게시글 이미지 업로드
     func uploadPostImage(images: [String: Data]) -> Single<UploadPostImageResponse> {
         let result = Single<UploadPostImageResponse>.create { observer in
