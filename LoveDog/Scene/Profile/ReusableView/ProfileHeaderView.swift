@@ -59,7 +59,7 @@ final class ProfileHeaderView: UICollectionReusableView {
     private func configureLayout() {
         profileImage.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide).inset(15)
-            make.top.equalTo(safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(safeAreaLayoutGuide).inset(15)
             make.size.equalTo(70)
         }
         

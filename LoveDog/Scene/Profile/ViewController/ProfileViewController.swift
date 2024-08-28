@@ -30,7 +30,7 @@ final class ProfileViewController: BaseViewController {
     
     static let profileSectionHeader = "profileSectionHeader"
     
-    private let userPostButtonClicked = BehaviorRelay<Void>(value: ())
+    private let userPostButtonClicked = PublishRelay<Void>()
     private let likePostButtonClicked = PublishRelay<Void>()
     let viewModel = ProfileViewModel()
     private let disposeBag = DisposeBag()
@@ -40,8 +40,9 @@ final class ProfileViewController: BaseViewController {
         bind()
     }
     
-    override func configureNav() {
-        navigationController?.navigationBar.isHidden = true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     override func configureHierarchy() {
@@ -55,6 +56,8 @@ final class ProfileViewController: BaseViewController {
     }
     
     override func configureView() {
+        navigationItem.title = Constant.Navigation.profile
+
         collectionView.register(
             ProfilePostCollectionViewCell.self,
             forCellWithReuseIdentifier: ProfilePostCollectionViewCell.identifier
@@ -67,7 +70,8 @@ final class ProfileViewController: BaseViewController {
 extension ProfileViewController {
     private func bind() {
         let input = ProfileViewModel.Input(
-            callProfile: BehaviorRelay(value: ()),
+            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
+            callProfile: PublishRelay<Void>(),
             callUserPost: userPostButtonClicked,
             callLikePost: likePostButtonClicked
         )
@@ -78,6 +82,14 @@ extension ProfileViewController {
         
         output.sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.modelSelected(Post.self)
+            .bind(with: self) { owner, post in
+                let viewModel = StoryDetailViewModel()
+                viewModel.postId = post.post_id
+                owner.navigationController?.pushViewController(StoryDetailViewController(viewModel: viewModel), animated: true)
+            }
             .disposed(by: disposeBag)
         
     }
@@ -99,6 +111,7 @@ extension ProfileViewController {
                         header.likePostButton.configuration?.baseForegroundColor = .dark_gray
                         
                         owner.userPostButtonClicked.accept(())
+                        owner.viewModel.selectIndex = 0
                     }
                     .disposed(by: header.disposeBag)
                 
@@ -108,6 +121,8 @@ extension ProfileViewController {
                         header.userPostButton.configuration?.baseForegroundColor = .dark_gray
                         
                         owner.likePostButtonClicked.accept(())
+                        owner.viewModel.selectIndex = 1
+                    
                     }
                     .disposed(by: header.disposeBag)
                 

@@ -13,9 +13,12 @@ final class ProfileViewModel: BaseViewModel {
     
     private let disposeBag = DisposeBag()
     
+    var selectIndex = 0
+    
     struct Input {
-        let callProfile: BehaviorRelay<Void>
-        let callUserPost: BehaviorRelay<Void>
+        let viewWillAppearEvent: Observable<Void>
+        let callProfile: PublishRelay<Void>
+        let callUserPost: PublishRelay<Void>
         let callLikePost: PublishRelay<Void>
     }
     
@@ -28,6 +31,20 @@ final class ProfileViewModel: BaseViewModel {
         let userPost = PublishRelay<FetchPostResponse>()
         let likePost = PublishRelay<FetchPostResponse>()
         let section: Observable<[ProfileSectionModel]>
+         
+        input.viewWillAppearEvent
+            .throttle(.seconds(30), latest: false, scheduler: MainScheduler.instance)
+            .debug("VIEWWILLAPPEAR")
+            .subscribe(with: self) { owner, _ in
+                input.callProfile.accept(())
+                
+                if owner.selectIndex == 0 {
+                    input.callUserPost.accept(())
+                } else {
+                    input.callLikePost.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
         
         input.callProfile
             .flatMap {
@@ -81,7 +98,9 @@ final class ProfileViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        let mergePost = Observable.of(userPost, likePost).merge().debug("MERGE TEST")
+        let mergePost = Observable.of(userPost, likePost)
+            .merge()
+            .debug("MERGE TEST")
         
         section = Observable.combineLatest(profile, mergePost)
             .map { value in
