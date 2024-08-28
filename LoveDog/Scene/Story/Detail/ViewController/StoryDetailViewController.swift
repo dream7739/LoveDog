@@ -185,7 +185,7 @@ extension StoryDetailViewController {
             .disposed(by: disposeBag)
     }
     
-    private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<MultipleSectionModel> {
+    private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<DetailSectionModel> {
         return RxCollectionViewSectionedReloadDataSource(configureCell:  { dataSource, collectionView, indexPath, _ in
             switch dataSource[indexPath] {
             case .profile(let data):
@@ -235,7 +235,7 @@ extension StoryDetailViewController {
     
 }
 
-enum MultipleSectionModel: SectionModelType {
+enum DetailSectionModel: SectionModelType {
     typealias Item = SectionItem
     
     //섹션
@@ -262,7 +262,7 @@ enum MultipleSectionModel: SectionModelType {
     }
     
     //섹션 생성자
-    init(original: MultipleSectionModel, items: [SectionItem]) {
+    init(original: DetailSectionModel, items: [SectionItem]) {
         switch original {
         case .profile(let items):
             self = .profile(items: items)

@@ -12,19 +12,45 @@ import RxCocoa
 final class StoryViewModel: BaseViewModel {
     private let disposeBag = DisposeBag()
     
+    private var profileResponse = ProfileResponse(
+        userId: "",
+        email: "",
+        nick: "",
+        profileImage: nil,
+        followers: [],
+        following: [],
+        posts: []
+    )
     var postResponse = FetchPostResponse(data: [], next_cursor: "")
-
+    private var sectionModel: [StorySectionModel] = []
+    private var selectedUser: String = ""
+    
     struct Input {
-        let request: BehaviorRelay<FetchPostRequest>
+        let viewWillAppearEvent: Observable<Void>
+        let selectFollower: PublishRelay<Int>
+        let callProfile: PublishRelay<Void>
+        let callPost: PublishRelay<Void>
+        let callUserPost: PublishRelay<String>
         let prefetch: PublishRelay<Void>
     }
     
     struct Output {
-        let postList: PublishRelay<[Post]>
+        let sections: BehaviorRelay<[StorySectionModel]>
     }
     
     func transform(input: Input) -> Output {
-        let postList = PublishRelay<[Post]>()
+        let sections =  BehaviorRelay<[StorySectionModel]>(value: [])
+        let follower = PublishRelay<[FollowInfo]>()
+        let post = PublishRelay<[Post]>()
+        
+        input.viewWillAppearEvent
+            .throttle(.seconds(30), latest: false, scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                owner.selectedUser = ""
+                input.callProfile.accept(())
+                input.callPost.accept(())
+            }
+            .disposed(by: disposeBag)
         
         input.prefetch
             .withUnretained(self)
@@ -32,10 +58,14 @@ final class StoryViewModel: BaseViewModel {
                 self.postResponse.next_cursor != "0"
             }
             .map { _ in
-                FetchPostRequest(next: self.postResponse.next_cursor)
+                return FetchPostRequest(next: self.postResponse.next_cursor)
             }
             .flatMap { request in
-                PostManager.shared.fetchPostList(request: request)
+                if self.selectedUser.isEmpty {
+                    PostManager.shared.fetchPostList(request: request)
+                } else {
+                    PostManager.shared.fetchUserPost(id: self.selectedUser, request: request)
+                }
             }
             .debug("PREFETCH POST")
             .subscribe { result in
@@ -43,15 +73,61 @@ final class StoryViewModel: BaseViewModel {
                 case .success(let value):
                     self.postResponse.next_cursor = value.next_cursor
                     self.postResponse.data.append(contentsOf: value.data)
-                    postList.accept(self.postResponse.data)
+                    post.accept(self.postResponse.data)
                 case .failure(let error):
                     print(error.localizedDescription)
-                }           
+                }
             }
             .disposed(by: disposeBag)
         
+        input.selectFollower
+            .withUnretained(self)
+            .map { return $1 }
+            .map { value in
+                for (idx, _) in self.profileResponse.following.enumerated() {
+                    if idx == value {
+                        self.profileResponse.following[idx].isClicked.toggle()
+                        
+                        if self.profileResponse.following[idx].isClicked {
+                            let userId = self.profileResponse.following[idx].userId
+                            self.selectedUser = userId
+                            input.callUserPost.accept(userId)
+                        } else {
+                            self.selectedUser = ""
+                            input.callPost.accept(())
+                        }
+                    } else {
+                        self.profileResponse.following[idx].isClicked = false
+                    }
+                }
+            }
+            .map {
+                follower.accept(self.profileResponse.following)
+            }
+            .debug("SELECTED USER")
+            .bind { value in
+                sections.accept(self.sectionModel)
+            }
+            .disposed(by: disposeBag)
         
-        input.request
+        input.callProfile
+            .flatMap { request in
+                UserManager.shared.profile()
+            }
+            .debug("PROFILE")
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    owner.profileResponse = value
+                    follower.accept(owner.profileResponse.following)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.callPost
+            .map { FetchPostRequest(next: "") }
             .flatMap { request in
                 PostManager.shared.fetchPostList(request: request)
             }
@@ -59,15 +135,48 @@ final class StoryViewModel: BaseViewModel {
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let value):
-                    owner.postResponse = value
-                    postList.accept(owner.postResponse.data)
+                    self.postResponse = value
+                    post.accept(self.postResponse.data)
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    print(error)
                 }
             }
             .disposed(by: disposeBag)
         
-        return Output(postList: postList)
+        input.callUserPost
+            .map { value in
+                return (value, FetchPostRequest(next: ""))
+            }
+            .flatMap { value in
+                PostManager.shared.fetchUserPost(id: value.0, request: value.1)
+            }
+            .debug("FETCH USER POST")
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    self.postResponse = value
+                    post.accept(self.postResponse.data)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        Observable.combineLatest(follower, post)
+            .map { follower, post in
+                return [
+                    StorySectionModel.follower(items: follower.map { StorySectionItem.follower(data: $0) }),
+                    StorySectionModel.story(items: post.map { StorySectionItem.story(data: $0) })
+                ]
+            }
+            .debug("SECTION")
+            .bind(with: self) { owner, value in
+                owner.sectionModel = value
+                sections.accept(owner.sectionModel)
+            }
+            .disposed(by: disposeBag)
+        
+        return Output(sections: sections)
     }
     
 }
