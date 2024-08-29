@@ -28,7 +28,7 @@ final class TabBarController: UITabBarController {
     }
     
     private func configureTabItem(){
-        let introduceItem = UITabBarItem(title: Constant.Navigation.introduce, image: UIImage(systemName: "heart"), tag: 0)
+        let introduceItem = UITabBarItem(title: Constant.Navigation.introduce, image: UIImage(systemName: "house"), tag: 0)
         let introduceVC = UINavigationController(rootViewController: IntroduceViewController())
         introduceVC.tabBarItem = introduceItem
         
@@ -36,7 +36,7 @@ final class TabBarController: UITabBarController {
         let storyVC = UINavigationController(rootViewController: StoryViewController(viewModel: StoryViewModel()))
         storyVC.tabBarItem = storyItem
         
-        let profileItem = UITabBarItem(title: Constant.Navigation.profile, image: UIImage(systemName: "heart"), tag: 2)
+        let profileItem = UITabBarItem(title: Constant.Navigation.profile, image: UIImage(systemName: "person"), tag: 2)
         let profileVC = UINavigationController(rootViewController: ProfileViewController())
         profileVC.tabBarItem = profileItem
         

@@ -13,7 +13,7 @@ struct ProfileResponse: Decodable {
     let nick: String
     let profileImage: String?
     let followers: [FollowInfo]
-    let following: [FollowInfo]
+    var following: [FollowInfo]
     let posts: [String]
     
     enum CodingKeys: String, CodingKey {
@@ -31,6 +31,7 @@ struct FollowInfo: Decodable {
     let userId: String
     let nick: String
     let profileImage: String?
+    var isClicked: Bool = false
     
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"

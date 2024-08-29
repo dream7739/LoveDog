@@ -24,12 +24,12 @@ final class StoryDetailViewModel: BaseViewModel {
     }
     
     struct Output {
-        let sections: Observable<[MultipleSectionModel]>
+        let sections: Observable<[DetailSectionModel]>
     }
     
     func transform(input: Input) -> Output {
         let postDetail = PublishRelay<Post>()
-        let sections: Observable<[MultipleSectionModel]>
+        let sections: Observable<[DetailSectionModel]>
         
         //네트워크 통신
         input.callRequest
@@ -113,7 +113,7 @@ final class StoryDetailViewModel: BaseViewModel {
         //게시글 - 프로필
         let profile = postDetail
             .map {
-                MultipleSectionModel.profile(
+                DetailSectionModel.profile(
                     items: [.profile(data: $0.creator)]
                 )
             }
@@ -125,7 +125,7 @@ final class StoryDetailViewModel: BaseViewModel {
             .map { value in
                 return value.map { SectionItem.image(image: $0) }
             }.map {
-                MultipleSectionModel.image(items: $0)
+                DetailSectionModel.image(items: $0)
             }
             .debug("IMAGE")
         
@@ -145,7 +145,7 @@ final class StoryDetailViewModel: BaseViewModel {
         let like = Observable.zip(isLiked, likeCount, commentCount)
             .map { ($0, "\($1)", "\($2)") }
             .map {
-                MultipleSectionModel.like(
+                DetailSectionModel.like(
                     items: [.like(isLiked: $0.0, likeCount: $0.1, commentCount: $0.2)]
                 )
             }
@@ -155,7 +155,7 @@ final class StoryDetailViewModel: BaseViewModel {
         let content = postDetail
             .map { ($0.title, $0.content) }
             .map {
-                MultipleSectionModel.content(
+                DetailSectionModel.content(
                     items: [.content(title: $0.0, content: $0.1 ?? "")]
                 )
             }
@@ -170,7 +170,7 @@ final class StoryDetailViewModel: BaseViewModel {
                 }
             }
             .map { value in
-                MultipleSectionModel.comment(items: value)
+                DetailSectionModel.comment(items: value)
             }
         
         //전체 섹션
