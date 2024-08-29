@@ -153,7 +153,7 @@ extension StoryDetailViewController {
             callRequest: BehaviorRelay(value: ()),
             followButtonClicked: followButtonClicked,
             likeButtonClicked: likeButtonClicked,
-            commentText: commentView.inputTextView.rx.text.orEmpty,
+            commentText:  commentView.inputTextView.rx.text.orEmpty,
             uploadComment: commentView.sendButton.rx.tap
         )
         

@@ -21,7 +21,9 @@ final class StoryViewModel: BaseViewModel {
         following: [],
         posts: []
     )
+    
     var postResponse = FetchPostResponse(data: [], next_cursor: "")
+    private var cacheResponse = FetchPostResponse(data: [], next_cursor: "")
     private var sectionModel: [StorySectionModel] = []
     private var selectedUser: String = ""
     
@@ -94,7 +96,8 @@ final class StoryViewModel: BaseViewModel {
                             input.callUserPost.accept(userId)
                         } else {
                             self.selectedUser = ""
-                            input.callPost.accept(())
+                            self.postResponse = self.cacheResponse
+                            post.accept(self.postResponse.data)
                         }
                     } else {
                         self.profileResponse.following[idx].isClicked = false
@@ -136,6 +139,7 @@ final class StoryViewModel: BaseViewModel {
                 switch result {
                 case .success(let value):
                     self.postResponse = value
+                    self.cacheResponse = value
                     post.accept(self.postResponse.data)
                 case .failure(let error):
                     print(error)
