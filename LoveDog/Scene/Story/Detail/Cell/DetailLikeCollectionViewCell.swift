@@ -14,6 +14,7 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     private let likeLabel = UILabel()
     private let commentButton = UIButton()
     private let commentLabel = UILabel()
+    let cheerButton = UIButton()
     private let seperatorLabel = UILabel()
     
     var isLiked = false
@@ -46,7 +47,7 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureHierarchy() {
-        [likeButton, likeLabel, commentButton, commentLabel, seperatorLabel].forEach {
+        [likeButton, likeLabel, commentButton, commentLabel, cheerButton, seperatorLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -75,6 +76,11 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
             make.centerY.equalTo(commentButton)
         }
         
+        cheerButton.snp.makeConstraints { make in
+            make.centerY.equalTo(contentView.safeAreaLayoutGuide)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+        }
+        
         seperatorLabel.snp.makeConstraints { make in
             make.bottom.horizontalEdges.equalTo(contentView)
             make.height.equalTo(1)
@@ -94,6 +100,8 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         commentLabel.font = Design.Font.tertiary
         commentLabel.textAlignment = .left
         
+        cheerButton.configuration = configuration
+        cheerButton.configuration?.title = "응원하기"
         seperatorLabel.backgroundColor = .light_gray
     }
     
