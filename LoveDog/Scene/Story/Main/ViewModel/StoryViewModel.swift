@@ -63,11 +63,11 @@ final class StoryViewModel: BaseViewModel {
                 return FetchPostRequest(next: self.postResponse.next_cursor)
             }
             .flatMap { request in
-                if self.selectedUser.isEmpty {
+//                if self.selectedUser.isEmpty {
                     PostManager.shared.fetchPostList(request: request)
-                } else {
-                    PostManager.shared.fetchUserPost(id: self.selectedUser, request: request)
-                }
+//                } else {
+//                    PostManager.shared.fetchUserPost(id: self.selectedUser, request: request)
+//                }
             }
             .debug("PREFETCH POST")
             .subscribe { result in
