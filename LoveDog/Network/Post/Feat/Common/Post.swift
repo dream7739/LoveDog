@@ -11,6 +11,7 @@ struct Post: Decodable {
     let post_id: String
     let product_id: String
     let title: String
+    let price: Int? //가격
     let content: String?
     let content1: String
     let createdAt: String

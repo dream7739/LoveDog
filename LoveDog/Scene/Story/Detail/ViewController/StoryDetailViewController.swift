@@ -6,18 +6,23 @@
 //
 
 import UIKit
+import WebKit
 import SnapKit
+import Toast
 import RxSwift
 import RxCocoa
 import RxDataSources
+import iamport_ios
 
 final class StoryDetailViewController: BaseViewController {
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     private let commentView = CommentView()
+    private let wkWebView = WKWebView()
 
     private let followButtonClicked = PublishRelay<Void>()
     private let likeButtonClicked = PublishRelay<Bool>()
+    private let cheerButtonClicked = PublishRelay<Void>()
     private let viewModel: StoryDetailViewModel
     private let disposeBag = DisposeBag()
     
@@ -44,7 +49,7 @@ final class StoryDetailViewController: BaseViewController {
             case .like:
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
@@ -96,6 +101,7 @@ final class StoryDetailViewController: BaseViewController {
     override func configureHierarchy() {
         view.addSubview(collectionView)
         view.addSubview(commentView)
+        view.addSubview(wkWebView)
     }
     
     override func configureLayout() {
@@ -108,6 +114,10 @@ final class StoryDetailViewController: BaseViewController {
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
             make.height.greaterThanOrEqualTo(45)
+        }
+        
+        wkWebView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -136,6 +146,9 @@ final class StoryDetailViewController: BaseViewController {
             DetailCommentCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailCommentCollectionViewCell.identifier
         )
+        
+        wkWebView.backgroundColor = .clear
+        wkWebView.isHidden = true
     }
 }
 
@@ -152,8 +165,10 @@ extension StoryDetailViewController {
         let input = StoryDetailViewModel.Input(
             callRequest: BehaviorRelay(value: ()),
             followButtonClicked: followButtonClicked,
-            likeButtonClicked: likeButtonClicked,
-            commentText:  commentView.inputTextView.rx.text.orEmpty,
+            likeButtonClicked: likeButtonClicked, 
+            cheerButtonClicked: cheerButtonClicked,
+            cheerPaymentCompleted: PublishRelay<ValidationRequest>(),
+            commentText: commentView.inputTextView.rx.text.orEmpty,
             uploadComment: commentView.sendButton.rx.tap
         )
         
@@ -163,6 +178,28 @@ extension StoryDetailViewController {
         
         output.sections
             .bind(to: collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        output.payment
+            .bind(with: self) { owner, payment in
+                print(payment)
+                owner.wkWebView.isHidden = false
+
+                Iamport.shared.paymentWebView(webViewMode: owner.wkWebView, userCode: APIKey.paymentUserCode, payment: payment) { response in
+                    guard let response, let impId = response.imp_uid else { return }
+                    let validationRequest = ValidationRequest(impUid: impId, postId: owner.viewModel.postId)
+                    print("VALIDATION REQUEST", validationRequest)
+                    input.cheerPaymentCompleted.accept(validationRequest)
+                    
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.validationResult
+            .bind(with: self) { owner, value in
+                owner.wkWebView.isHidden = true
+                owner.view.makeToast(value)
+            }
             .disposed(by: disposeBag)
 
         commentView.inputTextView
@@ -212,6 +249,13 @@ extension StoryDetailViewController {
                         owner.likeButtonClicked.accept(cell.isLiked)
                     }
                     .disposed(by: cell.disposeBag)
+                
+                cell.cheerButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.cheerButtonClicked.accept(())
+                    }
+                    .disposed(by: cell.disposeBag)
+                
                 return cell
                 
             case .content(let title, let content):

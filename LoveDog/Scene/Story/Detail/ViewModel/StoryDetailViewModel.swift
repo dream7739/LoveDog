@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import iamport_ios
 
 final class StoryDetailViewModel: BaseViewModel {
     
@@ -19,18 +20,24 @@ final class StoryDetailViewModel: BaseViewModel {
         let callRequest: BehaviorRelay<Void>
         let followButtonClicked: PublishRelay<Void>
         let likeButtonClicked: PublishRelay<Bool>
+        let cheerButtonClicked: PublishRelay<Void>
+        let cheerPaymentCompleted: PublishRelay<ValidationRequest>
         let commentText: ControlProperty<String>
         let uploadComment: ControlEvent<Void>
     }
     
     struct Output {
         let sections: Observable<[DetailSectionModel]>
+        let payment: PublishRelay<IamportPayment>
+        let validationResult: PublishRelay<String>
     }
     
     func transform(input: Input) -> Output {
         let postDetail = PublishRelay<Post>()
         let sections: Observable<[DetailSectionModel]>
-        
+        let payment = PublishRelay<IamportPayment>()
+        let validationResult = PublishRelay<String>()
+
         //네트워크 통신
         input.callRequest
             .withUnretained(self)
@@ -51,7 +58,7 @@ final class StoryDetailViewModel: BaseViewModel {
         //좋아요 버튼 클릭
         input.likeButtonClicked
             .withUnretained(self)
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
             .map { value in
                 return (id: self.postId, status: value.1)
             }
@@ -65,6 +72,46 @@ final class StoryDetailViewModel: BaseViewModel {
                     input.callRequest.accept(())
                 case .failure(let error):
                     print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        //응원하기 버튼 클릭
+        input.cheerButtonClicked
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .withLatestFrom(postDetail)
+            .map { value in
+                let payment = IamportPayment(
+                       pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
+                       merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))",
+                       amount: "\(value.price ?? 0)")
+                payment.pay_method = PayMethod.card.rawValue
+                payment.name = value.title
+                payment.buyer_name = "홍정민"
+                payment.app_scheme = "jm"
+                
+                return payment
+            }
+            .debug("PAYMENT")
+            .bind(with: self) { owner, value in
+                payment.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        //결제 완료 후 서버 검증
+        input.cheerPaymentCompleted
+            .flatMap { value in
+                PaymentManager.shared.validationPayment(request: value)
+            }
+            .debug("CHEER PAYMENT COMPLETED")
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    print(value)
+                    validationResult.accept("결제가 완료되었습니다.")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    validationResult.accept("결제가 실패하였습니다.")
                 }
             }
             .disposed(by: disposeBag)
@@ -182,6 +229,10 @@ final class StoryDetailViewModel: BaseViewModel {
             .debug("SECTION")
         
  
-        return Output(sections: sections)
+        return Output(
+            sections: sections,
+            payment: payment,
+            validationResult: validationResult
+        )
     }
 }

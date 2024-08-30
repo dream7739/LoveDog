@@ -104,6 +104,13 @@
 		88ECF32A2C7F3AB600613593 /* FollowCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF3292C7F3AB600613593 /* FollowCollectionViewCell.swift */; };
 		88F8D0BC2C7763D500AF9DED /* FetchAbandonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F8D0BB2C7763D500AF9DED /* FetchAbandonResponse.swift */; };
 		88F8D0C02C777F2500AF9DED /* IntroduceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F8D0BF2C777F2500AF9DED /* IntroduceViewModel.swift */; };
+		88FCDFBD2C8086A400B5FA24 /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 88FCDFBC2C8086A400B5FA24 /* iamport-ios */; };
+		88FCDFC12C8096E000B5FA24 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC02C8096E000B5FA24 /* PaymentManager.swift */; };
+		88FCDFC32C8096E700B5FA24 /* PaymentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC22C8096E700B5FA24 /* PaymentRouter.swift */; };
+		88FCDFC52C80971300B5FA24 /* ValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC42C80971300B5FA24 /* ValidationRequest.swift */; };
+		88FCDFC72C8097A500B5FA24 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC62C8097A500B5FA24 /* ValidationError.swift */; };
+		88FCDFC92C80993800B5FA24 /* ValidationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC82C80993800B5FA24 /* ValidationResponse.swift */; };
+		88FCDFCC2C809B4900B5FA24 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 88FCDFCB2C809B4900B5FA24 /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +208,11 @@
 		88ECF3292C7F3AB600613593 /* FollowCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowCollectionViewCell.swift; sourceTree = "<group>"; };
 		88F8D0BB2C7763D500AF9DED /* FetchAbandonResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAbandonResponse.swift; sourceTree = "<group>"; };
 		88F8D0BF2C777F2500AF9DED /* IntroduceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroduceViewModel.swift; sourceTree = "<group>"; };
+		88FCDFC02C8096E000B5FA24 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
+		88FCDFC22C8096E700B5FA24 /* PaymentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentRouter.swift; sourceTree = "<group>"; };
+		88FCDFC42C80971300B5FA24 /* ValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationRequest.swift; sourceTree = "<group>"; };
+		88FCDFC62C8097A500B5FA24 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
+		88FCDFC82C80993800B5FA24 /* ValidationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,7 +223,9 @@
 				8833A2DC2C6CDD52007DBE47 /* RxSwift in Frameworks */,
 				8874A1992C6E399600299265 /* Alamofire in Frameworks */,
 				8833A2DF2C6CDD5F007DBE47 /* SnapKit in Frameworks */,
+				88FCDFBD2C8086A400B5FA24 /* iamport-ios in Frameworks */,
 				88761BF62C75DA0A00D2FCC8 /* RxDataSources in Frameworks */,
+				88FCDFCC2C809B4900B5FA24 /* Toast in Frameworks */,
 				8833A2DA2C6CDD52007DBE47 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,6 +387,7 @@
 		8833A2902C6CA3EC007DBE47 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				88FCDFBE2C8096CB00B5FA24 /* Payment */,
 				88761C0E2C7625D200D2FCC8 /* OpenAPI */,
 				8874A17C2C6DC46900299265 /* Support */,
 				88BEF72C2C6F2665001F390D /* Post */,
@@ -831,6 +846,18 @@
 			path = ReusableView;
 			sourceTree = "<group>";
 		};
+		88FCDFBE2C8096CB00B5FA24 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				88FCDFC02C8096E000B5FA24 /* PaymentManager.swift */,
+				88FCDFC22C8096E700B5FA24 /* PaymentRouter.swift */,
+				88FCDFC42C80971300B5FA24 /* ValidationRequest.swift */,
+				88FCDFC62C8097A500B5FA24 /* ValidationError.swift */,
+				88FCDFC82C80993800B5FA24 /* ValidationResponse.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -853,6 +880,8 @@
 				8833A2DE2C6CDD5F007DBE47 /* SnapKit */,
 				8874A1982C6E399600299265 /* Alamofire */,
 				88761BF52C75DA0A00D2FCC8 /* RxDataSources */,
+				88FCDFBC2C8086A400B5FA24 /* iamport-ios */,
+				88FCDFCB2C809B4900B5FA24 /* Toast */,
 			);
 			productName = LoveDog;
 			productReference = 880E39E52C6C9CED00C57C2C /* LoveDog.app */;
@@ -887,6 +916,8 @@
 				8833A2DD2C6CDD5F007DBE47 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				8874A1972C6E399600299265 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				88761BF42C75DA0A00D2FCC8 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				88FCDFBB2C8086A400B5FA24 /* XCRemoteSwiftPackageReference "iamport-ios" */,
+				88FCDFCA2C809B4900B5FA24 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 880E39E62C6C9CED00C57C2C /* Products */;
 			projectDirPath = "";
@@ -923,6 +954,7 @@
 				888EA3AD2C7B07B60001C559 /* IntroduceDetailViewController.swift in Sources */,
 				88BEF74A2C6F828A001F390D /* FloatingButton.swift in Sources */,
 				8833A2E82C6CF6E9007DBE47 /* BaseViewModel.swift in Sources */,
+				88FCDFC32C8096E700B5FA24 /* PaymentRouter.swift in Sources */,
 				8833A2BB2C6CACF0007DBE47 /* Design.swift in Sources */,
 				884CB0D22C74C25700B7E8CC /* Creator.swift in Sources */,
 				882CDA642C7DBBC40096405F /* FollowError.swift in Sources */,
@@ -944,6 +976,7 @@
 				8874A19D2C6E3A1B00299265 /* TargetType.swift in Sources */,
 				8833A2CD2C6CD1B9007DBE47 /* LoginRequest.swift in Sources */,
 				8833A2BD2C6CC4FB007DBE47 /* APIKey.swift in Sources */,
+				88FCDFC52C80971300B5FA24 /* ValidationRequest.swift in Sources */,
 				88B0FD8F2C7E11D700F07974 /* ProfileViewModel.swift in Sources */,
 				8851F1C42C720FD100B7BD57 /* UploadPostError.swift in Sources */,
 				88BEF7462C6F5BDD001F390D /* BaseDateFormatterManager.swift in Sources */,
@@ -952,6 +985,7 @@
 				881E09422C6F9A51003EDD78 /* MakeStoryViewModel.swift in Sources */,
 				88761C142C76285300D2FCC8 /* OpenAPIManager.swift in Sources */,
 				8833A2C92C6CC6B8007DBE47 /* StoryViewController.swift in Sources */,
+				88FCDFC12C8096E000B5FA24 /* PaymentManager.swift in Sources */,
 				8833A2CB2C6CCF9E007DBE47 /* UserRouter.swift in Sources */,
 				88BEF7352C6F2E38001F390D /* FetchPostResponse.swift in Sources */,
 				880C6E672C7CBD1C00E93649 /* ProfileImageView.swift in Sources */,
@@ -977,6 +1011,7 @@
 				88BEF73E2C6F362A001F390D /* BaseCollectionViewCell.swift in Sources */,
 				8851F1C02C720D1A00B7BD57 /* Constant.swift in Sources */,
 				88BEF7392C6F355C001F390D /* StoryViewModel.swift in Sources */,
+				88FCDFC92C80993800B5FA24 /* ValidationResponse.swift in Sources */,
 				880C6E6A2C7CD5E500E93649 /* FollowResponse.swift in Sources */,
 				88761BFA2C75E47D00D2FCC8 /* DetailProfileCollectionViewCell.swift in Sources */,
 				88BEF7482C6F70FC001F390D /* PaddingLabel.swift in Sources */,
@@ -986,6 +1021,7 @@
 				884CB0CD2C74B96600B7E8CC /* StoryDetailViewModel.swift in Sources */,
 				8833A2972C6CA6CD007DBE47 /* UIColor+.swift in Sources */,
 				8833A2B32C6CAB34007DBE47 /* SignInViewController.swift in Sources */,
+				88FCDFC72C8097A500B5FA24 /* ValidationError.swift in Sources */,
 				8851F1B82C71D4F100B7BD57 /* OptionButton.swift in Sources */,
 				8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */,
 				88B3171B2C70849F0079E275 /* StoryImageCollectionViewCell.swift in Sources */,
@@ -1147,6 +1183,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6ZWU3ZJ8BG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LoveDog/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "사랑할개";
@@ -1180,6 +1217,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6ZWU3ZJ8BG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LoveDog/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "사랑할개";
@@ -1262,6 +1300,22 @@
 				minimumVersion = 5.0.2;
 			};
 		};
+		88FCDFBB2C8086A400B5FA24 /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.2;
+			};
+		};
+		88FCDFCA2C809B4900B5FA24 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1289,6 +1343,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 88761BF42C75DA0A00D2FCC8 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		88FCDFBC2C8086A400B5FA24 /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 88FCDFBB2C8086A400B5FA24 /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
+		};
+		88FCDFCB2C809B4900B5FA24 /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 88FCDFCA2C809B4900B5FA24 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
