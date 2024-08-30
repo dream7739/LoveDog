@@ -29,6 +29,7 @@ final class UserDefaultsManager {
         case access
         case refresh
         case userId
+        case etag
     }
     
     @UserDefault(key: UserDefaultsKey.access.rawValue, defaultValue: "")
@@ -39,6 +40,9 @@ final class UserDefaultsManager {
     
     @UserDefault(key: UserDefaultsKey.userId.rawValue, defaultValue: "")
     static var userId
+    
+    @UserDefault(key: UserDefaultsKey.etag.rawValue, defaultValue: [:])
+    static var etag
     
     static func removeTokens(){
         for key in UserDefaults.standard.dictionaryRepresentation().keys {

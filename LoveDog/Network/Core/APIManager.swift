@@ -26,6 +26,7 @@ final class APIManager {
                     case .success(let value):
                         observer(.success(.success(value)))
                     case .failure(let error):
+                        print(error)
                         observer(.success(.failure(APIError(statusCode: status))))
                     }
                 }
@@ -46,6 +47,7 @@ final class APIManager {
                     case .success(let value):
                         observer(.success(.success(value)))
                     case .failure(let error):
+                        print(error)
                         observer(.success(.failure(APIError(statusCode: status))))
                     }
                 }
@@ -68,6 +70,7 @@ final class APIManager {
                     case .success(let value):
                         observer(.success(value))
                     case .failure(let error):
+                        print(error)
                         observer(.failure(APIError(statusCode: status)))
                     }
                 }
@@ -91,10 +94,12 @@ final class APIManager {
                         if let image = UIImage(data: value) {
                             observer(.success(.success(image)))
                             ImageCacheManager.shared.cachingImage(url: request.url!, image: image)
+                            ImageCacheManager.shared.cachingDiskImage(url: request.url!, image: image)
                         }else {
                             observer(.failure(APIError.init(statusCode: status)))
                         }
                     case .failure(let error):
+                        print(error)
                         observer(.success(.failure(APIError(statusCode: status))))
                     }
                 }
