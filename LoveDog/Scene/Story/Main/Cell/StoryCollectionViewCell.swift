@@ -128,23 +128,13 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     
     private func configureMainImage(path: String) {
         let urlString = APIURL.sesacBaseURL + "/\(path)"
-
-        if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
-            mainImageView.image = image
-        } else {
-            callFetchPostImage(path)
-        }
-    }
-    
-    private func callFetchPostImage(_ path: String) {
-        PostManager.shared.fetchPostImage(path: path)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.mainImageView.image = value
-                case .failure(let error):
-                    print(error)
-                }
+        
+        ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+            .subscribe(with: self) { owner, value in
+                print("=============LOAD IMAGE \(value)")
+                owner.mainImageView.image = UIImage(data: value)
+            } onError: { owner, error in
+                print("LOAD IMAGE ERROR \(error)")
             }
             .disposed(by: disposeBag)
     }

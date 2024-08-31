@@ -89,24 +89,11 @@ extension IntroduceCollectionViewCell {
     }
     
     private func configureProfile(_ profileURL: String) {
-        if let image = ImageCacheManager.shared.loadImage(urlString: profileURL) {
-            mainImage.image = image
-        } else {
-            callFetchProfileImage(profileURL)
-        }
-    }
-    
-    private func callFetchProfileImage(_ urlString: String) {
-        
-        OpenAPIManager.shared.fetchAbondonPublicImage(urlString)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.mainImage.image = value
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+        ImageCacheManager.shared.loadImage(urlString: profileURL)
+            .subscribe(with: self) { owner, value in
+                owner.mainImage.image = UIImage(data: value)
             }
             .disposed(by: disposeBag)
     }
+    
 }

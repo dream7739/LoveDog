@@ -426,11 +426,13 @@ extension IntroduceDetailViewController {
         output.fetchAbandonItem
             .bind(with: self) { owner, value in
                 //이미지
-                if let image = ImageCacheManager.shared.loadImage(urlString: value.popfile) {
-                    owner.imageView.image = image
-                } else {
-                    owner.callFetchImage(value.popfile)
-                }
+                ImageCacheManager.shared.loadImage(urlString: value.popfile)
+                    .subscribe(with: self) { owner, value in
+                        owner.imageView.image = UIImage(data: value)
+                    } onError: { owner, error in
+                        print("LOAD IMAGE ERROR \(error)")
+                    }
+                    .disposed(by: owner.disposeBag)
                 
                 //상태
                 owner.statusLabel.text = value.processState
@@ -493,18 +495,6 @@ extension IntroduceDetailViewController {
             .disposed(by: disposeBag)
     }
     
-    private func callFetchImage(_ urlString: String) {
-        OpenAPIManager.shared.fetchAbondonPublicImage(urlString)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.imageView.image = value
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-            .disposed(by: disposeBag)
-    }
 }
 
 extension IntroduceDetailViewController {

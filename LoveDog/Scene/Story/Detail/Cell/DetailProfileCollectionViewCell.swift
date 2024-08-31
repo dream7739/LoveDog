@@ -33,16 +33,16 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(_ data: Creator) {
-        if let profileImagePath = data.profileImage {
-            let urlString = APIURL.sesacBaseURL + "/\(profileImagePath)"
+        if let path = data.profileImage {
+            let urlString = APIURL.sesacBaseURL + "/\(path)"
             
-            if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
-                profileView.profileImage.image = image
-            } else {
-                callFetchPostImage(profileImagePath)
-            }
-        }else {
-            profileView.profileImage.image = UIImage(resource: .profileEmpty)
+            ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .subscribe(with: self) { owner, value in
+                    owner.profileView.profileImage.image = UIImage(data: value)
+                } onError: { owner, error in
+                    print("LOAD IMAGE ERROR \(error)")
+                }
+                .disposed(by: disposeBag)
         }
         
         profileView.nicknameLabel.text = data.nick
@@ -52,19 +52,6 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
         } else {
             profileView.followButton.isHidden = false
         }
-    }
-    
-    private func callFetchPostImage(_ path: String) {
-        PostManager.shared.fetchPostImage(path: path)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.profileView.profileImage.image = value
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            .disposed(by: disposeBag)
     }
     
 }

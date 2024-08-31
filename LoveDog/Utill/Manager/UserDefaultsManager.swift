@@ -42,7 +42,7 @@ final class UserDefaultsManager {
     static var userId
     
     @UserDefault(key: UserDefaultsKey.etag.rawValue, defaultValue: [:])
-    static var etag
+    static var etag: [String: String]
     
     static func removeTokens(){
         for key in UserDefaults.standard.dictionaryRepresentation().keys {

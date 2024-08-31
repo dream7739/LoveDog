@@ -8,15 +8,18 @@
 import Foundation
 
 enum APIError: Int, Error, LocalizedError {
-    case unknownKey   //키값이 없거나 틀릴 경우
-    case tooMuchCall  //과호출일 경우
-    case invalidURL   //비정상 URL일 경우
-    case serverError  //서버 오류
+    case existImage = 304   //ETAG로 조회한 이미지의 변화가 없을 경우
+    case unknownKey = 420   //키값이 없거나 틀릴 경우
+    case tooMuchCall = 429 //과호출일 경우
+    case invalidURL = 444  //비정상 URL일 경우
+    case serverError = 500 //서버 오류
     case unknown      //알 수 없는 오류
-    case decoding     //디코딩 에러
+    case decoding      //디코딩 에러
     
     init(statusCode: Int) {
         switch statusCode {
+        case 304:
+            self = .existImage
         case 420:
             self = .unknownKey
         case 429:
@@ -32,6 +35,8 @@ enum APIError: Int, Error, LocalizedError {
     
     var errorDescription: String? {
         switch self {
+        case .existImage:
+            return "이미지의 변경사항이 없습니다"
         case .unknownKey:
             return "인증정보를 확인할 수 없습니다"
         case .tooMuchCall:
@@ -44,6 +49,7 @@ enum APIError: Int, Error, LocalizedError {
             return "오류가 발생했습니다"
         case .decoding:
             return "디코딩 시 오류가 발생했습니다"
+            
         }
     }
 }

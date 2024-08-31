@@ -36,26 +36,17 @@ final class DetailImageCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    func configureImage(_ imagePath: String){
-        let urlString = APIURL.sesacBaseURL + "/\(imagePath)"
+    func configureImage(_ path: String){
+        let urlString = APIURL.sesacBaseURL + "/\(path)"
         
-        if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
-            mainImageView.image = image
-        }else {
-            callFetchPostImage(imagePath)
-        }
-    }
-    
-    private func callFetchPostImage(_ path: String) {
-        PostManager.shared.fetchPostImage(path: path)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.mainImageView.image = value
-                case .failure(let error):
-                    print(error)
-                }
+        ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+            .subscribe(with: self) { owner, value in
+                owner.mainImageView.image = UIImage(data: value)
+            } onError: { owner, error in
+                print("LOAD IMAGE ERROR \(error)")
             }
             .disposed(by: disposeBag)
+        
     }
+    
 }

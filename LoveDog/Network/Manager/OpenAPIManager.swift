@@ -52,8 +52,8 @@ final class OpenAPIManager {
         return result
     }
     
-    func fetchAbondonPublicImage(_ urlString: String) -> Single<Result<UIImage, APIError>> {
-        let result = Single<Result<UIImage, APIError>>.create { observer in
+    func fetchAbondonPublicImage(_ urlString: String) -> Single<Result<Data, APIError>> {
+        let result = Single<Result<Data, APIError>>.create { observer in
             
             guard let url = URL(string: urlString) else {
                 observer(.success(.failure(.invalidURL)))
@@ -66,12 +66,9 @@ final class OpenAPIManager {
                     print("STATUS CODE ==== \(status)")
                     switch response.result {
                     case .success(let value):
-                        if let image = UIImage(data: value) {
-                            ImageCacheManager.shared.cachingImage(url: url, image: image)
-                            observer(.success(.success(image)))
-                        }else {
-                            observer(.failure(APIError.init(statusCode: status)))
-                        }
+                        ImageCacheManager.shared.cachingImage(url: url, cachable: Cachable(imageData: value))
+                        ImageCacheManager.shared.cachingDiskImage(url: url, cachable: Cachable(imageData: value))
+                        observer(.success(.success(value)))
                     case .failure(let error):
                         print(error)
                         observer(.success(.failure(APIError.init(statusCode: status))))

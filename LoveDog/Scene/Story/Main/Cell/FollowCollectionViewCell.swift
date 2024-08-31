@@ -12,7 +12,7 @@ import RxCocoa
 final class FollowCollectionViewCell: BaseCollectionViewCell {
     let profileImage = ProfileImageView()
     private let nicknameLabel = UILabel()
-
+    
     var disposeBag = DisposeBag()
     
     override func prepareForReuse() {
@@ -47,16 +47,16 @@ final class FollowCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(_ data: FollowInfo) {
-        if let profileImagePath = data.profileImage {
-            let urlString = APIURL.sesacBaseURL + "/\(profileImagePath)"
+        if let path = data.profileImage {
+            let urlString = APIURL.sesacBaseURL + "/\(path)"
             
-            if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
-                profileImage.image = image
-            } else {
-                callFetchPostImage(profileImagePath)
-            }
-        }else {
-            profileImage.image = UIImage(resource: .profileEmpty)
+            ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .subscribe(with: self) { owner, value in
+                    owner.profileImage.image = UIImage(data: value)
+                } onError: { owner, error in
+                    print("LOAD IMAGE ERROR \(error)")
+                }
+                .disposed(by: disposeBag)
         }
         
         nicknameLabel.text = data.nick
@@ -70,16 +70,5 @@ final class FollowCollectionViewCell: BaseCollectionViewCell {
         
     }
     
-    private func callFetchPostImage(_ path: String) {
-        PostManager.shared.fetchPostImage(path: path)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.profileImage.image = value
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            .disposed(by: disposeBag)
-    }
+    
 }

@@ -36,27 +36,17 @@ final class ProfilePostCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(_ data: Post) {
-        if let imagePath = data.files.first {
-            let urlString = APIURL.sesacBaseURL + "/\(imagePath)"
+        if let path = data.files.first {
+            let urlString = APIURL.sesacBaseURL + "/\(path)"
             
-            if let image = ImageCacheManager.shared.loadImage(urlString: urlString) {
-                photoImage.image = image
-            } else {
-                callFetchPostImage(imagePath)
-            }
+            ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .subscribe(with: self) { owner, value in
+                    owner.photoImage.image = UIImage(data: value)
+                } onError: { owner, error in
+                    print("LOAD IMAGE ERROR \(error)")
+                }
+                .disposed(by: disposeBag)
         }
     }
     
-    private func callFetchPostImage(_ path: String) {
-        PostManager.shared.fetchPostImage(path: path)
-            .subscribe(with: self) { owner, result in
-                switch result {
-                case .success(let value):
-                    owner.photoImage.image = value
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            .disposed(by: disposeBag)
-    }
 }

@@ -5,7 +5,7 @@
 //  Created by 홍정민 on 8/16/24.
 //
 
-import UIKit
+import Foundation
 import Alamofire
 import RxSwift
 
@@ -51,10 +51,14 @@ final class PostManager {
     }
     
     //게시글 이미지 조회
-    func fetchPostImage(path: String)
-    -> Single<Result<UIImage, APIError>> {
+    func fetchPostImage(path: String, etag: String? = nil)
+    -> Single<Result<Data, APIError>> {
         do {
-            let fetchPostImageResquest = try PostRouter.fetchPostImage(path: path).asURLRequest()
+            var fetchPostImageResquest = try PostRouter.fetchPostImage(path: path).asURLRequest()
+            
+            if let etag {
+                fetchPostImageResquest.addValue(etag, forHTTPHeaderField: "If-None-Match")
+            }
             
             return APIManager.shared.downloadRequest(
                 request: fetchPostImageResquest,
@@ -63,7 +67,7 @@ final class PostManager {
             
         }catch {
             print(#function, "FETCH POST IMAGE FAILED")
-            return Single<Result<UIImage, APIError>>.never()
+            return Single<Result<Data, APIError>>.never()
         }
     }
     

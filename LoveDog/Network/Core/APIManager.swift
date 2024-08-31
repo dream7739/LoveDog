@@ -5,7 +5,7 @@
 //  Created by 홍정민 on 8/30/24.
 //
 
-import UIKit
+import Foundation
 import Alamofire
 import RxSwift
 
@@ -84,20 +84,20 @@ final class APIManager {
         request: URLRequest,
         interceptor: RequestInterceptor
     )
-    -> Single<Result<UIImage, APIError>> {
-        let result = Single<Result<UIImage, APIError>>.create { observer in
+    -> Single<Result<Data, APIError>> {
+        let result = Single<Result<Data, APIError>>.create { observer in
+        
             AF.download(request, interceptor: interceptor)
                 .responseData { response in
                     let status = response.response?.statusCode ?? 0
                     switch response.result {
                     case .success(let value):
-                        if let image = UIImage(data: value) {
-                            observer(.success(.success(image)))
-                            ImageCacheManager.shared.cachingImage(url: request.url!, image: image)
-                            ImageCacheManager.shared.cachingDiskImage(url: request.url!, image: image)
-                        }else {
-                            observer(.failure(APIError.init(statusCode: status)))
-                        }
+                        let url = request.url!
+                        let etag = response.response?.allHeaderFields["Etag"] as? String ?? ""
+                        let cachable = Cachable(imageData: value, eTag: etag)
+                        ImageCacheManager.shared.cachingImage(url: url, cachable: cachable)
+                        ImageCacheManager.shared.cachingDiskImage(url: url, cachable: cachable)
+                        observer(.success(.success(value)))
                     case .failure(let error):
                         print(error)
                         observer(.success(.failure(APIError(statusCode: status))))
