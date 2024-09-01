@@ -52,7 +52,7 @@ final class FollowCollectionViewCell: BaseCollectionViewCell {
     override func configureView() {
         profileImage.image = UIImage(resource: .profileEmpty)
         nicknameLabel.textAlignment = .center
-        nicknameLabel.font = Design.Font.quarternary
+        nicknameLabel.font = Design.Font.mini
     }
     
     func configureData(_ data: FollowInfo) {

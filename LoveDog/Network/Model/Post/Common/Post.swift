@@ -22,6 +22,14 @@ struct Post: Decodable {
     let hashTags: [String] //추후 사용
     var comments: [Comment]
     
+    var likeDescription: String {
+        return "좋아요 " + likes.count.formatted()
+    }
+    
+    var commentDescription: String {
+        return "댓글 " + comments.count.formatted()
+    }
+    
     var dateDescription: String {
         let date = BaseDateFormatterManager.basicDateFormatter.date(from: createdAt)
         let dateString = BaseDateFormatterManager.longDateFormatter.string(from: date ?? Date())

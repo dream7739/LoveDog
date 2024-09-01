@@ -12,50 +12,57 @@ import RxSwift
 
 final class StoryCollectionViewCell: BaseCollectionViewCell {
     private let baseView = UIView()
-    private let mainImageView = UIImageView()
+    private let entireStackView = UIStackView()
+    private let subStackView1 = UIStackView()
+    private let subStackView2 = UIStackView()
     private let titleLabel = UILabel()
     private let dateLabel = UILabel()
     private let categoryLabel = PaddingLabel()
     private let iconStackView = UIStackView()
-    private let likeImage = UIImageView()
     private let likeCountLabel = UILabel()
-    private let commentImage = UIImageView()
     private let commentCountLabel = UILabel()
+    private let seperatorLabel = UILabel()
     
     private let disposeBag = DisposeBag()
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        subStackView1.subviews.forEach { $0.removeFromSuperview() }
+        subStackView2.subviews.forEach { $0.removeFromSuperview() }
     }
     
     override func configureHierarchy() {
         contentView.addSubview(baseView)
         
-        [mainImageView, titleLabel, dateLabel, categoryLabel, iconStackView]
+        [entireStackView, titleLabel, dateLabel, categoryLabel, iconStackView, seperatorLabel]
             .forEach {
                 baseView.addSubview($0)
             }
         
-        [likeImage, likeCountLabel, commentImage, commentCountLabel]
+        [likeCountLabel, commentCountLabel]
             .forEach {
                 iconStackView.addArrangedSubview($0)
+            }
+        
+        [subStackView1, subStackView2]
+            .forEach {
+                entireStackView.addArrangedSubview($0)
             }
     }
     
     override func configureLayout() {
         baseView.snp.makeConstraints { make in
-            make.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(10)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(20)
+            make.edges.equalTo(contentView.safeAreaLayoutGuide)
         }
         
-        mainImageView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(baseView)
-            make.height.equalTo(200)
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(baseView.snp.top).offset(10)
+            make.leading.equalTo(baseView).offset(15)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(mainImageView.snp.bottom).offset(12)
-            make.horizontalEdges.equalTo(baseView).inset(20)
+            make.top.equalTo(categoryLabel.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(baseView).inset(15)
         }
         
         dateLabel.snp.makeConstraints { make in
@@ -63,81 +70,110 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
             make.horizontalEdges.equalTo(titleLabel)
         }
         
-        categoryLabel.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom).offset(6)
-            make.leading.equalTo(baseView).offset(18)
+        entireStackView.snp.makeConstraints { make in
+            make.top.equalTo(dateLabel.snp.bottom).offset(4)
+            make.horizontalEdges.equalTo(baseView)
+            make.height.equalTo(360)
         }
         
         iconStackView.snp.makeConstraints { make in
-            make.top.equalTo(categoryLabel)
-            make.leading.greaterThanOrEqualTo(baseView.snp.leading).offset(20)
-            make.trailing.equalTo(baseView.snp.trailing).offset(-20)
-            make.height.equalTo(18)
+            make.top.equalTo(entireStackView.snp.bottom).offset(6)
+            make.leading.greaterThanOrEqualTo(baseView.snp.leading).offset(15)
+            make.trailing.equalTo(baseView.snp.trailing).offset(-15)
         }
         
-        likeImage.snp.makeConstraints { make in
-            make.width.equalTo(16)
-        }
-        
-        commentImage.snp.makeConstraints { make in
-            make.width.equalTo(17)
+        seperatorLabel.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.horizontalEdges.equalTo(baseView)
         }
     }
     
     override func configureView() {
-        baseView.layer.cornerRadius = 10
-        baseView.layer.borderColor = UIColor.main.cgColor
-        baseView.layer.borderWidth = 1
-        baseView.clipsToBounds = true
+        entireStackView.axis = .vertical
+        entireStackView.spacing = 4
         
-        mainImageView.contentMode = .scaleAspectFill
-        mainImageView.clipsToBounds = true
+        subStackView1.spacing = 4
+        subStackView2.spacing = 4
+
+        subStackView1.axis = .horizontal
+        subStackView1.distribution = .fillEqually
         
-        titleLabel.font = Design.Font.secondary
+        subStackView2.axis = .horizontal
+        subStackView2.distribution = .fillEqually
         
-        dateLabel.font = Design.Font.tertiary
-        dateLabel.textColor = .dark_gray
+        titleLabel.font = Design.Font.tertiary
+        
+        dateLabel.font = Design.Font.mini
+        dateLabel.textColor = .deep_gray
         
         categoryLabel.makeLightGrayRound()
         
         iconStackView.axis = .horizontal
-        iconStackView.spacing = 2
+        iconStackView.spacing = 6
         
-        likeImage.image = Design.Image.like
-        likeImage.tintColor = .dark_gray
+        likeCountLabel.font = Design.Font.mini
+        likeCountLabel.textColor = .deep_gray
         
-        likeCountLabel.font = Design.Font.quarternary
-        likeCountLabel.textColor = .dark_gray
+        commentCountLabel.font = Design.Font.mini
+        commentCountLabel.textColor = .deep_gray
         
-        commentImage.image = Design.Image.comment
-        commentImage.tintColor = .dark_gray
-        
-        commentCountLabel.font = Design.Font.quarternary
-        commentCountLabel.textColor = .dark_gray
-        
+        seperatorLabel.backgroundColor = .light_gray
     }
     
     func configureData(_ data: Post){
-        configureMainImage(path: data.files[0])
+        configureMainImage(path: data.files)
         titleLabel.text = data.title
         dateLabel.text = data.dateDescription
         categoryLabel.text = data.content1
-        likeCountLabel.text = data.likes.count.formatted()
-        commentCountLabel.text = data.comments.count.formatted()
+        likeCountLabel.text = data.likeDescription
+        commentCountLabel.text = data.commentDescription
     }
     
-    private func configureMainImage(path: String) {
+    private func configureMainImage(path: [String]) {
+        switch path.count {
+        case 1:
+            entireStackView.distribution = .fill
+            let imageView1 = UIImageView()
+            subStackView1.addArrangedSubview(imageView1)
+            loadImage(imageView: imageView1, path: path[0])
+        case 2:
+            entireStackView.distribution = .fill
+            for idx in 0..<path.count {
+                let imageView = UIImageView()
+                imageView.contentMode = .scaleAspectFill
+                imageView.clipsToBounds = true
+                subStackView1.addArrangedSubview(imageView)
+                loadImage(imageView: imageView, path: path[idx])
+            }
+        case 3, 4, 5:
+            entireStackView.distribution = .fillEqually
+            for idx in 0..<path.count {
+                let imageView = UIImageView()
+                imageView.contentMode = .scaleAspectFill
+                imageView.clipsToBounds = true
+                if idx < 2 {
+                    subStackView1.addArrangedSubview(imageView)
+                } else {
+                    subStackView2.addArrangedSubview(imageView)
+                }
+                loadImage(imageView: imageView, path: path[idx])
+            }
+        default:
+            print("DEFAULT")
+        }
+    }
+    
+    private func loadImage(imageView: UIImageView, path: String) {
         let urlString = APIURL.sesacBaseURL + "/\(path)"
         
         ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
-                owner.mainImageView.setImage(data: value, size: owner.mainImageView.bounds.size)
+                imageView.setImage(data: value, size: imageView.bounds.size)
             } onError: { owner, error in
                 print("LOAD IMAGE ERROR \(error)")
             }
             .disposed(by: disposeBag)
-        
     }
     
 }
