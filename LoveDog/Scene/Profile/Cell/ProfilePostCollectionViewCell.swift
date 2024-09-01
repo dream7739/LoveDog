@@ -40,8 +40,9 @@ final class ProfilePostCollectionViewCell: BaseCollectionViewCell {
             let urlString = APIURL.sesacBaseURL + "/\(path)"
             
             ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .observe(on: MainScheduler.instance)
                 .subscribe(with: self) { owner, value in
-                    owner.photoImage.image = UIImage(data: value)
+                    owner.photoImage.setImage(data: value, size: owner.photoImage.bounds.size)
                 } onError: { owner, error in
                     print("LOAD IMAGE ERROR \(error)")
                 }

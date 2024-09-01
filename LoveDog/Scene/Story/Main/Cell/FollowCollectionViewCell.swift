@@ -12,13 +12,23 @@ import RxCocoa
 final class FollowCollectionViewCell: BaseCollectionViewCell {
     let profileImage = ProfileImageView()
     private let nicknameLabel = UILabel()
-    
     var disposeBag = DisposeBag()
     
+    var isClicked: Bool = false {
+        didSet {
+            if isClicked {
+                profileImage.layer.borderColor = UIColor.main.cgColor
+                profileImage.layer.borderWidth = 2
+            } else {
+                profileImage.layer.borderColor = UIColor.clear.cgColor
+            }
+        }
+    }
+    
     override func prepareForReuse() {
+        print(#function)
         super.prepareForReuse()
         disposeBag = DisposeBag()
-        profileImage.image = nil
     }
     
     override func configureHierarchy() {
@@ -51,8 +61,9 @@ final class FollowCollectionViewCell: BaseCollectionViewCell {
             let urlString = APIURL.sesacBaseURL + "/\(path)"
             
             ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .observe(on: MainScheduler.instance)
                 .subscribe(with: self) { owner, value in
-                    owner.profileImage.image = UIImage(data: value)
+                    owner.profileImage.setImage(data: value, size: owner.profileImage.bounds.size)
                 } onError: { owner, error in
                     print("LOAD IMAGE ERROR \(error)")
                 }
@@ -60,13 +71,6 @@ final class FollowCollectionViewCell: BaseCollectionViewCell {
         }
         
         nicknameLabel.text = data.nick
-        
-        if data.isClicked {
-            profileImage.layer.borderColor = UIColor.main.cgColor
-            profileImage.layer.borderWidth = 2
-        } else {
-            profileImage.layer.borderColor = UIColor.clear.cgColor
-        }
         
     }
     

@@ -21,7 +21,6 @@ final class StoryViewModel: BaseViewModel {
         following: [],
         posts: []
     )
-    
     var postResponse = FetchPostResponse(data: [], next_cursor: "")
     private var cacheResponse = FetchPostResponse(data: [], next_cursor: "")
     private var sectionModel: [StorySectionModel] = []
@@ -29,7 +28,8 @@ final class StoryViewModel: BaseViewModel {
     
     struct Input {
         let viewWillAppearEvent: Observable<Void>
-        let selectFollower: PublishRelay<Int>
+        let selectFollower: PublishRelay<FollowInfo>
+        let unselectFollower: PublishRelay<Void>
         let callProfile: PublishRelay<Void>
         let callPost: PublishRelay<Void>
         let callUserPost: PublishRelay<String>
@@ -63,11 +63,7 @@ final class StoryViewModel: BaseViewModel {
                 return FetchPostRequest(next: self.postResponse.next_cursor)
             }
             .flatMap { request in
-//                if self.selectedUser.isEmpty {
                     PostManager.shared.fetchPostList(request: request)
-//                } else {
-//                    PostManager.shared.fetchUserPost(id: self.selectedUser, request: request)
-//                }
             }
             .debug("PREFETCH POST")
             .subscribe { result in
@@ -83,33 +79,17 @@ final class StoryViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.selectFollower
-            .withUnretained(self)
-            .map { return $1 }
-            .map { value in
-                for (idx, _) in self.profileResponse.following.enumerated() {
-                    if idx == value {
-                        self.profileResponse.following[idx].isClicked.toggle()
-                        
-                        if self.profileResponse.following[idx].isClicked {
-                            let userId = self.profileResponse.following[idx].userId
-                            self.selectedUser = userId
-                            input.callUserPost.accept(userId)
-                        } else {
-                            self.selectedUser = ""
-                            self.postResponse = self.cacheResponse
-                            post.accept(self.postResponse.data)
-                        }
-                    } else {
-                        self.profileResponse.following[idx].isClicked = false
-                    }
-                }
-            }
-            .map {
-                follower.accept(self.profileResponse.following)
-            }
             .debug("SELECTED USER")
-            .bind { value in
-                sections.accept(self.sectionModel)
+            .map { $0.userId }
+            .bind(with: self) { owner, value in
+                input.callUserPost.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        input.unselectFollower
+            .bind(with: self) { owner, _ in
+                owner.postResponse = owner.cacheResponse
+                post.accept(owner.postResponse.data)
             }
             .disposed(by: disposeBag)
         

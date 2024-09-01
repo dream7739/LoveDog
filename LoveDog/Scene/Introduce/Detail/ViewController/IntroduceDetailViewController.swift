@@ -427,8 +427,9 @@ extension IntroduceDetailViewController {
             .bind(with: self) { owner, value in
                 //이미지
                 ImageCacheManager.shared.loadImage(urlString: value.popfile)
+                    .observe(on: MainScheduler.instance)
                     .subscribe(with: self) { owner, value in
-                        owner.imageView.image = UIImage(data: value)
+                        owner.imageView.setImage(data: value, size: owner.imageView.bounds.size)
                     } onError: { owner, error in
                         print("LOAD IMAGE ERROR \(error)")
                     }

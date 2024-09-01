@@ -27,11 +27,10 @@ struct ProfileResponse: Decodable {
     }
 }
 
-struct FollowInfo: Decodable {
+struct FollowInfo: Decodable, Hashable {
     let userId: String
     let nick: String
     let profileImage: String?
-    var isClicked: Bool = false
     
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"

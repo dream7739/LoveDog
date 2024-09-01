@@ -40,8 +40,9 @@ final class DetailImageCollectionViewCell: BaseCollectionViewCell {
         let urlString = APIURL.sesacBaseURL + "/\(path)"
         
         ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+            .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
-                owner.mainImageView.image = UIImage(data: value)
+                owner.mainImageView.setImage(data: value, size: owner.mainImageView.bounds.size)
             } onError: { owner, error in
                 print("LOAD IMAGE ERROR \(error)")
             }

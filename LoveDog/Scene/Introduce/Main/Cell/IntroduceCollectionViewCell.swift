@@ -90,8 +90,9 @@ extension IntroduceCollectionViewCell {
     
     private func configureProfile(_ profileURL: String) {
         ImageCacheManager.shared.loadImage(urlString: profileURL)
+            .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
-                owner.mainImage.image = UIImage(data: value)
+                owner.mainImage.setImage(data: value, size: owner.mainImage.bounds.size)
             }
             .disposed(by: disposeBag)
     }

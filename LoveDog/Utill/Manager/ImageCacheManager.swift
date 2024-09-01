@@ -59,7 +59,7 @@ final class ImageCacheManager {
         
         if let image = cachedImage(url: url) {
             print("LSLP - CACHE에 이미지 존재")
-            return callFetchPostImageWithEtag(path: path, cachable: image)
+            return Observable.just(image.imageData)
         }
         
         if let diskImage = cachedDiskImage(url: url) {
@@ -123,7 +123,7 @@ final class ImageCacheManager {
 }
 
 extension ImageCacheManager {
-    private func callFetchPostImage(path: String) 
+    private func callFetchPostImage(path: String)
     -> Observable<Data> {
         return Observable<Data>.create { observer in
             PostManager.shared.fetchPostImage(path: path)

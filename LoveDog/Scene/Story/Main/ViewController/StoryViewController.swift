@@ -45,6 +45,7 @@ final class StoryViewController: BaseViewController {
         return layout
     }
     
+    private var selectedIndexPath: IndexPath?
     private let viewModel: StoryViewModel
     private let disposeBag = DisposeBag()
     
@@ -93,7 +94,8 @@ final class StoryViewController: BaseViewController {
     private func bind() {
         let input = StoryViewModel.Input(
             viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
-            selectFollower: PublishRelay<Int>(),
+            selectFollower: PublishRelay<FollowInfo>(), 
+            unselectFollower: PublishRelay<Void>(),
             callProfile: PublishRelay<Void>(),
             callPost: PublishRelay<Void>(),
             callUserPost: PublishRelay<String>(),
@@ -125,8 +127,17 @@ final class StoryViewController: BaseViewController {
         Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(StorySectionItem.self))
             .bind(with: self) { owner, value in
                 switch value.1 {
-                case .follower:
-                    input.selectFollower.accept(value.0.item)
+                case .follower(let item):
+                    guard let cell = owner.collectionView.cellForItem(at: value.0) as? FollowCollectionViewCell else { return }
+                    cell.isClicked.toggle()
+                    
+                    if cell.isClicked {
+                        owner.selectedIndexPath = value.0
+                        input.selectFollower.accept(item)
+                    } else {
+                        owner.selectedIndexPath = nil
+                        input.unselectFollower.accept(())
+                    }
                 case .story(data: let data):
                     let viewModel = StoryDetailViewModel()
                     viewModel.postId = data.post_id
@@ -147,11 +158,16 @@ final class StoryViewController: BaseViewController {
     }
     
     private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<StorySectionModel> {
-        return RxCollectionViewSectionedReloadDataSource(configureCell:  { dataSource, collectionView, indexPath, _ in
+        return RxCollectionViewSectionedReloadDataSource(configureCell:  {  [weak self] dataSource, collectionView, indexPath, _ in
             switch dataSource[indexPath] {
             case .follower(let data):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FollowCollectionViewCell.identifier, for: indexPath) as?  FollowCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(data)
+                if self?.selectedIndexPath == indexPath {
+                    cell.isClicked = true
+                } else {
+                    cell.isClicked = false
+                }
                 return cell
             case .story(let data):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoryCollectionViewCell.identifier, for: indexPath) as? StoryCollectionViewCell else { return UICollectionViewCell() }

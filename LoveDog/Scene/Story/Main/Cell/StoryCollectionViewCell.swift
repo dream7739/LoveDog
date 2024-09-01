@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ImageIO
 import SnapKit
 import RxSwift
 
@@ -25,7 +26,6 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        mainImageView.image = nil
     }
     
     override func configureHierarchy() {
@@ -130,13 +130,15 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
         let urlString = APIURL.sesacBaseURL + "/\(path)"
         
         ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+            .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
                 print("=============LOAD IMAGE \(value)")
-                owner.mainImageView.image = UIImage(data: value)
+                owner.mainImageView.setImage(data: value, size: owner.mainImageView.bounds.size)
             } onError: { owner, error in
                 print("LOAD IMAGE ERROR \(error)")
             }
             .disposed(by: disposeBag)
+        
     }
     
 }

@@ -115,8 +115,9 @@ final class ProfileHeaderView: UICollectionReusableView {
             let urlString = APIURL.sesacBaseURL + "/\(path)"
             
             ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .observe(on: MainScheduler.instance)
                 .subscribe(with: self) { owner, value in
-                    owner.profileImage.image = UIImage(data: value)
+                    owner.profileImage.setImage(data: value, size: owner.profileImage.bounds.size)
                 } onError: { owner, error in
                     print("LOAD IMAGE ERROR \(error)")
                 }
@@ -132,16 +133,4 @@ final class ProfileHeaderView: UICollectionReusableView {
         followingButton.configuration?.title = "\(data.following.count)"
     }
     
-//    private func callFetchPostImage(_ path: String) {
-//        PostManager.shared.fetchPostImage(path: path)
-//            .subscribe(with: self) { owner, result in
-//                switch result {
-//                case .success(let value):
-//                    owner.profileImage.image = value
-//                case .failure(let error):
-//                    print(error)
-//                }
-//            }
-//            .disposed(by: disposeBag)
-//    }
 }

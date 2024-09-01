@@ -37,8 +37,9 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
             let urlString = APIURL.sesacBaseURL + "/\(path)"
             
             ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .observe(on: MainScheduler.instance)
                 .subscribe(with: self) { owner, value in
-                    owner.profileView.profileImage.image = UIImage(data: value)
+                    owner.profileView.profileImage.setImage(data: value, size: owner.profileView.bounds.size)
                 } onError: { owner, error in
                     print("LOAD IMAGE ERROR \(error)")
                 }
