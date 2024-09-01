@@ -9,18 +9,26 @@ import Foundation
 
 enum BaseDateFormatterManager {
     enum DateType: String {
-        case yyMMdd = "yy년 MM월 dd일"
+        case yyMMdd = "yyyyMMdd"
+        case yyMMddLong = "yy년 MM월 dd일"
         case yyMMddShort = "yy.M.d"
     }
     
+    static let serverDateFormatter = {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return dateFormatter
+    }()
+    
     static let basicDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = DateType.yyMMdd.rawValue
         return dateFormatter
     }()
     
     static let longDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = DateType.yyMMdd.rawValue
+        dateFormatter.dateFormat = DateType.yyMMddLong.rawValue
         return dateFormatter
     }()
     

@@ -41,7 +41,7 @@ final class StoryDetailViewController: BaseViewController {
             case .image:
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(400))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(350))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPaging
@@ -49,7 +49,7 @@ final class StoryDetailViewController: BaseViewController {
             case .like:
                 let itemsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemsSize)
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 let section = NSCollectionLayoutSection(group: group)
                 return section
@@ -81,7 +81,7 @@ final class StoryDetailViewController: BaseViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -238,10 +238,10 @@ extension StoryDetailViewController {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as? DetailImageCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureImage(image)
                 return cell
-            case .like(let isLiked, let likeCount, let commentCount):
+            case .like(let isLiked, let likeCount, let commentCount, let cheerCount):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLikeCollectionViewCell.identifier, for: indexPath) as? DetailLikeCollectionViewCell else { return UICollectionViewCell() }
 
-                cell.configureData(isLiked, likeCount, commentCount)
+                cell.configureData(isLiked, likeCount, commentCount, cheerCount)
                 
                 cell.likeButton.rx.tap
                     .bind(with: self) { owner, _ in
@@ -327,7 +327,7 @@ enum SectionItem {
     //섹션에 들어갈 아이템 단건
     case profile(data: Creator)
     case image(image: String)
-    case like(isLiked: Bool, likeCount: String, commentCount: String)
+    case like(isLiked: Bool, likeCount: String, commentCount: String, cheerCount: String)
     case content(title: String, content: String)
     case comment(comments: Comment)
 }

@@ -7,12 +7,21 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class DetailCommentCollectionViewCell: BaseCollectionViewCell {
     private let profileImage = ProfileImageView()
     private let nicknameLabel = UILabel()
     private let dateLabel = UILabel()
     private let contentLabel = UILabel()
+    
+    private var disposeBag = DisposeBag()
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         [profileImage, nicknameLabel, dateLabel, contentLabel]
@@ -48,7 +57,18 @@ final class DetailCommentCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(_ data: Comment) {
-        profileImage.image = UIImage(resource: .profileEmpty)
+        if let path = data.creator.profileImage {
+            let urlString = APIURL.sesacBaseURL + "/\(path)"
+            
+            ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
+                .observe(on: MainScheduler.instance)
+                .subscribe(with: self) { owner, value in
+                    owner.profileImage.setImage(data: value, size: owner.profileImage.bounds.size)
+                } onError: { owner, error in
+                    print("LOAD IMAGE ERROR \(error)")
+                }
+                .disposed(by: disposeBag)
+        }
         
         nicknameLabel.text = data.creator.nick
         nicknameLabel.font = Design.Font.tertiary

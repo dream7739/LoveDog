@@ -21,6 +21,7 @@ struct Post: Decodable {
     let likes2: [String] //추후 사용
     let hashTags: [String] //추후 사용
     var comments: [Comment]
+    let buyers: [String] //구매자 userId배열
     
     var likeDescription: String {
         return "좋아요 " + likes.count.formatted()
@@ -31,7 +32,7 @@ struct Post: Decodable {
     }
     
     var dateDescription: String {
-        let date = BaseDateFormatterManager.basicDateFormatter.date(from: createdAt)
+        let date = BaseDateFormatterManager.serverDateFormatter.date(from: createdAt)
         let dateString = BaseDateFormatterManager.longDateFormatter.string(from: date ?? Date())
         let description = "작성일 " + dateString
         return description

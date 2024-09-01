@@ -14,6 +14,7 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     private let likeLabel = UILabel()
     private let commentButton = UIButton()
     private let commentLabel = UILabel()
+    let cheerCountLabel = UILabel()
     let cheerButton = UIButton()
     private let seperatorLabel = UILabel()
     
@@ -47,7 +48,7 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureHierarchy() {
-        [likeButton, likeLabel, commentButton, commentLabel, cheerButton, seperatorLabel].forEach {
+        [likeButton, likeLabel, commentButton, commentLabel, cheerCountLabel, cheerButton, seperatorLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -72,12 +73,18 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         
         commentLabel.snp.makeConstraints { make in
             make.leading.equalTo(commentButton.snp.trailing).offset(8)
-            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.trailing.lessThanOrEqualTo(cheerButton.snp.leading).offset(-15)
             make.centerY.equalTo(commentButton)
+        }
+        
+        cheerCountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(cheerButton)
+            make.trailing.equalTo(cheerButton.snp.leading).offset(-10)
         }
         
         cheerButton.snp.makeConstraints { make in
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
+            make.size.equalTo(30)
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
@@ -100,12 +107,14 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         commentLabel.font = Design.Font.tertiary
         commentLabel.textAlignment = .left
         
+        cheerCountLabel.font = Design.Font.quarternary
+        
         cheerButton.configuration = configuration
-        cheerButton.configuration?.title = "응원하기"
+        cheerButton.configuration?.image = UIImage(resource: .donation)
         seperatorLabel.backgroundColor = .light_gray
     }
     
-    func configureData(_ isLiked: Bool, _ likeCount: String, _ commentCount: String) {
+    func configureData(_ isLiked: Bool, _ likeCount: String, _ commentCount: String, _ cheerCount: String) {
         self.isLiked = isLiked
 
         let color: UIColor = isLiked ? .coral: .black
@@ -115,5 +124,6 @@ final class DetailLikeCollectionViewCell: BaseCollectionViewCell {
         
         likeLabel.text = likeCount
         commentLabel.text = commentCount
+        cheerCountLabel.text = cheerCount + "명이 응원하고 있어요"
     }
 }

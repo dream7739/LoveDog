@@ -14,8 +14,8 @@ struct Comment: Decodable {
     let creator: Creator
     
     var dateDescription: String {
-        let createDate = BaseDateFormatterManager.basicDateFormatter.date(from: createdAt) ?? Date()
-        let createDateString = BaseDateFormatterManager.shortDateFormatter.string(from: createDate)
+        let createDate = BaseDateFormatterManager.serverDateFormatter.date(from: createdAt)
+        let createDateString = BaseDateFormatterManager.shortDateFormatter.string(from: createDate ?? Date())
         return createDateString
     }
 }

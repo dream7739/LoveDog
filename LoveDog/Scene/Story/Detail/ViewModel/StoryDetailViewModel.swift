@@ -184,16 +184,29 @@ final class StoryDetailViewModel: BaseViewModel {
         let commentCount = postDetail
             .map { $0.comments.count }
         
+        //후원 수
+        let cheerCount = postDetail
+            .map { value in
+                var set = Set<String>()
+                value.buyers.forEach {
+                    set.insert($0)
+                }
+                return Array(set)
+            }
+            .map {
+                $0.count
+            }
+        
         //좋아요 여부
         let isLiked = postDetail
             .map { $0.likes.contains(UserDefaultsManager.userId) }
         
         //게시글 - 좋아요 댓글
-        let like = Observable.zip(isLiked, likeCount, commentCount)
-            .map { ($0, "\($1)", "\($2)") }
+        let like = Observable.zip(isLiked, likeCount, commentCount, cheerCount)
+            .map { ($0, "\($1)", "\($2)", "\($3)") }
             .map {
                 DetailSectionModel.like(
-                    items: [.like(isLiked: $0.0, likeCount: $0.1, commentCount: $0.2)]
+                    items: [.like(isLiked: $0.0, likeCount: $0.1, commentCount: $0.2, cheerCount: $0.3)]
                 )
             }
             .debug("LIKE")

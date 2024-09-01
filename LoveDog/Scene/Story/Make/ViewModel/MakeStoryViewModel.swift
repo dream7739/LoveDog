@@ -100,7 +100,7 @@ extension MakeStoryViewModel {
         var request: [String: Data] = [:]
         
         for (idx, image) in image.enumerated() {
-            let imageData = image.pngData()
+            let imageData = image.jpegData(compressionQuality: 0.5)
             let fileName = fileList[idx]
             request[fileName] = imageData
         }

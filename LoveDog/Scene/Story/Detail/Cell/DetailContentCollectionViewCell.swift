@@ -32,10 +32,10 @@ final class DetailContentCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureView() {
-        titleLabel.font = Design.Font.primary_bold
+        titleLabel.font = Design.Font.tertiary_bold
         titleLabel.numberOfLines = 2
         
-        contentLabel.font = Design.Font.secondary
+        contentLabel.font = Design.Font.tertiary
         contentLabel.numberOfLines = 0
     }
     

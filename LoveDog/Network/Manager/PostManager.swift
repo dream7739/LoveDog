@@ -115,7 +115,7 @@ final class PostManager {
             
             let multipart = MultipartFormData()
             images.forEach { fileName, image in
-                multipart.append(image, withName: "files", fileName: fileName, mimeType: "image/png")
+                multipart.append(image, withName: "files", fileName: fileName, mimeType: "image/jpeg")
             }
             
             return APIManager.shared.uploadRequest(
