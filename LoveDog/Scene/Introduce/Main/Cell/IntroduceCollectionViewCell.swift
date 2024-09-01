@@ -35,7 +35,7 @@ final class IntroduceCollectionViewCell: BaseCollectionViewCell {
         mainImage.snp.makeConstraints { make in
             make.centerY.equalTo(contentView.safeAreaLayoutGuide)
             make.size.equalTo(130)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
         stateLabel.snp.makeConstraints { make in
@@ -46,13 +46,13 @@ final class IntroduceCollectionViewCell: BaseCollectionViewCell {
         noticeNoLabel.snp.makeConstraints { make in
             make.top.equalTo(stateLabel.snp.bottom).offset(4)
             make.leading.equalTo(stateLabel)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
         infoLabel.snp.makeConstraints { make in
             make.top.equalTo(noticeNoLabel.snp.bottom).offset(4)
             make.leading.equalTo(stateLabel)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(10)
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
         seperatorLabel.snp.makeConstraints { make in

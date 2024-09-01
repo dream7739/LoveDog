@@ -132,7 +132,6 @@ final class StoryCollectionViewCell: BaseCollectionViewCell {
         ImageCacheManager.shared.loadImage(urlString: urlString, path: path)
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, value in
-                print("=============LOAD IMAGE \(value)")
                 owner.mainImageView.setImage(data: value, size: owner.mainImageView.bounds.size)
             } onError: { owner, error in
                 print("LOAD IMAGE ERROR \(error)")

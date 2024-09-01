@@ -12,10 +12,20 @@ import RxCocoa
 
 final class IntroduceViewController: BaseViewController {
     
-    private let toolBar = UIToolbar()
-    private let pickerView = UIPickerView()
-    private let cityTextField = UITextField()
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
+    private lazy var sidoCollectionView = UICollectionView(frame: .zero, collectionViewLayout: cityLayout())
+    private lazy var animalCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
+    
+    private func cityLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(80), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(1280), heightDimension: .absolute(27))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 8
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 15, bottom: 4, trailing: 15)
+        return UICollectionViewCompositionalLayout(section: section)
+    }
     
     private func layout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(150))
@@ -23,10 +33,10 @@ final class IntroduceViewController: BaseViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(150))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         return UICollectionViewCompositionalLayout(section: section)
     }
     
+    private var selectedIndex = IndexPath(item: 0, section: 0)
     let viewModel = IntroduceViewModel()
     private let disposeBag = DisposeBag()
     
@@ -37,52 +47,28 @@ final class IntroduceViewController: BaseViewController {
     }
     
     override func configureHierarchy() {
-        [collectionView, cityTextField].forEach {
+        [sidoCollectionView, animalCollectionView].forEach {
             view.addSubview($0)
         }
     }
     
     override func configureLayout() {
-        cityTextField.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(4)
-            make.leading.equalTo(view.safeAreaLayoutGuide).inset(10)
+        
+        sidoCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(35)
         }
         
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(cityTextField.snp.bottom)
+        animalCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(sidoCollectionView.snp.bottom)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        
-
     }
     
     override func configureView() {
-        //툴바
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor.black
-        toolBar.sizeToFit()
-        
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let cancel = UIBarButtonItem(title: "취소", style: .plain, target: self, action: nil)
-        let done = UIBarButtonItem(title: "완료", style: .done, target: self, action: nil)
-        toolBar.setItems([flexibleSpace, cancel, done], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        
-        //텍스트필드
-        cityTextField.inputView = pickerView
-        cityTextField.inputAccessoryView = toolBar
-        cityTextField.delegate = self
-        cityTextField.text = "서울특별시"
-        cityTextField.font = Design.Font.primary
-        cityTextField.tintColor = .clear
-        let iconImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        iconImage.image = Design.Image.down.withTintColor(.black).withRenderingMode(.alwaysOriginal)
-        cityTextField.rightView = iconImage
-        cityTextField.rightViewMode = .always
-        
-        //컬렉션뷰
-        collectionView.register(IntroduceCollectionViewCell.self, forCellWithReuseIdentifier: IntroduceCollectionViewCell.identifier)
+        sidoCollectionView.register(CityCollectionViewCell.self, forCellWithReuseIdentifier: CityCollectionViewCell.identifier)
+        animalCollectionView.register(IntroduceCollectionViewCell.self, forCellWithReuseIdentifier: IntroduceCollectionViewCell.identifier)
     }
     
 }
@@ -99,32 +85,30 @@ extension IntroduceViewController {
         let output = viewModel.transform(input: input)
         
         output.sidoList
-            .bind(to: pickerView.rx.itemTitles){ row, item in
-                return "\(item.orgdownNm)"
-             }
+            .bind(to: sidoCollectionView.rx.items(cellIdentifier: CityCollectionViewCell.identifier, cellType: CityCollectionViewCell.self)){ [weak self] (row, element, cell) in
+                cell.configureData(data: element.orgdownNm)
+                if row == self?.selectedIndex.item {
+                    cell.isClicked = true
+                } else {
+                    cell.isClicked = false
+                }
+            }
             .disposed(by: disposeBag)
-                
-        if let items = toolBar.items, items.count == 3 {
-            items[1].rx.tap
-                .bind(with: self) { owner, _ in
-                    owner.cityTextField.endEditing(true)
-                }
-                .disposed(by: disposeBag)
-            
-            items[2]
-                .rx.tap
-                .withLatestFrom(pickerView.rx.modelSelected(SidoModel.self))
-                .compactMap { $0.first }
-                .bind(with: self) { owner, value in
-                    owner.cityTextField.text = value.orgdownNm
-                    owner.cityTextField.endEditing(true)
-                    input.request.accept(FetchAbandonRequest(upperCd: Int(value.orgCd) ?? 0, pageNo: 1))
-                }
-                .disposed(by: disposeBag)
-        }
+        
+        Observable.zip(sidoCollectionView.rx.itemSelected,
+            sidoCollectionView.rx.modelSelected(SidoModel.self))
+            .withUnretained(self)
+            .filter { value in self.selectedIndex != value.1.0 }
+            .map { value in return value.1 }
+            .bind(with: self) { owner, value in
+                owner.selectedIndex = value.0
+                output.sidoList.accept(output.sidoList.value)
+                input.request.accept(FetchAbandonRequest(upperCd: Int(value.1.orgCd) ?? 0, pageNo: 1))
+            }
+            .disposed(by: disposeBag)
         
         output.abondonList
-            .bind(to: collectionView.rx.items(cellIdentifier: IntroduceCollectionViewCell.identifier, cellType: IntroduceCollectionViewCell.self)){
+            .bind(to: animalCollectionView.rx.items(cellIdentifier: IntroduceCollectionViewCell.identifier, cellType: IntroduceCollectionViewCell.self)){
                 (row, element, cell) in
                 cell.configureData(data: element)
             }
@@ -132,11 +116,11 @@ extension IntroduceViewController {
         
         output.scrollToTop
             .bind(with: self) { owner, _ in
-                owner.collectionView.scrollToItem(at: IndexPath(item: -1, section: 0), at: .top, animated: true)
+                owner.animalCollectionView.scrollToItem(at: IndexPath(item: -1, section: 0), at: .top, animated: true)
             }
             .disposed(by: disposeBag)
         
-        collectionView.rx.prefetchItems
+        animalCollectionView.rx.prefetchItems
             .bind(with: self) { owner, value in
                 let itemList = owner.viewModel.abandonResponse.items.item
                 value.forEach { idx in
@@ -147,7 +131,7 @@ extension IntroduceViewController {
             }
             .disposed(by: disposeBag)
         
-        collectionView.rx.modelSelected(FetchAbandonItem.self)
+        animalCollectionView.rx.modelSelected(FetchAbandonItem.self)
             .bind(with: self) { owner, value in
                 let detailVC = IntroduceDetailViewController()
                 detailVC.viewModel.fetchAbandonItem.accept(value)

@@ -26,7 +26,6 @@ final class FollowCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func prepareForReuse() {
-        print(#function)
         super.prepareForReuse()
         disposeBag = DisposeBag()
     }

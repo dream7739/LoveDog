@@ -9,7 +9,7 @@ import UIKit
 
 final class PaddingLabel: UILabel {
     private let padding = UIEdgeInsets(top: 4, left: 6, bottom: 4, right: 6)
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -30,10 +30,22 @@ final class PaddingLabel: UILabel {
     }
     
     func makeLightGrayRound() {
-       backgroundColor = .light_gray
-       layer.cornerRadius = 8
-       clipsToBounds = true
-       font = Design.Font.quarternary
+        layer.borderWidth = 0.8
+        layer.borderColor = UIColor.deep_gray.withAlphaComponent(0.2).cgColor
+        layer.cornerRadius = 6
+        clipsToBounds = true
+        font = Design.Font.mini
+        textColor = .deep_gray
+        backgroundColor = .white
+    }
+    
+    func makeBlueBackground() {
+        layer.borderWidth = 0.8
+        layer.cornerRadius = 6
+        clipsToBounds = true
+        font = Design.Font.mini
+        textColor = .white
+        backgroundColor = .main
     }
     
     func makeBasicRound() {

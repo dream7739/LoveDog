@@ -13,6 +13,7 @@ enum Design {
         static let secondary = UIFont.systemFont(ofSize: FontSize.secondary)
         static let tertiary = UIFont.systemFont(ofSize: FontSize.tertiary)
         static let quarternary = UIFont.systemFont(ofSize: FontSize.quarternary)
+        static let mini = UIFont.systemFont(ofSize: FontSize.mini)
         
         static let primary_bold = UIFont.boldSystemFont(ofSize: FontSize.primary)
         static let secondary_bold = UIFont.boldSystemFont(ofSize: FontSize.secondary)
@@ -24,6 +25,7 @@ enum Design {
             static let secondary: CGFloat = 15
             static let tertiary: CGFloat = 14
             static let quarternary: CGFloat = 13
+            static let mini: CGFloat = 12
         }
     }
     
