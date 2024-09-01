@@ -25,10 +25,6 @@ final class IntroduceDetailViewController: BaseViewController {
     private let kindInfoLabel = UILabel()
     private let ageLabel = UILabel()
     private let ageInfoLabel = UILabel()
-    private let weightLabel = UILabel()
-    private let weightInfoLabel = UILabel()
-    private let sexLabel = UILabel()
-    private let sexInfoLabel = PaddingLabel()
     private let seperatorLabel2 = UILabel()
     private let additionalLabel = UILabel()
     private let findPlaceLabel = UILabel()
@@ -59,7 +55,7 @@ final class IntroduceDetailViewController: BaseViewController {
         super.viewDidLoad()
         bind()
     }
-    
+ 
     override func configureHierarchy() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -74,10 +70,6 @@ final class IntroduceDetailViewController: BaseViewController {
           kindInfoLabel,
           ageLabel,
           ageInfoLabel,
-          weightLabel,
-          weightInfoLabel,
-          sexLabel,
-          sexInfoLabel,
           seperatorLabel2,
           additionalLabel,
           findPlaceLabel,
@@ -106,13 +98,12 @@ final class IntroduceDetailViewController: BaseViewController {
     
     override func configureNav() {
         super.configureNav()
-        let close = UIBarButtonItem(image: Design.Image.close, style: .plain, target: self, action: nil)
-        navigationItem.leftBarButtonItem = close
+        navigationController?.navigationBar.tintColor = .white
     }
     
     override func configureLayout() {
         scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalTo(view)
         }
         
         contentView.snp.makeConstraints { make in
@@ -121,8 +112,9 @@ final class IntroduceDetailViewController: BaseViewController {
         }
         
         imageView.snp.makeConstraints { make in
-            make.height.equalTo(350)
-            make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(240)
+            make.horizontalEdges.equalToSuperview()
+            make.top.equalToSuperview().offset(-44)
         }
         
         statusLabel.snp.makeConstraints { make in
@@ -153,7 +145,7 @@ final class IntroduceDetailViewController: BaseViewController {
         }
         
         kindLabel.snp.makeConstraints { make in
-            make.top.equalTo(baseInfoLabel.snp.bottom).offset(8)
+            make.top.equalTo(baseInfoLabel.snp.bottom).offset(4)
             make.leading.equalTo(baseInfoLabel)
             make.width.equalTo(50)
         }
@@ -176,99 +168,19 @@ final class IntroduceDetailViewController: BaseViewController {
             make.centerY.equalTo(ageLabel)
         }
         
-        weightLabel.snp.makeConstraints { make in
-            make.top.equalTo(ageLabel.snp.bottom).offset(4)
-            make.leading.equalTo(statusLabel)
-            make.width.equalTo(50)
-        }
-        
-        weightInfoLabel.snp.makeConstraints { make in
-            make.leading.equalTo(weightLabel.snp.trailing).offset(4)
-            make.trailing.equalTo(contentView.safeAreaLayoutGuide)
-            make.centerY.equalTo(weightLabel)
-        }
-        
-        sexLabel.snp.makeConstraints { make in
-            make.top.equalTo(weightLabel.snp.bottom).offset(8)
-            make.leading.equalTo(statusLabel)
-            make.width.equalTo(50)
-        }
-        
-        sexInfoLabel.snp.makeConstraints { make in
-            make.leading.equalTo(sexLabel.snp.trailing).offset(4)
-            make.centerY.equalTo(sexLabel)
-        }
-        
         seperatorLabel2.snp.makeConstraints { make in
-            make.top.equalTo(sexInfoLabel.snp.bottom).offset(10)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
-            make.height.equalTo(1)
-        }
-        
-        additionalLabel.snp.makeConstraints { make in
-            make.top.equalTo(seperatorLabel2.snp.bottom).offset(8)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
-        }
-        
-        findPlaceLabel.snp.makeConstraints { make in
-            make.top.equalTo(additionalLabel.snp.bottom).offset(8)
-            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
-            make.width.equalTo(70)
-        }
-        
-        findPlaceInfoLabel.snp.makeConstraints { make in
-            make.leading.equalTo(findPlaceLabel.snp.trailing).offset(4)
-            make.centerY.equalTo(findPlaceLabel)
-        }
-        
-        findDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(findPlaceLabel.snp.bottom).offset(4)
-            make.leading.equalTo(findPlaceLabel)
-            make.width.equalTo(70)
-        }
-        
-        findDateInfoLabel.snp.makeConstraints { make in
-            make.leading.equalTo(findDateLabel.snp.trailing).offset(4)
-            make.centerY.equalTo(findDateLabel)
-        }
-        
-        neuterYnLabel.snp.makeConstraints { make in
-            make.top.equalTo(findDateLabel.snp.bottom).offset(4)
-            make.leading.equalTo(findPlaceLabel)
-            make.width.equalTo(70)
-        }
-        
-        neuterYnInfoLabel.snp.makeConstraints { make in
-            make.leading.equalTo(neuterYnLabel.snp.trailing).offset(4)
-            make.centerY.equalTo(neuterYnLabel)
-        }
-        
-        specialLabel.snp.makeConstraints { make in
-            make.top.equalTo(neuterYnLabel.snp.bottom).offset(4)
-            make.leading.equalTo(findPlaceLabel)
-            make.width.equalTo(70)
-        }
-        
-        specialInfoLabel.snp.makeConstraints { make in
-            make.leading.equalTo(specialLabel.snp.trailing).offset(4)
-            make.width.equalTo(50).priority(.low)
-            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).offset(-15)
-            make.top.equalTo(specialLabel)
-        }
-        
-        seperatorLabel3.snp.makeConstraints { make in
-            make.top.equalTo(specialInfoLabel.snp.bottom).offset(10)
+            make.top.equalTo(ageInfoLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
             make.height.equalTo(1)
         }
         
         careLabel.snp.makeConstraints { make in
-            make.top.equalTo(seperatorLabel3.snp.bottom).offset(8)
+            make.top.equalTo(seperatorLabel2.snp.bottom).offset(8)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
         }
         
         orgInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(careLabel.snp.bottom).offset(8)
+            make.top.equalTo(careLabel.snp.bottom).offset(4)
             make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
             make.width.equalTo(70)
         }
@@ -315,6 +227,63 @@ final class IntroduceDetailViewController: BaseViewController {
             make.top.equalTo(careAddrInfoLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(15)
             make.height.equalTo(230)
+        }
+        
+        seperatorLabel3.snp.makeConstraints { make in
+            make.top.equalTo(mapView.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(1)
+        }
+        
+        additionalLabel.snp.makeConstraints { make in
+            make.top.equalTo(seperatorLabel3.snp.bottom).offset(8)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+        }
+        
+        findPlaceLabel.snp.makeConstraints { make in
+            make.top.equalTo(additionalLabel.snp.bottom).offset(4)
+            make.leading.equalTo(contentView.safeAreaLayoutGuide).inset(15)
+            make.width.equalTo(70)
+        }
+        
+        findPlaceInfoLabel.snp.makeConstraints { make in
+            make.leading.equalTo(findPlaceLabel.snp.trailing).offset(4)
+            make.centerY.equalTo(findPlaceLabel)
+        }
+        
+        findDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(findPlaceLabel.snp.bottom).offset(4)
+            make.leading.equalTo(findPlaceLabel)
+            make.width.equalTo(70)
+        }
+        
+        findDateInfoLabel.snp.makeConstraints { make in
+            make.leading.equalTo(findDateLabel.snp.trailing).offset(4)
+            make.centerY.equalTo(findDateLabel)
+        }
+        
+        neuterYnLabel.snp.makeConstraints { make in
+            make.top.equalTo(findDateLabel.snp.bottom).offset(4)
+            make.leading.equalTo(findPlaceLabel)
+            make.width.equalTo(70)
+        }
+        
+        neuterYnInfoLabel.snp.makeConstraints { make in
+            make.leading.equalTo(neuterYnLabel.snp.trailing).offset(4)
+            make.centerY.equalTo(neuterYnLabel)
+        }
+        
+        specialLabel.snp.makeConstraints { make in
+            make.top.equalTo(neuterYnLabel.snp.bottom).offset(4)
+            make.leading.equalTo(findPlaceLabel)
+            make.width.equalTo(70)
+        }
+        
+        specialInfoLabel.snp.makeConstraints { make in
+            make.leading.equalTo(specialLabel.snp.trailing).offset(4)
+            make.width.equalTo(50).priority(.low)
+            make.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).offset(-15)
+            make.top.equalTo(specialLabel)
             make.bottom.equalTo(contentView).offset(-15)
         }
         
@@ -342,21 +311,10 @@ final class IntroduceDetailViewController: BaseViewController {
         
         kindInfoLabel.font = Design.Font.tertiary
         
-        ageLabel.text = "나이"
         ageLabel.font = Design.Font.tertiary
+        ageLabel.text = "정보"
         
         ageInfoLabel.font = Design.Font.tertiary
-        
-        weightLabel.text = "무게"
-        weightLabel.font = Design.Font.tertiary
-        
-        weightInfoLabel.font = Design.Font.tertiary
-        
-        sexLabel.text = "성별"
-        sexLabel.font = Design.Font.tertiary
-        
-        sexInfoLabel.font = Design.Font.tertiary
-        sexInfoLabel.makeBasicRound()
         
         seperatorLabel2.backgroundColor = .light_gray
         
@@ -448,16 +406,8 @@ extension IntroduceDetailViewController {
                 owner.kindInfoLabel.text = value.kindCd
                 
                 //나이
-                owner.ageInfoLabel.text = value.ageDescription
-                
-                //무게
-                owner.weightInfoLabel.text = value.weightDescription
-                
-                //성별
-                let sexCd = SexCode(rawValue: value.sexCd) ?? .unknown
-                owner.sexInfoLabel.text = sexCd.name
-                owner.sexInfoLabel.backgroundColor = sexCd.color
-                
+                owner.ageInfoLabel.text = value.basicInfoDescription
+            
                 //발견장소
                 owner.findPlaceInfoLabel.text = value.happenPlace
                 

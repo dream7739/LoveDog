@@ -63,7 +63,7 @@ struct FetchAbandonItem: Decodable {
     let noticeComment: String? //특이사항
     
     var infoDescription: String {
-        return "\(ageDescription) \(weightDescription)"
+        return "\(age.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)) \(weight.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines))"
     }
     
     var dateDescription: String {
@@ -76,12 +76,9 @@ struct FetchAbandonItem: Decodable {
         return "공고기간 " + startDateString + " - " + endDateString
     }
     
-    var ageDescription: String {
-        return age.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
-    var weightDescription: String {
-        return weight.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
+    var basicInfoDescription: String {
+        let sex = SexCode(rawValue: sexCd) ?? .unknown
+        return sex.name + "/" + age.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines) + "/" + weight.htmlEscaped.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     var findDateDescription: String {

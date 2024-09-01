@@ -135,9 +135,7 @@ extension IntroduceViewController {
             .bind(with: self) { owner, value in
                 let detailVC = IntroduceDetailViewController()
                 detailVC.viewModel.fetchAbandonItem.accept(value)
-                let detailNav = UINavigationController(rootViewController: detailVC)
-                detailNav.modalPresentationStyle = .fullScreen
-                owner.present(detailNav, animated: true)
+                owner.navigationController?.pushViewController(detailVC, animated: true)
             }
             .disposed(by: disposeBag)
     }
