@@ -202,6 +202,9 @@ extension MakeStoryViewController {
                     owner.contentTextView.text = content
                     owner.contentTextView.textColor = .black
                 }
+                //이미지
+                owner.createImages(value.files)
+                
             }
             .disposed(by: disposeBag)
         
@@ -227,7 +230,6 @@ extension MakeStoryViewController {
                 
                 cell.configureImage(element)
                 
-                // - TODO: 수정 필요
                 cell.deleteButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.viewModel.imageList.remove(at: row)
@@ -267,6 +269,26 @@ extension MakeStoryViewController {
             button.isClicked = false
         }
     }
+    
+    private func createImages(_ files: [String]) {
+        var imageList: [UIImage] = []
+        var fileList: [String] = []
+        
+        for (idx, path) in files.enumerated() {
+            ImageCacheManager.shared.loadImage(urlString: path)
+                .bind(with: self) { owner, value in
+                    if let image = UIImage(data: value) {
+                        imageList.append(image)
+                        fileList.append("image_\(idx)")
+                        owner.viewModel.imageList = imageList
+                        owner.viewModel.fileList = fileList
+                        owner.viewModel.selectedImages.accept(imageList)
+                        owner.viewModel.fileNames.accept(fileList)
+                    }
+                }
+                .disposed(by: disposeBag)
+        }
+    }
   
 }
 
@@ -285,23 +307,31 @@ extension MakeStoryViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
         
-        var images: [UIImage] = []
-        var fileNames: [String] = []
+        var imageList: [UIImage] = []
+        var fileList: [String] = []
         
-        // - TODO: 수정 필요
+        let group = DispatchGroup()
+        
         for (_, result) in results.enumerated() {
-            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
-                if let image = object as? UIImage {
-                    DispatchQueue.main.async {
-                        images.append(image)
-                        fileNames.append(result.itemProvider.suggestedName ?? "")
-                        self?.viewModel.imageList = images
-                        self?.viewModel.fileList = fileNames
-                        self?.viewModel.selectedImages.accept(self?.viewModel.imageList ?? [])
-                        self?.viewModel.fileNames.accept(self?.viewModel.fileList ?? [])
+            DispatchQueue.global().async(group: group) {
+                group.enter()
+                result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
+                    if let image = object as? UIImage {
+                        DispatchQueue.main.async {
+                            imageList.append(image)
+                            fileList.append(result.itemProvider.suggestedName ?? "")
+                        }
                     }
+                    group.leave()
                 }
             }
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.viewModel.imageList = imageList
+            self?.viewModel.fileList = fileList
+            self?.viewModel.selectedImages.accept(imageList)
+            self?.viewModel.fileNames.accept(fileList)
         }
     }
 }
