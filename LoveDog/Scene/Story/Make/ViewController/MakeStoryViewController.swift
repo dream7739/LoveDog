@@ -7,9 +7,10 @@
 
 import UIKit
 import PhotosUI
-import SnapKit
 import RxSwift
 import RxCocoa
+import SnapKit
+import Toast
 
 final class MakeStoryViewController: BaseViewController {
     private let cameraButton = UIButton()
@@ -26,7 +27,7 @@ final class MakeStoryViewController: BaseViewController {
     private let contentTextView = BasicTextView(placeholder: "내용을 입력해주세요")
     private lazy var categoryButtonList = [reviewButton, reportButton, dailyButton, promotionButton]
     private let emptyView = UIView()
-
+    
     private let viewModel: MakeStoryViewModel
     private let disposeBag = DisposeBag()
     
@@ -47,6 +48,7 @@ final class MakeStoryViewController: BaseViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -157,7 +159,6 @@ final class MakeStoryViewController: BaseViewController {
     
     override func configureNav(){
         super.configureNav()
-        navigationItem.title = Constant.Navigation.makeStory
         let close = UIBarButtonItem(image: Design.Image.close, style: .plain, target: self, action: nil)
         let save = UIBarButtonItem(title: "저장", style: .plain, target: self, action: nil)
         navigationItem.leftBarButtonItem = close
@@ -180,6 +181,33 @@ extension MakeStoryViewController {
         )
         
         let output = viewModel.transform(input: input)
+        
+        output.uploadSuccess
+            .bind(with: self) { owner, value in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.uploadError
+            .bind(with: self) { owner, value in
+                owner.view.makeToast(value)
+            }
+            .disposed(by: disposeBag)
+        
+        output.modifyStory
+            .compactMap { $0 }
+            .bind(with: self) { owner, value in
+                owner.titleTextField.text = value.title
+                if let content = value.content {
+                    owner.contentTextView.text = content
+                    owner.contentTextView.textColor = .black
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.navigationTitle
+            .bind(to: navigationItem.rx.title)
+            .disposed(by: disposeBag)
         
         navigationItem.leftBarButtonItem?.rx.tap
             .bind(with: self) { owner, value in
@@ -239,7 +267,7 @@ extension MakeStoryViewController {
             button.isClicked = false
         }
     }
-    
+  
 }
 
 extension MakeStoryViewController: PHPickerViewControllerDelegate {

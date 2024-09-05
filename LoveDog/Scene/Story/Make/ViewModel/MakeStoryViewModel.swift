@@ -9,12 +9,14 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+
 final class MakeStoryViewModel: BaseViewModel {
     private let disposeBag = DisposeBag()
     
+    var viewType: MakeViewType = .add
+    var modifyStory: Post?
     var imageList: [UIImage] = []
     var fileList: [String] = []
-    
     lazy var selectedImages = BehaviorRelay(value: imageList)
     lazy var fileNames = BehaviorRelay(value: fileList)
 
@@ -26,12 +28,17 @@ final class MakeStoryViewModel: BaseViewModel {
     }
     
     struct Output {
+        let uploadSuccess: PublishRelay<Void>
         let uploadError: PublishRelay<String>
+        let navigationTitle: BehaviorRelay<String>
+        let modifyStory: BehaviorRelay<Post?>
     }
     
     func transform(input: Input) -> Output {
-
+        let uploadSuccess = PublishRelay<Void>()
         let uploadError = PublishRelay<String>()
+        let navigationTitle = BehaviorRelay(value: viewType.title)
+        let modifyStory = BehaviorRelay<Post?>(value: modifyStory)
         
         //이미지
         let images = input.saveTap
@@ -85,17 +92,38 @@ final class MakeStoryViewModel: BaseViewModel {
                 switch value {
                 case .success(let value):
                     print(value)
+                    uploadSuccess.accept(())
                 case .failure(let error):
                     print(error)
+                    uploadError.accept(error.localizedDescription)
                 }
             }
             .disposed(by: disposeBag)
         
-        return Output(uploadError: uploadError)
+        return Output(
+            uploadSuccess: uploadSuccess,
+            uploadError: uploadError,
+            navigationTitle: navigationTitle, 
+            modifyStory: modifyStory
+        )
     }
 }
 
 extension MakeStoryViewModel {
+    enum MakeViewType {
+        case add
+        case edit
+        
+        var title: String {
+            switch self {
+            case .add:
+                return Constant.Navigation.makeStory
+            case .edit:
+                return Constant.Navigation.editStory
+            }
+        }
+    }
+    
     func createImageRequest(image: [UIImage], fileName: [String]) -> [String: Data] {
         var request: [String: Data] = [:]
         

@@ -148,6 +148,20 @@ final class PostManager {
         }
     }
     
+    //게시글 삭제
+    func deletePost(id: String)
+    -> Single<Result<Empty, APIError>> {
+        do {
+            let deletePostRequest = try PostRouter.deletePost(id: id).asURLRequest()
+            
+            return APIManager.shared.callRequestEmpty(request: deletePostRequest, interceptor: AuthInterceptor.shared)
+            
+        }catch {
+            print(#function, "DELETE POST FAILED")
+            return Single<Result<Empty, APIError>>.never()
+        }
+    }
+    
     //댓글 작성
     func uploadComments(id: String, request: UploadCommentsRequest)
     -> Single<Result<Comment, APIError>> {

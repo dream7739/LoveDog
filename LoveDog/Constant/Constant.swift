@@ -17,5 +17,6 @@ enum Constant {
         static let story = "스토리"
         static let profile = "프로필"
         static let makeStory = "스토리 작성"
+        static let editStory = "스토리 수정"
     }
 }

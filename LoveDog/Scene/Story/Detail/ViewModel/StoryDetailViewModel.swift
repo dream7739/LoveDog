@@ -19,6 +19,8 @@ final class StoryDetailViewModel: BaseViewModel {
     struct Input {
         let callRequest: BehaviorRelay<Void>
         let followButtonClicked: PublishRelay<Void>
+        let modifyButtonClicked: PublishRelay<Void>
+        let deleteButtonClicked: PublishRelay<Void>
         let likeButtonClicked: PublishRelay<Bool>
         let cheerButtonClicked: PublishRelay<Void>
         let cheerPaymentCompleted: PublishRelay<ValidationRequest>
@@ -30,6 +32,9 @@ final class StoryDetailViewModel: BaseViewModel {
         let sections: Observable<[DetailSectionModel]>
         let payment: PublishRelay<IamportPayment>
         let validationResult: PublishRelay<String>
+        let deleteSuccess: PublishRelay<Void>
+        let deleteFailed: PublishRelay<String>
+        let modifyViewModel: PublishRelay<MakeStoryViewModel>
     }
     
     func transform(input: Input) -> Output {
@@ -37,6 +42,9 @@ final class StoryDetailViewModel: BaseViewModel {
         let sections: Observable<[DetailSectionModel]>
         let payment = PublishRelay<IamportPayment>()
         let validationResult = PublishRelay<String>()
+        let deleteSuccess = PublishRelay<Void>()
+        let deleteFailed = PublishRelay<String>()
+        let modifyViewModel = PublishRelay<MakeStoryViewModel>()
 
         //네트워크 통신
         input.callRequest
@@ -140,7 +148,6 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        
         //팔로우 버튼 클릭
         input.followButtonClicked
              .withLatestFrom(postDetail)
@@ -156,6 +163,35 @@ final class StoryDetailViewModel: BaseViewModel {
                  }
              }
              .disposed(by: disposeBag)
+        
+        //게시글 삭제 버튼 클릭
+        input.deleteButtonClicked
+            .withLatestFrom(postDetail)
+            .flatMap { value in
+                PostManager.shared.deletePost(id: value.post_id)
+            }
+            .subscribe(with: self) { owner, result in
+                print("삭제 버튼 눌림")
+                switch result {
+                case .success(let value):
+                    print(value)
+                    deleteSuccess.accept(())
+                case .failure(let error):
+                    print(error)
+                    deleteFailed.accept(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.modifyButtonClicked
+            .withLatestFrom(postDetail)
+            .bind(with: self) { owner, value in
+                let viewModel = MakeStoryViewModel()
+                viewModel.modifyStory = value
+                viewModel.viewType = .edit
+                modifyViewModel.accept(viewModel)
+            }
+            .disposed(by: disposeBag)
 
         //게시글 - 프로필
         let profile = postDetail
@@ -245,7 +281,10 @@ final class StoryDetailViewModel: BaseViewModel {
         return Output(
             sections: sections,
             payment: payment,
-            validationResult: validationResult
+            validationResult: validationResult,
+            deleteSuccess: deleteSuccess,
+            deleteFailed: deleteFailed,
+            modifyViewModel: modifyViewModel
         )
     }
 }

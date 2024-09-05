@@ -150,6 +150,7 @@ final class StoryViewController: BaseViewController {
         writeButton.rx.tap
             .bind(with: self){ owner, value in
                 let viewModel = MakeStoryViewModel()
+                viewModel.viewType = .add
                 let makeVC = UINavigationController(rootViewController: MakeStoryViewController(viewModel: viewModel))
                 makeVC.modalPresentationStyle = .fullScreen
                 owner.present(makeVC, animated: true)

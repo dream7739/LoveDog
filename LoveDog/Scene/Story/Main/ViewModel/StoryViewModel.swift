@@ -46,7 +46,6 @@ final class StoryViewModel: BaseViewModel {
         let post = PublishRelay<[Post]>()
         
         input.viewWillAppearEvent
-            .throttle(.seconds(30), latest: false, scheduler: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 owner.selectedUser = ""
                 input.callProfile.accept(())

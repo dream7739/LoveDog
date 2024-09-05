@@ -33,7 +33,6 @@ final class ProfileViewModel: BaseViewModel {
         let section: Observable<[ProfileSectionModel]>
          
         input.viewWillAppearEvent
-            .throttle(.seconds(30), latest: false, scheduler: MainScheduler.instance)
             .debug("VIEWWILLAPPEAR")
             .subscribe(with: self) { owner, _ in
                 input.callProfile.accept(())

@@ -15,6 +15,7 @@ enum PostRouter {
     case fetchUserPost(id: String, param: FetchPostRequest)
     case fetchLikePost(param: FetchPostRequest)
     case uploadPost(param: UploadPostRequest)
+    case deletePost(id: String)
     case uploadPostImage
     case uploadComments(id: String, param: UploadCommentsRequest)
     case like(id: String, param: Like)
@@ -33,6 +34,8 @@ extension PostRouter: TargetType {
             return .get
         case .uploadPost, .uploadPostImage, .uploadComments, .like, .follow:
             return .post
+        case .deletePost:
+            return .delete
         }
     }
     
@@ -40,7 +43,7 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPostList, .uploadPost:
             return "posts"
-        case .fetchPost(let id):
+        case .fetchPost(let id), .deletePost(let id):
             return "posts/\(id)"
         case .uploadPostImage:
             return "posts/files"
@@ -61,7 +64,7 @@ extension PostRouter: TargetType {
     
     var header: [String : String] {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .fetchUserPost, .fetchLikePost, .uploadComments, .like, .follow:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .deletePost, .fetchUserPost, .fetchLikePost, .uploadComments, .like, .follow:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -93,14 +96,14 @@ extension PostRouter: TargetType {
                 URLQueryItem(name: "next", value: param.next),
                 URLQueryItem(name: "limit", value: param.limit)
             ]
-        case .fetchPost, .fetchPostImage, .uploadPost, .uploadPostImage, .uploadComments, .like, .follow:
+        case .fetchPost, .fetchPostImage, .uploadPost, .deletePost, .uploadPostImage, .uploadComments, .like, .follow:
             return nil
         }
     }
     
     var body: Data? {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPostImage, .fetchUserPost, .fetchLikePost, .follow:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .deletePost, .uploadPostImage, .fetchUserPost, .fetchLikePost, .follow:
             return nil
         case .uploadPost(let param):
             let encoder = JSONEncoder()

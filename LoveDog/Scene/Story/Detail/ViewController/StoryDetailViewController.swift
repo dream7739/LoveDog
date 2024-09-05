@@ -21,6 +21,8 @@ final class StoryDetailViewController: BaseViewController {
     private let wkWebView = WKWebView()
 
     private let followButtonClicked = PublishRelay<Void>()
+    private let deleteButtonClicked = PublishRelay<Void>()
+    private let modifyButtonClicked = PublishRelay<Void>()
     private let likeButtonClicked = PublishRelay<Bool>()
     private let cheerButtonClicked = PublishRelay<Void>()
     private let viewModel: StoryDetailViewModel
@@ -164,8 +166,10 @@ extension StoryDetailViewController {
     private func bind() {
         let input = StoryDetailViewModel.Input(
             callRequest: BehaviorRelay(value: ()),
-            followButtonClicked: followButtonClicked,
-            likeButtonClicked: likeButtonClicked, 
+            followButtonClicked: followButtonClicked, 
+            modifyButtonClicked: modifyButtonClicked,
+            deleteButtonClicked: deleteButtonClicked,
+            likeButtonClicked: likeButtonClicked,
             cheerButtonClicked: cheerButtonClicked,
             cheerPaymentCompleted: PublishRelay<ValidationRequest>(),
             commentText: commentView.inputTextView.rx.text.orEmpty,
@@ -201,6 +205,27 @@ extension StoryDetailViewController {
                 owner.view.makeToast(value)
             }
             .disposed(by: disposeBag)
+        
+        output.deleteFailed
+            .bind(with: self) { owner, value in
+                owner.view.makeToast(value)
+            }
+            .disposed(by: disposeBag)
+        
+        output.deleteSuccess
+            .bind(with: self) { owner, _ in
+                owner.view.makeToast("삭제되었습니다")
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.modifyViewModel
+            .bind(with: self) { owner, viewModel in
+                let makeVC = UINavigationController(rootViewController: MakeStoryViewController(viewModel: viewModel))
+                makeVC.modalPresentationStyle = .fullScreen
+                owner.present(makeVC, animated: true)
+            }
+            .disposed(by: disposeBag)
 
         commentView.inputTextView
             .rx.didChange
@@ -228,11 +253,28 @@ extension StoryDetailViewController {
             case .profile(let data):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as?  DetailProfileCollectionViewCell else { return UICollectionViewCell() }
                 cell.configureData(data)
+                
+                //팔로우 버튼
                 cell.profileView.followButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.followButtonClicked.accept(())
                     }
                     .disposed(by: cell.disposeBag)
+                
+                //수정 삭제 버튼
+                let edit = UIAction(title: "수정", image: nil) { [weak self] _ in
+                    self?.modifyButtonClicked.accept(())
+                }
+                
+                let delete = UIAction(title: "삭제", attributes: .destructive) { [weak self] _ in
+                    self?.deleteButtonClicked.accept(())
+                }
+                
+                cell.profileView.editButton.menu = UIMenu(title: "",
+                                     options: .displayInline,
+                                     children: [edit, delete])
+                cell.profileView.editButton.showsMenuAsPrimaryAction = true
+                
                 return cell
             case .image(let image):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailImageCollectionViewCell.identifier, for: indexPath) as? DetailImageCollectionViewCell else { return UICollectionViewCell() }

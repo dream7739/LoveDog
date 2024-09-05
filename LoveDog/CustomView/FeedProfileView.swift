@@ -12,9 +12,10 @@ final class FeedProfileView: BaseView {
     let profileImage = ProfileImageView()
     let nicknameLabel = UILabel()
     let followButton = UIButton()
-        
+    let editButton = UIButton()
+    
     override func configureHierarchy() {
-        [profileImage, nicknameLabel, followButton]
+        [profileImage, nicknameLabel, followButton, editButton]
             .forEach {
                 addSubview($0)
             }
@@ -39,6 +40,11 @@ final class FeedProfileView: BaseView {
             make.height.equalTo(30)
             make.centerY.equalTo(profileImage)
         }
+        
+        editButton.snp.makeConstraints { make in
+            make.trailing.equalTo(snp.trailing).offset(-10)
+            make.centerY.equalTo(profileImage)
+        }
     }
     
     override func configureView() {
@@ -50,5 +56,10 @@ final class FeedProfileView: BaseView {
         var container = AttributeContainer()
         container.font = Design.Font.secondary_bold
         followButton.configuration?.attributedTitle = AttributedString("팔로우", attributes: container)
+        
+        editButton.configuration = .plain()
+        editButton.configuration?.baseForegroundColor = .black
+        editButton.configuration?.image = UIImage(systemName: "ellipsis")
+
     }
 }

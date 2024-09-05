@@ -68,6 +68,8 @@ final class DetailCommentCollectionViewCell: BaseCollectionViewCell {
                     print("LOAD IMAGE ERROR \(error)")
                 }
                 .disposed(by: disposeBag)
+        } else {
+            profileImage.image = UIImage(resource: .profileEmpty)
         }
         
         nicknameLabel.text = data.creator.nick

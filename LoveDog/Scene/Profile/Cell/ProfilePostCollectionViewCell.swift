@@ -47,7 +47,7 @@ final class ProfilePostCollectionViewCell: BaseCollectionViewCell {
                     print("LOAD IMAGE ERROR \(error)")
                 }
                 .disposed(by: disposeBag)
-        }
+        }  
     }
     
 }

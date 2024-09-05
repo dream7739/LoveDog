@@ -50,9 +50,12 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
         
         if UserDefaultsManager.userId == data.user_id {
             profileView.followButton.isHidden = true
+            profileView.editButton.isHidden = false
         } else {
             profileView.followButton.isHidden = false
+            profileView.editButton.isHidden = true
         }
+        
     }
     
 }

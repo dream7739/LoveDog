@@ -35,6 +35,27 @@ final class APIManager {
         return result
     }
     
+    func callRequestEmpty (
+        request: URLRequest,
+        interceptor: RequestInterceptor
+    ) -> Single<Result<Empty, APIError>> {
+        let result = Single<Result<Empty, APIError>>.create { observer in
+            AF.request(request, interceptor: interceptor)
+                .responseDecodable(of: Empty.self, emptyResponseCodes: [200]) { response in
+                    let status = response.response?.statusCode ?? 0
+                    switch response.result {
+                    case .success(let value):
+                        observer(.success(.success(value)))
+                    case .failure(let error):
+                        print(error)
+                        observer(.success(.failure(APIError(statusCode: status))))
+                    }
+                }
+            return Disposables.create()
+        }
+        return result
+    }
+    
     func callRequest<T: Decodable>(
         request: URLRequest,
         response: T.Type
