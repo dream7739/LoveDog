@@ -14,7 +14,8 @@ final class OpenAPIManager {
     static let shared = OpenAPIManager()
     private init() { }
     
-    func fetchAbondonPublic(request: FetchAbandonRequest) -> Single<Result<FetchAbandonResponse, APIError>> {
+    func fetchAbondonPublic(request: FetchAbandonRequest) 
+    -> Single<Result<FetchAbandonResponse, APIError>> {
         let result = Single<Result<FetchAbandonResponse, APIError>>.create { observer in
             guard let url = URL(string: APIURL.abondonPublicURL) else {
                 observer(.success(.failure(.invalidURL)))
@@ -52,7 +53,8 @@ final class OpenAPIManager {
         return result
     }
     
-    func fetchAbondonPublicImage(_ urlString: String) -> Single<Result<Data, APIError>> {
+    func fetchAbondonPublicImage(_ urlString: String) 
+    -> Single<Result<Data, APIError>> {
         let result = Single<Result<Data, APIError>>.create { observer in
             
             guard let url = URL(string: urlString) else {

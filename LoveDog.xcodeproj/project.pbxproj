@@ -44,7 +44,7 @@
 		8833A2EC2C6CF844007DBE47 /* ButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */; };
 		88429CB62C816DF000C7A45F /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88429CB52C816DF000C7A45F /* APIManager.swift */; };
 		884881932C7C627500156411 /* UploadCommentsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881922C7C627500156411 /* UploadCommentsRequest.swift */; };
-		884881982C7C82C300156411 /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881972C7C82C300156411 /* Like.swift */; };
+		884881982C7C82C300156411 /* LikeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884881972C7C82C300156411 /* LikeResponse.swift */; };
 		884CB0CB2C74B76000B7E8CC /* StoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CA2C74B76000B7E8CC /* StoryDetailViewController.swift */; };
 		884CB0CD2C74B96600B7E8CC /* StoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CC2C74B96600B7E8CC /* StoryDetailViewModel.swift */; };
 		884CB0D02C74C25300B7E8CC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CB0CF2C74C25300B7E8CC /* Post.swift */; };
@@ -103,7 +103,6 @@
 		88FCDFC12C8096E000B5FA24 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC02C8096E000B5FA24 /* PaymentManager.swift */; };
 		88FCDFC32C8096E700B5FA24 /* PaymentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC22C8096E700B5FA24 /* PaymentRouter.swift */; };
 		88FCDFC52C80971300B5FA24 /* ValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC42C80971300B5FA24 /* ValidationRequest.swift */; };
-		88FCDFC72C8097A500B5FA24 /* ValidationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC62C8097A500B5FA24 /* ValidationError.swift */; };
 		88FCDFC92C80993800B5FA24 /* ValidationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FCDFC82C80993800B5FA24 /* ValidationResponse.swift */; };
 		88FCDFCC2C809B4900B5FA24 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 88FCDFCB2C809B4900B5FA24 /* Toast */; };
 /* End PBXBuildFile section */
@@ -145,7 +144,7 @@
 		8833A2EB2C6CF844007DBE47 /* ButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfiguration.swift; sourceTree = "<group>"; };
 		88429CB52C816DF000C7A45F /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		884881922C7C627500156411 /* UploadCommentsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCommentsRequest.swift; sourceTree = "<group>"; };
-		884881972C7C82C300156411 /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
+		884881972C7C82C300156411 /* LikeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeResponse.swift; sourceTree = "<group>"; };
 		884CB0CA2C74B76000B7E8CC /* StoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewController.swift; sourceTree = "<group>"; };
 		884CB0CC2C74B96600B7E8CC /* StoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailViewModel.swift; sourceTree = "<group>"; };
 		884CB0CF2C74C25300B7E8CC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -201,7 +200,6 @@
 		88FCDFC02C8096E000B5FA24 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
 		88FCDFC22C8096E700B5FA24 /* PaymentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentRouter.swift; sourceTree = "<group>"; };
 		88FCDFC42C80971300B5FA24 /* ValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationRequest.swift; sourceTree = "<group>"; };
-		88FCDFC62C8097A500B5FA24 /* ValidationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationError.swift; sourceTree = "<group>"; };
 		88FCDFC82C80993800B5FA24 /* ValidationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -481,7 +479,7 @@
 		884881962C7C82B500156411 /* Like */ = {
 			isa = PBXGroup;
 			children = (
-				884881972C7C82C300156411 /* Like.swift */,
+				884881972C7C82C300156411 /* LikeResponse.swift */,
 			);
 			path = Like;
 			sourceTree = "<group>";
@@ -813,7 +811,6 @@
 			isa = PBXGroup;
 			children = (
 				88FCDFC42C80971300B5FA24 /* ValidationRequest.swift */,
-				88FCDFC62C8097A500B5FA24 /* ValidationError.swift */,
 				88FCDFC82C80993800B5FA24 /* ValidationResponse.swift */,
 			);
 			path = Payment;
@@ -977,7 +974,6 @@
 				884CB0CD2C74B96600B7E8CC /* StoryDetailViewModel.swift in Sources */,
 				8833A2972C6CA6CD007DBE47 /* UIColor+.swift in Sources */,
 				8833A2B32C6CAB34007DBE47 /* SignInViewController.swift in Sources */,
-				88FCDFC72C8097A500B5FA24 /* ValidationError.swift in Sources */,
 				8851F1B82C71D4F100B7BD57 /* OptionButton.swift in Sources */,
 				8833A2AE2C6CA834007DBE47 /* BaseView.swift in Sources */,
 				88B3171B2C70849F0079E275 /* StoryImageCollectionViewCell.swift in Sources */,
@@ -991,7 +987,7 @@
 				884CB0D42C74C25C00B7E8CC /* Comment.swift in Sources */,
 				880E39EB2C6C9CED00C57C2C /* SceneDelegate.swift in Sources */,
 				8833A2CF2C6CD1E2007DBE47 /* LoginResponse.swift in Sources */,
-				884881982C7C82C300156411 /* Like.swift in Sources */,
+				884881982C7C82C300156411 /* LikeResponse.swift in Sources */,
 				88C1E5E92C7B65C400A13B92 /* DetailCommentCollectionViewCell.swift in Sources */,
 				881E09402C6F93E2003EDD78 /* MakeStoryViewController.swift in Sources */,
 				88C1E5EC2C7B6CB900A13B92 /* TitleHeaderView.swift in Sources */,

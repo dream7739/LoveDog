@@ -19,7 +19,7 @@ enum PostRouter {
     case deletePost(id: String)
     case uploadPostImage
     case uploadComments(id: String, param: UploadCommentsRequest)
-    case like(id: String, param: Like)
+    case like(id: String, param: LikeResponse)
     case follow(id: String)
     case unfollow(id: String)
 }

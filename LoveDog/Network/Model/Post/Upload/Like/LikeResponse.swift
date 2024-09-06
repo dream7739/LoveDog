@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct Like: Codable {
+struct LikeResponse: Codable {
     let like_status: Bool
 }

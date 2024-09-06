@@ -154,7 +154,10 @@ final class PostManager {
         do {
             let deletePostRequest = try PostRouter.deletePost(id: id).asURLRequest()
             
-            return APIManager.shared.callRequestEmpty(request: deletePostRequest, interceptor: AuthInterceptor.shared)
+            return APIManager.shared.callRequestEmpty(
+                request: deletePostRequest,
+                interceptor: AuthInterceptor.shared
+            )
             
         }catch {
             print(#function, "DELETE POST FAILED")
@@ -198,20 +201,20 @@ final class PostManager {
     }
     
     //좋아요
-    func uploadLike(id: String, request: Like)
-    -> Single<Result<Like, APIError>> {
+    func uploadLike(id: String, request: LikeResponse)
+    -> Single<Result<LikeResponse, APIError>> {
         do {
             let uploadLikeRequest = try PostRouter.like(id: id, param: request).asURLRequest()
             
             return APIManager.shared.callRequest(
                 request: uploadLikeRequest,
-                response: Like.self,
+                response: LikeResponse.self,
                 interceptor: AuthInterceptor.shared
             )
             
         }catch {
             print(#function, "UPLOAD LIKE FAILED")
-            return Single<Result<Like, APIError>>.never()
+            return Single<Result<LikeResponse, APIError>>.never()
         }
     }
     

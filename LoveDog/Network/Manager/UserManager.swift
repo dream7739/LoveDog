@@ -15,7 +15,8 @@ final class UserManager {
     private init() { }
     
     //로그인
-    func login(request: LoginRequest) -> Single<Result<LoginResponse, APIError>> {
+    func login(request: LoginRequest)
+    -> Single<Result<LoginResponse, APIError>> {
         do {
             let loginRequest = try UserRouter.login(param: request).asURLRequest()
             

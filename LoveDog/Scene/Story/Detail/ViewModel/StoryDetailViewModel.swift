@@ -80,7 +80,7 @@ final class StoryDetailViewModel: BaseViewModel {
                 return (id: self.postId, status: value.1)
             }
             .flatMap { value in
-                PostManager.shared.uploadLike(id: value.id, request: Like(like_status: value.status))
+                PostManager.shared.uploadLike(id: value.id, request: LikeResponse(like_status: value.status))
             }
             .debug("LIKE CLICK")
             .subscribe { result in
