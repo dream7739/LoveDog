@@ -47,14 +47,14 @@ final class MakeStoryViewModel: BaseViewModel {
             .map { _, value in
                 self.createImageRequest(image: value.0, fileName: value.1)
             }
-            .debug("IMAGE")
+            .debug("POST IMAGE")
         
         //컨텐츠
         let content = input.saveTap
             .withLatestFrom(
                 Observable.combineLatest(input.title, input.content, input.category)
             )
-            .debug("CONTENT")
+            .debug("POST CONTENT")
         
         //서버통신 - 이미지 업로드
         let postImage = images
@@ -86,6 +86,8 @@ final class MakeStoryViewModel: BaseViewModel {
                     files: value.images
                 )
             }
+            .share(replay: 1)
+            .debug("REQUEST")
         
         //게시글 작성
         request
@@ -126,9 +128,10 @@ final class MakeStoryViewModel: BaseViewModel {
             .flatMap { request, postId in
                 PostManager.shared.modifyPost(id: postId, param: request)
             }
+            .debug("POST MODIFY")
             .subscribe(with: self) { owner, result in
                 switch result {
-                case .success(let value):
+                case .success:
                     uploadSuccess.accept(())
                 case .failure(let error):
                     print(error)

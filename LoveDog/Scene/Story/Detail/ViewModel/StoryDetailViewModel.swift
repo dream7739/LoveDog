@@ -17,7 +17,8 @@ final class StoryDetailViewModel: BaseViewModel {
     private let disposeBag = DisposeBag()
     
     struct Input {
-        let callRequest: BehaviorRelay<Void>
+        let viewWillAppearEvent: Observable<Void>
+        let callRequest: PublishRelay<Void>
         let followButtonClicked: PublishRelay<Bool>
         let modifyButtonClicked: PublishRelay<Void>
         let deleteButtonClicked: PublishRelay<Void>
@@ -46,6 +47,13 @@ final class StoryDetailViewModel: BaseViewModel {
         let deleteFailed = PublishRelay<String>()
         let modifyViewModel = PublishRelay<MakeStoryViewModel>()
         let userProfile = PublishRelay<ProfileResponse>()
+        
+        input.viewWillAppearEvent
+            .debug("VIEWWILLAPPEAR")
+            .subscribe(with: self) { owner, _ in
+                input.callRequest.accept(())
+            }
+            .disposed(by: disposeBag)
         
         //네트워크 통신
         input.callRequest

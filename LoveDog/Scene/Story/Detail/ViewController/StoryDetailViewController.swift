@@ -165,8 +165,9 @@ extension StoryDetailViewController {
     
     private func bind() {
         let input = StoryDetailViewModel.Input(
-            callRequest: BehaviorRelay(value: ()),
-            followButtonClicked: followButtonClicked, 
+            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
+            callRequest: PublishRelay<Void>(),
+            followButtonClicked: followButtonClicked,
             modifyButtonClicked: modifyButtonClicked,
             deleteButtonClicked: deleteButtonClicked,
             likeButtonClicked: likeButtonClicked,

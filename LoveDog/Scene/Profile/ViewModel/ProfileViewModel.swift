@@ -99,7 +99,7 @@ final class ProfileViewModel: BaseViewModel {
         
         let mergePost = Observable.of(userPost, likePost)
             .merge()
-            .debug("MERGE TEST")
+            .debug("MERGE POST")
         
         section = Observable.combineLatest(profile, mergePost)
             .map { value in

@@ -199,6 +199,7 @@ extension MakeStoryViewController {
                 owner.createImages(value.files)
                 
                 owner.titleTextField.text = value.title
+                owner.titleTextField.sendActions(for: .valueChanged)
                 
                 if let content = value.content {
                     owner.contentTextView.text = content
