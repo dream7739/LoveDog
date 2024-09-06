@@ -20,7 +20,7 @@ final class StoryDetailViewController: BaseViewController {
     private let commentView = CommentView()
     private let wkWebView = WKWebView()
 
-    private let followButtonClicked = PublishRelay<Void>()
+    private let followButtonClicked = PublishRelay<Bool>()
     private let deleteButtonClicked = PublishRelay<Void>()
     private let modifyButtonClicked = PublishRelay<Void>()
     private let likeButtonClicked = PublishRelay<Bool>()
@@ -189,10 +189,11 @@ extension StoryDetailViewController {
                 print(payment)
                 owner.wkWebView.isHidden = false
 
-                Iamport.shared.paymentWebView(webViewMode: owner.wkWebView, userCode: APIKey.paymentUserCode, payment: payment) { response in
+                Iamport.shared.paymentWebView(webViewMode: owner.wkWebView,
+                                              userCode: APIKey.paymentUserCode,
+                                              payment: payment) { response in
                     guard let response, let impId = response.imp_uid else { return }
                     let validationRequest = ValidationRequest(impUid: impId, postId: owner.viewModel.postId)
-                    print("VALIDATION REQUEST", validationRequest)
                     input.cheerPaymentCompleted.accept(validationRequest)
                     
                 }
@@ -257,15 +258,17 @@ extension StoryDetailViewController {
                 //팔로우 버튼
                 cell.profileView.followButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.followButtonClicked.accept(())
+                        cell.isFollowed = !isFollowed
+                        owner.followButtonClicked.accept(!isFollowed)
                     }
                     .disposed(by: cell.disposeBag)
                 
-                //수정 삭제 버튼
+                //수정 버튼
                 let edit = UIAction(title: "수정", image: nil) { [weak self] _ in
                     self?.modifyButtonClicked.accept(())
                 }
                 
+                //삭제 버튼
                 let delete = UIAction(title: "삭제", attributes: .destructive) { [weak self] _ in
                     self?.deleteButtonClicked.accept(())
                 }

@@ -228,7 +228,24 @@ final class PostManager {
             )
             
         }catch {
-            print(#function, "UPLOAD LIKE FAILED")
+            print(#function, "UPLOAD FOLLOW FAILED")
+            return Single<Result<FollowResponse, APIError>>.never()
+        }
+    }
+    
+    //언팔로우
+    func deleteFollow(id: String)
+    -> Single<Result<FollowResponse, APIError>> {
+        do {
+            let deleteFollowReqeust = try PostRouter.unfollow(id: id).asURLRequest()
+            
+            return APIManager.shared.callRequest(
+                request: deleteFollowReqeust,
+                response: FollowResponse.self,
+                interceptor: AuthInterceptor.shared
+            )
+        }catch {
+            print(#function, "DELETE FOLLOW FAILED")
             return Single<Result<FollowResponse, APIError>>.never()
         }
     }

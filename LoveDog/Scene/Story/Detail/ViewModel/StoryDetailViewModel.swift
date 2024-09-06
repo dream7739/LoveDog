@@ -18,7 +18,7 @@ final class StoryDetailViewModel: BaseViewModel {
     
     struct Input {
         let callRequest: BehaviorRelay<Void>
-        let followButtonClicked: PublishRelay<Void>
+        let followButtonClicked: PublishRelay<Bool>
         let modifyButtonClicked: PublishRelay<Void>
         let deleteButtonClicked: PublishRelay<Void>
         let likeButtonClicked: PublishRelay<Bool>
@@ -46,7 +46,7 @@ final class StoryDetailViewModel: BaseViewModel {
         let deleteFailed = PublishRelay<String>()
         let modifyViewModel = PublishRelay<MakeStoryViewModel>()
         let userProfile = PublishRelay<ProfileResponse>()
-
+        
         //네트워크 통신
         input.callRequest
             .withUnretained(self)
@@ -91,9 +91,9 @@ final class StoryDetailViewModel: BaseViewModel {
             .withLatestFrom(postDetail)
             .map { value in
                 let payment = IamportPayment(
-                       pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
-                       merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))",
-                       amount: "\(value.price ?? 0)")
+                    pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
+                    merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))",
+                    amount: "\(value.price ?? 0)")
                 payment.pay_method = PayMethod.card.rawValue
                 payment.name = value.title
                 payment.buyer_name = "홍정민"
@@ -125,9 +125,9 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        //댓글 전송 버튼 클릭
+        //댓글 버튼 클릭
         input.uploadComment
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
             .withLatestFrom(input.commentText)
             .filter { value in
                 !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -149,21 +149,49 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        //팔로우 버튼 클릭
-        input.followButtonClicked
-             .withLatestFrom(postDetail)
-             .flatMap { value in
-                 PostManager.shared.uploadFollow(id: value.creator.user_id)
-             }
-             .subscribe(with: self) { owner, result in
-                 switch result {
-                 case .success(let value):
-                     print(value)
-                 case .failure(let error):
-                     print(error)
-                 }
-             }
-             .disposed(by: disposeBag)
+        //팔로우 버튼 클릭 - 팔로잉
+        let follow = input.followButtonClicked
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .filter { $0 }
+        
+        //팔로우 버튼 클릭 - 언팔로잉
+        let unfollow = input.followButtonClicked
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
+            .filter { !$0 }
+        
+        //팔로잉 서버통신
+        follow
+            .withLatestFrom(postDetail)
+            .flatMap { value in
+                PostManager.shared.uploadFollow(id: value.creator.user_id)
+            }
+            .debug("FOLLOW")
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    input.callRequest.accept(())
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        //언팔로잉 서버통신
+        unfollow
+            .withLatestFrom(postDetail)
+            .flatMap { value in
+                PostManager.shared.deleteFollow(id: value.creator.user_id)
+            }
+            .debug("UNFOLLOW")
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    input.callRequest.accept(())
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
         
         //게시글 삭제 버튼 클릭
         input.deleteButtonClicked
@@ -183,6 +211,7 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        //게시글 수정 버튼 클릭
         input.modifyButtonClicked
             .withLatestFrom(postDetail)
             .bind(with: self) { owner, value in
@@ -192,14 +221,15 @@ final class StoryDetailViewModel: BaseViewModel {
                 modifyViewModel.accept(viewModel)
             }
             .disposed(by: disposeBag)
-
-        //게시글이 나의 포스트
+        
+        //나의 포스트일 경우
         let myPost = postDetail
             .filter { $0.creator.user_id == UserDefaultsManager.userId }
             .map { ($0.creator, false) }
             .debug("MY POST")
         
-        //게시글이 다른사람의 포스트
+        //다른사람의 포스트일 경우
+        //팔로잉 관계를 파악하기 위해 유저 프로필 조회
         postDetail
             .filter { $0.creator.user_id != UserDefaultsManager.userId }
             .flatMap { value in
@@ -215,7 +245,7 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        //유저 프로필 조회한 결과값이 있다면
+        //다른 사람 포스트일 경우
         let otherPost = Observable.zip(postDetail, userProfile)
             .map { value in
                 let creator = value.0.creator
@@ -224,7 +254,7 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .debug("OHTER POST")
         
-        //팔로우되어있는 상태인지 식별
+        // 프로필 섹션
         let profile = Observable.merge(myPost, otherPost)
             .map { value in
                 DetailSectionModel.profile(
@@ -232,8 +262,8 @@ final class StoryDetailViewModel: BaseViewModel {
                 )
             }
             .debug("PROFILE")
-    
-        //게시글 - 이미지
+        
+        //이미지 섹션
         let image = postDetail
             .map { $0.files }
             .map { value in
@@ -268,7 +298,8 @@ final class StoryDetailViewModel: BaseViewModel {
         let isLiked = postDetail
             .map { $0.likes.contains(UserDefaultsManager.userId) }
         
-        //게시글 - 좋아요 댓글
+        //좋아요 섹션
+        //- 좋아요 여부, 좋아요 수, 댓글 수, 응원 수
         let like = Observable.zip(isLiked, likeCount, commentCount, cheerCount)
             .map { ($0, "\($1)", "\($2)", "\($3)") }
             .map {
@@ -278,7 +309,8 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .debug("LIKE")
         
-        //게시글 - 제목, 내용
+        //게시글 섹션
+        //- 제목, 내용
         let content = postDetail
             .map { ($0.title, $0.content) }
             .map {
@@ -288,7 +320,7 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .debug("CONTENT")
         
-        //게시글 - 댓글
+        //댓글 섹션
         let comment = postDetail
             .map { $0.comments }
             .map { value in
@@ -301,14 +333,14 @@ final class StoryDetailViewModel: BaseViewModel {
             }
         
         //전체 섹션
-       sections = Observable.zip(profile, image, like, content, comment)
+        sections = Observable.zip(profile, image, like, content, comment)
             .map { value in
                 let section = [value.0, value.1, value.2, value.3, value.4]
                 return section
             }
             .debug("SECTION")
         
- 
+        
         return Output(
             sections: sections,
             payment: payment,

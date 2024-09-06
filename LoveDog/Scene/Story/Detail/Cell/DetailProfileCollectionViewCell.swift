@@ -15,6 +15,12 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
     
     var disposeBag = DisposeBag()
     
+    var isFollowed: Bool = false {
+        didSet {
+            setFollowStatus(isFollowed)
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -70,14 +76,14 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
          - "팔로잉"
          */
         
+        setFollowStatus(isFollowed)
+    }
+    
+    private func setFollowStatus(_ isFollowed: Bool) {
         var container = AttributeContainer()
         container.font = Design.Font.secondary_bold
-        if isFollowed {
-            profileView.followButton.configuration?.attributedTitle = AttributedString("언팔로우", attributes: container)
-        } else {
-            profileView.followButton.configuration?.attributedTitle = AttributedString("팔로우", attributes: container)
-        }
-        
+        let followStatus = isFollowed ? "언팔로우" : "팔로우"
+        profileView.followButton.configuration?.attributedTitle = AttributedString(followStatus, attributes: container)
     }
     
 }
