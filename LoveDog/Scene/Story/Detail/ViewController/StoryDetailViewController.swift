@@ -250,9 +250,9 @@ extension StoryDetailViewController {
     private func configureDataSource() -> RxCollectionViewSectionedReloadDataSource<DetailSectionModel> {
         return RxCollectionViewSectionedReloadDataSource(configureCell:  { dataSource, collectionView, indexPath, _ in
             switch dataSource[indexPath] {
-            case .profile(let data):
+            case .profile(let data, let isFollowed):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailProfileCollectionViewCell.identifier, for: indexPath) as?  DetailProfileCollectionViewCell else { return UICollectionViewCell() }
-                cell.configureData(data)
+                cell.configureData(data, isFollowed)
                 
                 //팔로우 버튼
                 cell.profileView.followButton.rx.tap
@@ -367,7 +367,7 @@ enum DetailSectionModel: SectionModelType {
 
 enum SectionItem {
     //섹션에 들어갈 아이템 단건
-    case profile(data: Creator)
+    case profile(data: Creator, isFollowed: Bool)
     case image(image: String)
     case like(isLiked: Bool, likeCount: String, commentCount: String, cheerCount: String)
     case content(title: String, content: String)

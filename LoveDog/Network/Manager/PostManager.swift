@@ -162,6 +162,22 @@ final class PostManager {
         }
     }
     
+    //게시글 수정
+    func modifyPost(id: String, param: UploadPostRequest)
+    -> Single<Result<Post, APIError>> {
+        do {
+            let modifyPostRequest = try PostRouter.modifyPost(id: id, param: param).asURLRequest()
+            
+            return APIManager.shared.callRequest(request: modifyPostRequest,
+                                                 response: Post.self,
+                                                 interceptor: AuthInterceptor.shared)
+            
+        }catch {
+            print(#function, "MODIFY POST FAILED")
+            return Single<Result<Post, APIError>>.never()
+        }
+    }
+    
     //댓글 작성
     func uploadComments(id: String, request: UploadCommentsRequest)
     -> Single<Result<Comment, APIError>> {

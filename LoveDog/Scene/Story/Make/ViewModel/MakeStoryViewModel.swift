@@ -51,10 +51,12 @@ final class MakeStoryViewModel: BaseViewModel {
         
         //컨텐츠
         let content = input.saveTap
-            .withLatestFrom(Observable.combineLatest(input.title, input.content, input.category))
+            .withLatestFrom(
+                Observable.combineLatest(input.title, input.content, input.category)
+            )
             .debug("CONTENT")
         
-        //업로드 이미지
+        //서버통신 - 이미지 업로드
         let postImage = images
             .filter { !$0.isEmpty }
             .flatMap { value in
@@ -67,8 +69,7 @@ final class MakeStoryViewModel: BaseViewModel {
             }
             .debug("IMAGE UPLOAD")
         
-        //업로드 포스트(제목, 내용, 카테고리)
-        Observable.zip(postImage, content)
+        let request = Observable.zip(postImage, content)
             .map { value in
                 return (
                     images: value.0,
@@ -84,7 +85,18 @@ final class MakeStoryViewModel: BaseViewModel {
                     content1: value.category,
                     files: value.images
                 )
-            }.flatMap { value in
+            }
+        
+        //게시글 작성
+        request
+            .withUnretained(self)
+            .filter { _ in
+                self.viewType == .add
+            }
+            .map { value in
+                return value.1
+            }
+            .flatMap { value in
                 PostManager.shared.uploadPost(request: value)
             }
             .debug("POST UPLOAD")
@@ -100,6 +112,31 @@ final class MakeStoryViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        //게시글 수정
+        let modifyRequest = request
+            .withUnretained(self)
+            .filter { _ in
+                self.viewType == .edit
+            }.map {
+                $1
+            }
+        
+        Observable.combineLatest(modifyRequest,
+                                 modifyStory.compactMap { $0 }.map { $0.post_id } )
+            .flatMap { request, postId in
+                PostManager.shared.modifyPost(id: postId, param: request)
+            }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    uploadSuccess.accept(())
+                case .failure(let error):
+                    print(error)
+                    uploadError.accept(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposeBag)
+          
         return Output(
             uploadSuccess: uploadSuccess,
             uploadError: uploadError,

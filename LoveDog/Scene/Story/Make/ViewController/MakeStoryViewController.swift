@@ -145,12 +145,11 @@ final class MakeStoryViewController: BaseViewController {
         categoryStackView.axis = .horizontal
         categoryStackView.spacing = 8
         categoryStackView.distribution = .fillEqually
+        
         for (idx, button) in categoryButtonList.enumerated() {
             button.tag = idx
-            if idx == 0 {
-                button.isClicked = true
-            }
         }
+        categoryButtonList[0].isClicked = true
         
         contentLabel.text = "내용"
         contentLabel.font = Design.Font.tertiary_bold
@@ -172,7 +171,7 @@ final class MakeStoryViewController: BaseViewController {
 }
 
 extension MakeStoryViewController {
-    private func bind(){
+    private func bind() {
         let input = MakeStoryViewModel.Input(
             saveTap: navigationItem.rightBarButtonItem!.rx.tap,
             title: titleTextField.rx.text.orEmpty,
@@ -197,14 +196,20 @@ extension MakeStoryViewController {
         output.modifyStory
             .compactMap { $0 }
             .bind(with: self) { owner, value in
+                owner.createImages(value.files)
+                
                 owner.titleTextField.text = value.title
+                
                 if let content = value.content {
                     owner.contentTextView.text = content
                     owner.contentTextView.textColor = .black
                 }
-                //이미지
-                owner.createImages(value.files)
                 
+                let category = MakeCategory(rawValue: value.content1) ?? .daily
+                let index = category.index
+                owner.categoryButtonList[index].isClicked = true
+                owner.deselectOptionButtons(index)
+                input.category.accept(category.rawValue)
             }
             .disposed(by: disposeBag)
         
@@ -242,7 +247,6 @@ extension MakeStoryViewController {
             }
             .disposed(by: disposeBag)
         
-        
         categoryButtonList.forEach { button in
             button.rx.tap
                 .bind(with: self) { owner, value in
@@ -261,6 +265,19 @@ extension MakeStoryViewController {
         case report = "신고/제보"
         case daily = "일상"
         case promotion = "입양홍보"
+        
+        var index: Int {
+            switch self {
+            case .review:
+                return 0
+            case .report:
+                return 1
+            case .daily:
+                return 2
+            case .promotion:
+                return 3
+            }
+        }
     }
     
     private func deselectOptionButtons(_ selectedIndex: Int) {
@@ -306,6 +323,10 @@ extension MakeStoryViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
+        
+        if results.isEmpty {
+            return
+        }
         
         var imageList: [UIImage] = []
         var fileList: [String] = []

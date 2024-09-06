@@ -45,6 +45,7 @@ final class StoryDetailViewModel: BaseViewModel {
         let deleteSuccess = PublishRelay<Void>()
         let deleteFailed = PublishRelay<String>()
         let modifyViewModel = PublishRelay<MakeStoryViewModel>()
+        let userProfile = PublishRelay<ProfileResponse>()
 
         //네트워크 통신
         input.callRequest
@@ -171,7 +172,6 @@ final class StoryDetailViewModel: BaseViewModel {
                 PostManager.shared.deletePost(id: value.post_id)
             }
             .subscribe(with: self) { owner, result in
-                print("삭제 버튼 눌림")
                 switch result {
                 case .success(let value):
                     print(value)
@@ -193,11 +193,42 @@ final class StoryDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
 
-        //게시글 - 프로필
-        let profile = postDetail
-            .map {
+        //게시글이 나의 포스트
+        let myPost = postDetail
+            .filter { $0.creator.user_id == UserDefaultsManager.userId }
+            .map { ($0.creator, false) }
+            .debug("MY POST")
+        
+        //게시글이 다른사람의 포스트
+        postDetail
+            .filter { $0.creator.user_id != UserDefaultsManager.userId }
+            .flatMap { value in
+                UserManager.shared.profile()
+            }
+            .subscribe(with: self) { owner, result in
+                switch result {
+                case .success(let value):
+                    userProfile.accept(value)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        //유저 프로필 조회한 결과값이 있다면
+        let otherPost = Observable.zip(postDetail, userProfile)
+            .map { value in
+                let creator = value.0.creator
+                let isFollowed = value.1.following.filter { $0.userId == value.0.creator.user_id }.count > 0
+                return (creator, isFollowed)
+            }
+            .debug("OHTER POST")
+        
+        //팔로우되어있는 상태인지 식별
+        let profile = Observable.merge(myPost, otherPost)
+            .map { value in
                 DetailSectionModel.profile(
-                    items: [.profile(data: $0.creator)]
+                    items: [.profile(data: value.0, isFollowed: value.1)]
                 )
             }
             .debug("PROFILE")

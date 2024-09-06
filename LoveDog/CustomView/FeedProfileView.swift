@@ -53,9 +53,6 @@ final class FeedProfileView: BaseView {
         nicknameLabel.font = Design.Font.tertiary_bold
         
         followButton.configuration = ButtonConfiguration.basic
-        var container = AttributeContainer()
-        container.font = Design.Font.secondary_bold
-        followButton.configuration?.attributedTitle = AttributedString("팔로우", attributes: container)
         
         editButton.configuration = .plain()
         editButton.configuration?.baseForegroundColor = .black

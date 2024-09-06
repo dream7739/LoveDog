@@ -15,6 +15,7 @@ enum PostRouter {
     case fetchUserPost(id: String, param: FetchPostRequest)
     case fetchLikePost(param: FetchPostRequest)
     case uploadPost(param: UploadPostRequest)
+    case modifyPost(id: String, param: UploadPostRequest)
     case deletePost(id: String)
     case uploadPostImage
     case uploadComments(id: String, param: UploadCommentsRequest)
@@ -36,6 +37,8 @@ extension PostRouter: TargetType {
             return .post
         case .deletePost:
             return .delete
+        case .modifyPost:
+            return .put
         }
     }
     
@@ -59,12 +62,14 @@ extension PostRouter: TargetType {
             return "posts/\(id)/like"
         case .follow(let id):
             return "follow/\(id)"
+        case .modifyPost(let id, _):
+            return "posts/\(id)"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .deletePost, .fetchUserPost, .fetchLikePost, .uploadComments, .like, .follow:
+        case .fetchPostList, .fetchPost, .fetchPostImage, .uploadPost, .deletePost, .fetchUserPost, .fetchLikePost, .uploadComments, .like, .follow, .modifyPost:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.token,
                 HeaderKey.contentType.rawValue : HeaderValue.json.rawValue,
@@ -96,7 +101,8 @@ extension PostRouter: TargetType {
                 URLQueryItem(name: "next", value: param.next),
                 URLQueryItem(name: "limit", value: param.limit)
             ]
-        case .fetchPost, .fetchPostImage, .uploadPost, .deletePost, .uploadPostImage, .uploadComments, .like, .follow:
+        case .fetchPost, .fetchPostImage, .uploadPost, .deletePost, 
+                .uploadPostImage, .uploadComments, .like, .follow, .modifyPost:
             return nil
         }
     }
@@ -112,6 +118,9 @@ extension PostRouter: TargetType {
             let encoder = JSONEncoder()
             return try? encoder.encode(param)
         case .like(_, let param):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(param)
+        case .modifyPost(_, let param):
             let encoder = JSONEncoder()
             return try? encoder.encode(param)
         }

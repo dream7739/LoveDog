@@ -32,7 +32,8 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
-    func configureData(_ data: Creator) {
+    func configureData(_ data: Creator, _ isFollowed: Bool) {
+        //작성자 프로필 - 이미지
         if let path = data.profileImage {
             let urlString = APIURL.sesacBaseURL + "/\(path)"
             
@@ -46,14 +47,35 @@ final class DetailProfileCollectionViewCell: BaseCollectionViewCell {
                 .disposed(by: disposeBag)
         }
         
+        //작성자 프로필 - 닉네임
         profileView.nicknameLabel.text = data.nick
-        
+    
+        /* 작성자가 유저 본인일 경우
+         - 팔로잉 버튼 숨기기, 수정&삭제 버튼 표시
+         * 작성자가 다른 사람일 경우
+         - 팔로잉 버튼 표시, 수정&삭제 버튼 숨기기
+         */
         if UserDefaultsManager.userId == data.user_id {
             profileView.followButton.isHidden = true
             profileView.editButton.isHidden = false
         } else {
             profileView.followButton.isHidden = false
             profileView.editButton.isHidden = true
+        }
+        
+        /*
+         이미 팔로우된 경우
+         - "팔로잉 취소" 출력
+         팔로우가 아닌 경우
+         - "팔로잉"
+         */
+        
+        var container = AttributeContainer()
+        container.font = Design.Font.secondary_bold
+        if isFollowed {
+            profileView.followButton.configuration?.attributedTitle = AttributedString("언팔로우", attributes: container)
+        } else {
+            profileView.followButton.configuration?.attributedTitle = AttributedString("팔로우", attributes: container)
         }
         
     }
