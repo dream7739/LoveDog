@@ -23,10 +23,11 @@ final class ImageCacheManager {
     static let shared = ImageCacheManager()
     private let cache: NSCache<NSString, Cachable>
     private let disposeBag = DisposeBag()
+    private let maxDiskLimit = 1024 * 1024 * 50
     
     private init() {
         cache = NSCache<NSString, Cachable>()
-        cache.totalCostLimit = 1024 * 1024 * 50 //50MB 제한
+        cache.totalCostLimit = 1024 * 1024 * 50
     }
     
     //Etag 지원하지 않는 OpenAPI
@@ -36,16 +37,14 @@ final class ImageCacheManager {
         }
         
         if let cachedImage = cachedImage(url: url) {
-            print("OPENAPI - 캐시에 이미지 존재")
             return Observable.just(cachedImage.imageData)
         }
         
         if let diskImage = cachedDiskImage(url: url) {
-            print("OPENAPI - 디스크에 이미지 존재")
+            cachingImage(url: url, cachable: diskImage)
             return Observable.just(diskImage.imageData)
         }
         
-        print("OPENAPI - 서버에서 이미지 가져옴")
         let serverImage = callFetchAbaondonImage(urlString: urlString)
         return serverImage
     }
@@ -58,16 +57,14 @@ final class ImageCacheManager {
         }
         
         if let image = cachedImage(url: url) {
-            print("LSLP - CACHE에 이미지 존재")
             return Observable.just(image.imageData)
         }
         
         if let diskImage = cachedDiskImage(url: url) {
-            print("LSLP - DISK에 이미지 존재")
+            cachingImage(url: url, cachable: diskImage)
             return callFetchPostImageWithEtag(path: path, cachable: diskImage)
         }
         
-        print("LSLP - 서버에서 이미지 가져옴")
         let serverImage = callFetchPostImage(path: path)
         return serverImage
     }
@@ -87,25 +84,84 @@ final class ImageCacheManager {
     func cachingDiskImage(url: URL, cachable: Cachable) {
         guard let fileURL = createFilePath(url: url) else { return }
         
+        let imageCount = cachable.imageData.count
+        let requireDiskCount = imageCount + countCurrentDiskSize()
+        
+        if maxDiskLimit < requireDiskCount {
+            deleteDiskImage(imageCount)
+        }
+        
         do {
             try cachable.imageData.write(to: fileURL)
             UserDefaultsManager.etag[fileURL.lastPathComponent] = cachable.eTag
         } catch {
             print("FILE SAVE ERROR")
         }
-        return
     }
     
     private func cachedDiskImage(url: URL) -> Cachable? {
         guard let fileURL = createFilePath(url: url) else { return nil }
         
+        print(fileURL)
         if FileManager.default.fileExists(atPath: fileURL.path) {
             guard let data = try? Data(contentsOf: fileURL) else { return nil }
             let cachable = Cachable(imageData: data, eTag: UserDefaultsManager.etag[fileURL.lastPathComponent])
-            cachingImage(url: url, cachable: cachable)
             return cachable
         } else {
             return nil
+        }
+    }
+    
+    private func countCurrentDiskSize() -> Int {
+        var count = 0
+        
+        do {
+            let manager = FileManager.default
+            let documentDirUrl = try manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            if manager.changeCurrentDirectoryPath(documentDirUrl.path) {
+                for file in try manager.contentsOfDirectory(atPath: ".") {
+                    let fileCount = try manager.attributesOfItem(atPath: file)[FileAttributeKey.size] as? Int ?? 0
+                    count += fileCount
+                }
+            }
+        }
+        catch {
+            print("COUNT CURRENT DISK SIZE ERROR: \(error)")
+        }
+        
+        return count
+    }
+    
+    private func deleteDiskImage(_ size: Int) {
+        let maximumDays = 1.0
+        let minimumDate = Date().addingTimeInterval(-maximumDays * 24 * 60 * 60)
+        func meetsRequirement(date: Date) -> Bool { return date < minimumDate }
+        
+        do {
+            let manager = FileManager.default
+            let documentDirUrl = try manager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            if manager.changeCurrentDirectoryPath(documentDirUrl.path) {
+                for file in try manager.contentsOfDirectory(atPath: ".") {
+                    let creationDate = try manager.attributesOfItem(atPath: file)[FileAttributeKey.creationDate] as? Date ?? Date()
+                    if meetsRequirement(date: creationDate) {
+                        try manager.removeItem(atPath: file)
+                        UserDefaultsManager.etag.removeValue(forKey: file)
+                    }
+                }
+                
+                if maxDiskLimit < countCurrentDiskSize() + size {
+                    for file in try manager.contentsOfDirectory(atPath: ".") {
+                        if(maxDiskLimit > countCurrentDiskSize() + size) {
+                            break
+                        }
+                        try manager.removeItem(atPath: file)
+                        UserDefaultsManager.etag.removeValue(forKey: file)
+                    }
+                }
+            }
+        }
+        catch {
+            print("DELETE DISK IMAGE ERROR: \(error)")
         }
     }
     
@@ -116,7 +172,6 @@ final class ImageCacheManager {
         
         var fileURL = URL(fileURLWithPath: directoryPath)
         fileURL.appendPathComponent(url.lastPathComponent)
-        print("FILEURL \(fileURL)")
         return fileURL
     }
     
@@ -153,7 +208,6 @@ extension ImageCacheManager {
                         observer.onCompleted()
                     case .failure(let error):
                         if error.self == .existImage {
-                            print(error.localizedDescription)
                             observer.onNext(cachable.imageData)
                             observer.onCompleted()
                         }

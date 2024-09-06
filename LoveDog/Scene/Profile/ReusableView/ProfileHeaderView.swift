@@ -60,7 +60,7 @@ final class ProfileHeaderView: UICollectionReusableView {
         profileImage.snp.makeConstraints { make in
             make.leading.equalTo(safeAreaLayoutGuide).inset(15)
             make.top.equalTo(safeAreaLayoutGuide).inset(15)
-            make.size.equalTo(70)
+            make.size.equalTo(90)
         }
         
         infoStackView.snp.makeConstraints { make in
@@ -72,10 +72,11 @@ final class ProfileHeaderView: UICollectionReusableView {
         nicknameLabel.snp.makeConstraints { make in
             make.top.equalTo(profileImage.snp.bottom).offset(10)
             make.leading.equalTo(profileImage)
+            make.trailing.equalTo(safeAreaInsets).inset(15)
         }
         
         contentStackView.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(4)
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
         

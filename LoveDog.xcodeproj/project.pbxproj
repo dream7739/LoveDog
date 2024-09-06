@@ -249,6 +249,7 @@
 		880E39E72C6C9CED00C57C2C /* LoveDog */ = {
 			isa = PBXGroup;
 			children = (
+				887421582C8B3497005FADB6 /* Application */,
 				88761C0D2C76256300D2FCC8 /* Scene */,
 				8833A2922C6CA3F8007DBE47 /* Constant */,
 				8874A18E2C6E123A00299265 /* Utill */,
@@ -258,8 +259,6 @@
 				8833A2902C6CA3EC007DBE47 /* Network */,
 				8833A28F2C6CA3E8007DBE47 /* Extension */,
 				8833A2892C6CA31E007DBE47 /* Protocol */,
-				880E39E82C6C9CED00C57C2C /* AppDelegate.swift */,
-				880E39EA2C6C9CED00C57C2C /* SceneDelegate.swift */,
 				880E39F12C6C9CEE00C57C2C /* Assets.xcassets */,
 				880E39F32C6C9CEE00C57C2C /* LaunchScreen.storyboard */,
 				8833A2BC2C6CC4FB007DBE47 /* APIKey.swift */,
@@ -520,6 +519,15 @@
 				8851F1C52C72122F00B7BD57 /* UploadPostImageResponse.swift */,
 			);
 			path = Image;
+			sourceTree = "<group>";
+		};
+		887421582C8B3497005FADB6 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				880E39E82C6C9CED00C57C2C /* AppDelegate.swift */,
+				880E39EA2C6C9CED00C57C2C /* SceneDelegate.swift */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 		8874A17B2C6DC45400299265 /* Login */ = {
