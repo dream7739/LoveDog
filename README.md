@@ -11,7 +11,7 @@
 - 버전: iOS 16+
 
 ## 기술 스택
-- UIKit, MapKit, RxSwift, MVVM, Alamofire, SnapKit
+- UIKit, SnapKit, KeyboardLayoutGuide, MapKit, RxSwift, RxDatasource, MVVM+Input/Output, Alamofire+Router, PortOne
 
 ## 핵심 기능
 - 공공API를 사용한 보호중인 유기견 소개
@@ -20,10 +20,16 @@
 - 작성 및 좋아요한 글 확인
   
 ## 주요 기술
-- Router 패턴을 사용한 네트워크 추상화
-- 메모리 캐시와 디스크 캐시를 사용한 이미지 캐싱
-- ETag를 사용한 캐싱된 이미지의 유효성 검사
-- keyboardLayoutGuide를 이용한 키보드 대응
+- enum을 사용한 Router 패턴을 구현하여 네트워크 요청 추상화 및 엔드포인트별 관리 효율성 향상
+- 메모리 캐시와 디스크 캐시를 구현하여 이미지 캐싱 및 ETag를 통한 이미지 유효성 검증
+- RxSwift의 Single과 ResultType을 조합하여 네트워크 통신 구현. 네트워크 요청 실패 시 구독이 끊기지 않도록 실패 케이스 대응
+- 스토리 조회 시 커서 기반 페이지네이션 적용 및 게시글 Prefetch 적용하여 응답성 향상
+- 스토리 사진 등록 시 Multipart-Form 데이터 형식으로 서버 업로드 기능 구현
+- PortOne을 통한 결제(응원하기)기능 구현 및 영수증 검증 API 통신을 통해 유효성 검증
+- keyboardLayoutGuide를 통한 키보드 대응 및 라이브러리 의존성 제거
+- Alamofire RequestInterceptor를 통한 JWT 토큰 갱신 및 사용자 인증 기능 구현
+- enum을 사용한 네트워크 상태코드 처리 및 다양한 네트워크 오류 상황에 대한 대응
+- RxDatasource와 UICollectionViewCompositionalLayout을 사용하여 섹션별 다른 내용의 컬렉션뷰 구성
   
 ## 트러블 슈팅
 ### 1. 이미지 메모리 최적화
@@ -84,7 +90,6 @@ final class ImageCacheManager {
 ```
   
 ## 회고
-- 이미지가 많은 앱을 프로젝트로 다루며 이미지 캐싱과 메모리 최적화 방법에 대해 이해를 높일 수 있었음
-- Etag를 넣어 이미지 파일의 유효성을 검증하여 이미지 캐시의 완성도를 높일 수 있었음
-- 디스크 캐시의 파일 삭제 방법에 대한 아쉬움이 존재. 지정된 용량을 넘었을 때 용량을 확보해야할 경우 무작위로 삭제하는 방식보다 더 나은 방식이 존재할 것이라 생각됨
+- 디스크 캐시의 파일 삭제 방법에 대한 아쉬움이 존재. 지정된 용량을 넘었을 때 용량을 확보해야할 경우 무작위로 삭제하는 방식보다 상황에 맞는 더 나은 방식이 존재할 것이라 생각됨
 - keyboardLayoutGuide를 사용하여 별도 라이브러리없이 키보드 대응할 수 있는 방법에 대해 학습할 수 있었음
+- 네트워크 통신 오류 발생 시 여러 에러메시지가 존재하는데, 메시지에 대한 부분은 처리하지 않아서 클라이언트에서 처리하는 방법에 대해 고민해야 할 지점이라고 생각됨
