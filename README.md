@@ -1,5 +1,5 @@
 # 사랑할개
-보호중인 유기견을 소개하고, 유기견 입양스토리를 공유하는 유기견 커뮤니티 앱
+보호중인 유기견을 소개하고 유기견 입양스토리를 공유하는 유기견 커뮤니티 앱
 
 |유기견 소개|유기견 소개 상세|스토리|스토리 상세|프로필|
 |--------|------------|-----|--------|----|
@@ -11,25 +11,30 @@
 - 버전: iOS 16+
 
 ## 기술 스택
-- UIKit, SnapKit, KeyboardLayoutGuide, MapKit, RxSwift, RxDatasource, MVVM+Input/Output, Alamofire+Router, PortOne
+- iOS: UIKit, MapKit, RxSwift
+- Architecture: MVVM + Input/Output, Coordinator, Singleton, Repository
+- DB & Network: Alamofire, Router
+- UI: CodebaseUI, SnapKit, UIKeyboardLayoutGuide, RxDataSource
+- ETC: NSCache, FileManager
 
 ## 핵심 기능
-- 공공API를 사용한 보호중인 유기견 소개
-- 유기견 커뮤니티 및 응원(결제)
-- 유저 팔로잉 및 팔로우
-- 작성 및 좋아요한 글 확인
+- 유기견 소개: 공공API 활용 보호중인 유기견 소개
+- 스토리: 유기견 입양 커뮤니티
+- 응원하기: 유기견 후원금 결제
+- 프로필: 작성글 및 좋아요한 글 확인
   
 ## 주요 기술
-- enum을 사용한 Router 패턴을 구현하여 네트워크 요청 추상화 및 엔드포인트별 관리 효율성 향상
-- 메모리 캐시와 디스크 캐시를 구현하여 이미지 캐싱 및 ETag를 통한 이미지 유효성 검증
-- RxSwift의 Single과 ResultType을 조합하여 네트워크 통신 구현. 네트워크 요청 실패 시 구독이 끊기지 않도록 실패 케이스 대응
-- 스토리 조회 시 커서 기반 페이지네이션 적용 및 게시글 Prefetch 적용하여 응답성 향상
-- 스토리 사진 등록 시 Multipart-Form 데이터 형식으로 서버 업로드 기능 구현
-- PortOne을 통한 결제(응원하기)기능 구현 및 영수증 검증 API 통신을 통해 유효성 검증
-- keyboardLayoutGuide를 통한 키보드 대응 및 라이브러리 의존성 제거
-- Alamofire RequestInterceptor를 통한 JWT 토큰 갱신 및 사용자 인증 기능 구현
-- enum을 사용한 네트워크 상태코드 처리 및 다양한 네트워크 오류 상황에 대한 대응
-- RxDatasource와 UICollectionViewCompositionalLayout을 사용하여 섹션별 다른 내용의 컬렉션뷰 구성
+- ViewModel 생성 시 Dependency Injection을 통해 재사용성 및 유연성 확보
+- Protocol과 Coordinator 패턴을 통한 화면전환 로직 분리
+- Alamofire URLRequestConvertible과 enum을 사용한 Router 패턴을 통해 네트워크 추상화
+- Single과 ResultType을 통한 네트워크 통신 실패 대응 및 enum을 통한 상태코드 처리
+- Alamofire RequestInterceptor와 UserDefaults를 통한 JWT 토큰 갱신 구현
+- Cursor Based Pagination과 UICollectionView Prefetch 기능 구현
+- CompresstionQuality를 통한 이미지 압축 및 Multipart-Form 데이터 업로드 구현
+- NSCache와 FileManager를 사용한 이미지 캐싱 구현 및 ETag를 사용한 이미지 유효성 검증
+- ImageIO를 사용한 이미지 다운샘플링 적용 및 메모리 사용 최적화
+- RxDataSource과 CompositionalLayout을 사용한 다중 섹션 컬렉션 뷰 구성
+- 통합결제 시스템을 통한 결제기능 구현 및 유효성 검증
   
 ## 트러블 슈팅
 ### 1. 이미지 메모리 최적화
