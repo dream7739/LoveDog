@@ -14,7 +14,7 @@
 - iOS: UIKit, MapKit, RxSwift
 - Architecture: MVVM + Input/Output, Coordinator, Singleton, Repository
 - DB & Network: Alamofire, Router
-- UI: CodebaseUI, SnapKit, UIKeyboardLayoutGuide, RxDataSource
+- UI: CodebaseUI, SnapKit, UIKeyboardLayoutGuide, RxDataSources
 - ETC: NSCache, FileManager
 
 ## 핵심 기능
@@ -33,7 +33,7 @@
 - CompresstionQuality를 통한 이미지 압축 및 Multipart-Form 데이터 업로드 구현
 - NSCache와 FileManager를 사용한 이미지 캐싱 구현 및 ETag를 사용한 이미지 유효성 검증
 - ImageIO를 사용한 이미지 다운샘플링 적용 및 메모리 사용 최적화
-- RxDataSource과 CompositionalLayout을 사용한 다중 섹션 컬렉션 뷰 구성
+- RxDataSources과 CompositionalLayout을 사용한 다중 섹션 컬렉션 뷰 구성
 - 통합결제 시스템을 통한 결제기능 구현 및 유효성 검증
   
 ## 트러블 슈팅
